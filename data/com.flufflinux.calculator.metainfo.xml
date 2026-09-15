@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.flufflinux.calculator</id>
+  <name>Calculator</name>
+  <name xml:lang="bg">Калкулатор</name>
+  <name xml:lang="cs">Kalkulačka</name>
+  <name xml:lang="da">Lommeregner</name>
+  <name xml:lang="de">Taschenrechner</name>
+  <name xml:lang="el">Αριθμομηχανή</name>
+  <name xml:lang="es">Calculadora</name>
+  <name xml:lang="et">Kalkulaator</name>
+  <name xml:lang="fi">Laskin</name>
+  <name xml:lang="fr">Calculatrice</name>
+  <name xml:lang="ga">Áireamhán</name>
+  <name xml:lang="he">מחשבון</name>
+  <name xml:lang="hr">Kalkulator</name>
+  <name xml:lang="hu">Számológép</name>
+  <name xml:lang="it">Calcolatrice</name>
+  <name xml:lang="ja">電卓</name>
+  <name xml:lang="lt">Skaičiuotuvas</name>
+  <name xml:lang="lv">Kalkulators</name>
+  <name xml:lang="mt">Kalkulatur</name>
+  <name xml:lang="nl">Rekenmachine</name>
+  <name xml:lang="pl">Kalkulator</name>
+  <name xml:lang="pt">Calculadora</name>
+  <name xml:lang="ro">Calculator</name>
+  <name xml:lang="ru">Калькулятор</name>
+  <name xml:lang="sk">Kalkulačka</name>
+  <name xml:lang="sl">Računalo</name>
+  <name xml:lang="sv">Kalkylator</name>
+  <summary>Calculator for Fluff Linux</summary>
+  <summary xml:lang="bg">Калкулатор за Fluff Linux</summary>
+  <summary xml:lang="cs">Kalkulačka pro Fluff Linux</summary>
+  <summary xml:lang="da">Lommeregner til Fluff Linux</summary>
+  <summary xml:lang="de">Taschenrechner für Fluff Linux</summary>
+  <summary xml:lang="el">Αριθμομηχανή για το Fluff Linux</summary>
+  <summary xml:lang="es">Calculadora para Fluff Linux</summary>
+  <summary xml:lang="et">Kalkulaator Fluff Linuxi jaoks</summary>
+  <summary xml:lang="fi">Laskin Fluff Linuxille</summary>
+  <summary xml:lang="fr">Calculatrice pour Fluff Linux</summary>
+  <summary xml:lang="ga">Áireamhán do Fluff Linux</summary>
+  <summary xml:lang="he">מחשבון עבור Fluff Linux</summary>
+  <summary xml:lang="hr">Kalkulator za Fluff Linux</summary>
+  <summary xml:lang="hu">Számológép Fluff Linuxhoz</summary>
+  <summary xml:lang="it">Calcolatrice per Fluff Linux</summary>
+  <summary xml:lang="ja">Fluff Linux 用計算機</summary>
+  <summary xml:lang="lt">Skaičiuotuvas, skirtas Fluff Linux</summary>
+  <summary xml:lang="lv">Kalkulators operētājsistēmai Fluff Linux</summary>
+  <summary xml:lang="mt">Kalkulatur għal Fluff Linux</summary>
+  <summary xml:lang="nl">Rekenmachine voor Fluff Linux</summary>
+  <summary xml:lang="pl">Kalkulator dla Fluff Linux</summary>
+  <summary xml:lang="pt">Calculadora para Fluff Linux</summary>
+  <summary xml:lang="ro">Calculator pentru Fluff Linux</summary>
+  <summary xml:lang="ru">Калькулятор для Fluff Linux</summary>
+  <summary xml:lang="sk">Kalkulačka pre Fluff Linux</summary>
+  <summary xml:lang="sl">Računalo za Fluff Linux</summary>
+  <summary xml:lang="sv">Kalkylator för Fluff Linux</summary>
+  <developer id="com.fluffnet">
+    <name>FluffNet LLC</name>
+  </developer>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <description>
+    <p>
+      Fluff Linux Calculator provides basic, scientific, financial,
+      programming, and unit conversion modes in a compact native interface.
+    </p>
+  </description>
+  <launchable type="desktop-id">com.flufflinux.calculator.desktop</launchable>
+  <provides>
+    <binary>flufflinux-calculator</binary>
+  </provides>
+  <categories>
+    <category>Utility</category>
+    <category>Calculator</category>
+  </categories>
+  <url type="homepage">https://github.com/FluffNet/flufflinux-calculator</url>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="2026.09-2" date="2026-09-15"/>
+  </releases>
+</component>

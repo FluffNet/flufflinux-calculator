@@ -1,0 +1,32 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+  <qresource prefix="/com/flufflinux/calculator">
+    <file alias="icon.svg">data/icons/hicolor/scalable/apps/com.flufflinux.calculator.svg</file>
+    <file alias="translations/flufflinux-calculator_bg.qm">translations/flufflinux-calculator_bg.qm</file>
+    <file alias="translations/flufflinux-calculator_cs.qm">translations/flufflinux-calculator_cs.qm</file>
+    <file alias="translations/flufflinux-calculator_da.qm">translations/flufflinux-calculator_da.qm</file>
+    <file alias="translations/flufflinux-calculator_de.qm">translations/flufflinux-calculator_de.qm</file>
+    <file alias="translations/flufflinux-calculator_el.qm">translations/flufflinux-calculator_el.qm</file>
+    <file alias="translations/flufflinux-calculator_es.qm">translations/flufflinux-calculator_es.qm</file>
+    <file alias="translations/flufflinux-calculator_et.qm">translations/flufflinux-calculator_et.qm</file>
+    <file alias="translations/flufflinux-calculator_fi.qm">translations/flufflinux-calculator_fi.qm</file>
+    <file alias="translations/flufflinux-calculator_fr.qm">translations/flufflinux-calculator_fr.qm</file>
+    <file alias="translations/flufflinux-calculator_ga.qm">translations/flufflinux-calculator_ga.qm</file>
+    <file alias="translations/flufflinux-calculator_hr.qm">translations/flufflinux-calculator_hr.qm</file>
+    <file alias="translations/flufflinux-calculator_hu.qm">translations/flufflinux-calculator_hu.qm</file>
+    <file alias="translations/flufflinux-calculator_he.qm">translations/flufflinux-calculator_he.qm</file>
+    <file alias="translations/flufflinux-calculator_it.qm">translations/flufflinux-calculator_it.qm</file>
+    <file alias="translations/flufflinux-calculator_ja.qm">translations/flufflinux-calculator_ja.qm</file>
+    <file alias="translations/flufflinux-calculator_lt.qm">translations/flufflinux-calculator_lt.qm</file>
+    <file alias="translations/flufflinux-calculator_lv.qm">translations/flufflinux-calculator_lv.qm</file>
+    <file alias="translations/flufflinux-calculator_mt.qm">translations/flufflinux-calculator_mt.qm</file>
+    <file alias="translations/flufflinux-calculator_nl.qm">translations/flufflinux-calculator_nl.qm</file>
+    <file alias="translations/flufflinux-calculator_pl.qm">translations/flufflinux-calculator_pl.qm</file>
+    <file alias="translations/flufflinux-calculator_pt.qm">translations/flufflinux-calculator_pt.qm</file>
+    <file alias="translations/flufflinux-calculator_ro.qm">translations/flufflinux-calculator_ro.qm</file>
+    <file alias="translations/flufflinux-calculator_ru.qm">translations/flufflinux-calculator_ru.qm</file>
+    <file alias="translations/flufflinux-calculator_sk.qm">translations/flufflinux-calculator_sk.qm</file>
+    <file alias="translations/flufflinux-calculator_sl.qm">translations/flufflinux-calculator_sl.qm</file>
+    <file alias="translations/flufflinux-calculator_sv.qm">translations/flufflinux-calculator_sv.qm</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,25 @@
+pkgname = flufflinux-calculator
+pkgbase = flufflinux-calculator
+xdata = pkgtype=pkg
+pkgver = 2026.09-2
+pkgdesc = Calculator for Fluff Linux
+url = https://github.com/FluffNet/flufflinux-calculator
+builddate = 1789468144
+packager = FluffNet LLC
+size = 3597504
+arch = x86_64
+license = GPL-3.0-or-later
+replaces = gnome-calculator
+depend = gcc-libs
+depend = glibc
+depend = gmp
+depend = mpfr
+depend = libmpc
+depend = qt6-base
+depend = qt6-declarative
+depend = qt6-wayland
+depend = hicolor-icon-theme
+makedepend = base-devel
+makedepend = cmake
+makedepend = ninja
+makedepend = rust
