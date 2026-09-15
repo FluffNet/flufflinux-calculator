@@ -1,7 +1,7 @@
 pkgname = flufflinux-calculator
 pkgbase = flufflinux-calculator
 xdata = pkgtype=pkg
-pkgver = 2026.09-2
+pkgver = 2026.09-3
 pkgdesc = Calculator for Fluff Linux
 url = https://github.com/FluffNet/flufflinux-calculator
 builddate = 1789468144

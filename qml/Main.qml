@@ -422,6 +422,17 @@ ApplicationWindow {
         return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     }
 
+    function stripCurrencySymbolsFromField(field) {
+        const originalText = field.text
+        const originalCursor = field.cursorPosition
+        const cleanedText = backend.stripCurrencySymbols(originalText)
+        if (cleanedText === originalText) return
+        const cleanedPrefix = backend.stripCurrencySymbols(
+            originalText.slice(0, originalCursor))
+        field.text = cleanedText
+        field.cursorPosition = Math.min(cleanedPrefix.length, cleanedText.length)
+    }
+
     function press(label) {
         if (label === "C" || label === "CLR") backend.clear()
         else if (label === "=") {
@@ -1093,7 +1104,7 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Calculator For Fluff Linux")
-                    + "\n" + qsTr("Version %1").arg("2026.09-2")
+                    + "\n" + qsTr("Version %1").arg("2026.09-3")
                     + "\n\nCopyright © 2026 FluffNet LLC"
                     + "\nGNU General Public License v3.0 or later"
                 wrapMode: Text.WordWrap
@@ -1352,10 +1363,10 @@ ApplicationWindow {
         onAccepted: backend.applyExpression(backend.financialValue(financeOperation, finPrincipal.text, finRate.text, finPeriods.text, finPayment.text))
         ColumnLayout { width: parent.width
             Label { text: qsTr("Use only the fields needed by this calculation."); wrapMode: Text.WordWrap; Layout.fillWidth: true }
-            TextField { id: finPrincipal; Layout.fillWidth: true; placeholderText: qsTr("Principal / cost / present value") }
-            TextField { id: finRate; Layout.fillWidth: true; placeholderText: qsTr("Rate (%)") }
-            TextField { id: finPeriods; Layout.fillWidth: true; placeholderText: qsTr("Periods / life") }
-            TextField { id: finPayment; Layout.fillWidth: true; placeholderText: qsTr("Payment / salvage / future value") }
+            TextField { id: finPrincipal; Layout.fillWidth: true; placeholderText: qsTr("Principal / cost / present value"); onTextEdited: window.stripCurrencySymbolsFromField(finPrincipal) }
+            TextField { id: finRate; Layout.fillWidth: true; placeholderText: qsTr("Rate (%)"); onTextEdited: window.stripCurrencySymbolsFromField(finRate) }
+            TextField { id: finPeriods; Layout.fillWidth: true; placeholderText: qsTr("Periods / life"); onTextEdited: window.stripCurrencySymbolsFromField(finPeriods) }
+            TextField { id: finPayment; Layout.fillWidth: true; placeholderText: qsTr("Payment / salvage / future value"); onTextEdited: window.stripCurrencySymbolsFromField(finPayment) }
         }
     }
 
@@ -1462,8 +1473,8 @@ ApplicationWindow {
                         Keys.priority: Keys.BeforeItem
                         onTextChanged: {
                             cursorSyncRevision++
-                            if (activeFocus && text !== backend.expression) {
-                                typingCursorVisibility.typingActivity()
+                            if (text !== backend.expression) {
+                                if (activeFocus) typingCursorVisibility.typingActivity()
                                 const logicalIndex = window.logicalCursorIndex(text, cursorPosition)
                                 backend.applyExpression(text)
                                 const revision = ++cursorSyncRevision
@@ -1953,7 +1964,10 @@ ApplicationWindow {
                                         onActiveFocusChanged: {
                                             if (activeFocus) conversionPanel.activeValueField = fromValue
                                         }
-                                        onTextEdited: conversionPanel.updateOther(fromValue)
+                                        onTextEdited: {
+                                            window.stripCurrencySymbolsFromField(fromValue)
+                                            conversionPanel.updateOther(fromValue)
+                                        }
                                     }
                                     Text {
                                         anchors.fill: parent
@@ -2030,7 +2044,10 @@ ApplicationWindow {
                                         onActiveFocusChanged: {
                                             if (activeFocus) conversionPanel.activeValueField = toValue
                                         }
-                                        onTextEdited: conversionPanel.updateOther(toValue)
+                                        onTextEdited: {
+                                            window.stripCurrencySymbolsFromField(toValue)
+                                            conversionPanel.updateOther(toValue)
+                                        }
                                     }
                                     Text {
                                         anchors.fill: parent
