@@ -14,6 +14,45 @@ use std::{
 const WRAP_HINT: char = '\u{200b}';
 const CONFIG_FILE_NAME: &str = "flufflinux-calculator.conf";
 
+fn is_currency_symbol(character: char) -> bool {
+    matches!(
+        character,
+        '$'
+            | '\u{00a2}'..='\u{00a5}'
+            | '\u{058f}'
+            | '\u{060b}'
+            | '\u{07fe}'..='\u{07ff}'
+            | '\u{09f2}'..='\u{09f3}'
+            | '\u{09fb}'
+            | '\u{0af1}'
+            | '\u{0bf9}'
+            | '\u{0e3f}'
+            | '\u{17db}'
+            | '\u{20a0}'..='\u{20c0}'
+            | '\u{a838}'
+            | '\u{fdfc}'
+            | '\u{fe69}'
+            | '\u{ff04}'
+            | '\u{ffe0}'..='\u{ffe1}'
+            | '\u{ffe5}'..='\u{ffe6}'
+            | '\u{11fdd}'..='\u{11fe0}'
+            | '\u{1e2ff}'
+            | '\u{1ecb0}'
+    )
+}
+
+fn strip_currency_symbols(input: &str) -> String {
+    if !input.chars().any(is_currency_symbol) {
+        return input.to_string();
+    }
+    input
+        .chars()
+        .filter(|character| !is_currency_symbol(*character))
+        .collect::<String>()
+        .trim()
+        .to_string()
+}
+
 fn add_wrap_hints(input: &str) -> String {
     let chars: Vec<char> = input.chars().filter(|c| *c != WRAP_HINT).collect();
     let mut output = String::with_capacity(input.len());
@@ -150,7 +189,8 @@ fn group_ascii_number_literals(input: &str) -> String {
 }
 
 fn format_expression_for_display(input: &str, grouping_enabled: bool) -> String {
-    let unwrapped: String = input
+    let sanitized = strip_currency_symbols(input);
+    let unwrapped: String = sanitized
         .chars()
         .filter(|character| *character != WRAP_HINT)
         .collect();
@@ -628,6 +668,9 @@ pub mod qobject {
         #[cxx_name = "applyExpression"]
         fn apply_expression(self: Pin<&mut CalculatorBackend>, text: &QString);
         #[qinvokable]
+        #[cxx_name = "stripCurrencySymbols"]
+        fn strip_currency_symbols_for_input(&self, text: &QString) -> QString;
+        #[qinvokable]
         #[cxx_name = "setFormatting"]
         fn set_formatting(self: Pin<&mut CalculatorBackend>, format: &QString, precision: i32);
         #[qinvokable]
@@ -938,6 +981,10 @@ impl qobject::CalculatorBackend {
         self.as_mut().update_history_action_availability();
     }
 
+    pub fn strip_currency_symbols_for_input(&self, text: &QString) -> QString {
+        strip_currency_symbols(&text.to_string()).into()
+    }
+
     pub fn clear(mut self: Pin<&mut Self>) {
         self.as_mut().rust_mut().abandon_redo();
         self.as_mut().set_expression(QString::default());
@@ -1150,9 +1197,10 @@ impl qobject::CalculatorBackend {
     }
 
     pub fn convert_value(&self, value: &QString, from: &QString, to: &QString) -> QString {
+        let value = strip_currency_symbols(&value.to_string());
         format_number_for_display(
             &convert_value_precise_text(
-                &value.to_string(),
+                &value,
                 &from.to_string(),
                 &to.to_string(),
                 "conversion",
@@ -1224,12 +1272,16 @@ impl qobject::CalculatorBackend {
         periods: &QString,
         payment: &QString,
     ) -> QString {
+        let principal = strip_currency_symbols(&principal.to_string());
+        let rate = strip_currency_symbols(&rate.to_string());
+        let periods = strip_currency_symbols(&periods.to_string());
+        let payment = strip_currency_symbols(&payment.to_string());
         let result = precise::financial_value(
             &operation.to_string(),
-            &principal.to_string(),
-            &rate.to_string(),
-            &periods.to_string(),
-            &payment.to_string(),
+            &principal,
+            &rate,
+            &periods,
+            &payment,
             &self.format().to_string(),
             *self.precision(),
         )
@@ -1743,6 +1795,36 @@ mod tests {
     fn parse_number(text: &str) -> f64 {
         text.parse()
             .unwrap_or_else(|error| panic!("could not parse '{text}': {error}"))
+    }
+
+    #[test]
+    fn pasted_currency_symbols_are_removed_from_numeric_input() {
+        let cases = [
+            ("$49,000", "49,000"),
+            ("€ 49,000", "49,000"),
+            ("49,000 ₪", "49,000"),
+            ("£12,345.67", "12,345.67"),
+            ("¥4,900+₹100", "4,900+100"),
+            ("₩1,000-₽250", "1,000-250"),
+            ("₿0.5", "0.5"),
+            ("؋500", "500"),
+            ("֏500", "500"),
+            ("฿500", "500"),
+            ("៛500", "500"),
+            ("＄500", "500"),
+        ];
+
+        for (input, expected) in cases {
+            assert_eq!(strip_currency_symbols(input), expected, "input: {input}");
+            assert_eq!(
+                format_expression_for_display(input, true).replace(WRAP_HINT, ""),
+                expected,
+                "display input: {input}"
+            );
+        }
+
+        assert_eq!(strip_currency_symbols("100-20%"), "100-20%");
+        assert_eq!(strip_currency_symbols("5×9+3"), "5×9+3");
     }
 
     #[test]
