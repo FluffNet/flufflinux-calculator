@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
 
 Drawer {
     id: root
@@ -11,6 +12,7 @@ Drawer {
     property bool canUndo: false
     property bool canRedo: false
     property real sidecarWidth: 0
+    property bool openingFocusPending: false
 
     readonly property int count: historyList.count
     readonly property bool empty: count === 0
@@ -25,6 +27,7 @@ Drawer {
     signal undoRequested()
     signal redoRequested()
     signal entryRequested(string expression, string result, int index)
+    signal typingRequested(var event)
 
     function entryExpression(entry) {
         if (entry === undefined || entry === null) return ""
@@ -67,6 +70,10 @@ Drawer {
         historyList.positionViewAtEnd()
     }
 
+    function cancelOpeningFocus() {
+        openingFocusPending = false
+    }
+
     function focusInitialControl() {
         if (root.count > 0) {
             historyList.currentIndex = root.count - 1
@@ -90,9 +97,14 @@ Drawer {
             : Math.max(340, parent.width * 0.48)) : 360
     height: parent ? parent.height : 560
     closePolicy: Popup.NoAutoClose
+    onAboutToShow: openingFocusPending = true
     onOpened: Qt.callLater(function() {
         showNewest()
-        Qt.callLater(focusInitialControl)
+        Qt.callLater(function() {
+            if (!root.openingFocusPending) return
+            root.openingFocusPending = false
+            root.focusInitialControl()
+        })
     })
 
     background: Rectangle {
@@ -115,6 +127,8 @@ Drawer {
     contentItem: ColumnLayout {
         spacing: 0
         Accessible.name: root.titleText
+        Keys.priority: Keys.BeforeItem
+        Keys.onPressed: function(event) { root.typingRequested(event) }
 
         Item {
             Layout.fillWidth: true
@@ -230,9 +244,15 @@ Drawer {
                 model: root.entries || []
                 activeFocusOnTab: true
                 Accessible.name: qsTr("%1 entries").arg(root.titleText)
+                Kirigami.WheelHandler {
+                    target: historyList
+                    blockTargetWheel: true
+                    scrollFlickableTarget: true
+                    filterMouseEvents: false
+                }
                 onCountChanged: Qt.callLater(function() {
                     root.showNewest()
-                    if (root.opened && root.count === 0)
+                    if (root.opened && root.count === 0 && root.activeFocus)
                         root.focusInitialControl()
                 })
 

@@ -7,6 +7,16 @@ TestCase {
 
     Calculator.ExpressionTypingRouter { id: router }
 
+    function test_equals_calculates_instead_of_inserting_text() {
+        compare(router.actionForEvent(Qt.Key_Equal, Qt.NoModifier, "="), "calculate")
+        compare(router.actionForEvent(Qt.Key_Equal, Qt.ShiftModifier, "="), "calculate")
+    }
+
+    function test_modified_equals_is_not_a_calculation() {
+        for (const modifier of [Qt.ControlModifier, Qt.AltModifier, Qt.MetaModifier])
+            compare(router.actionForEvent(Qt.Key_Equal, modifier, "="), "ignore")
+    }
+
     function test_backspace_is_an_action_not_text() {
         compare(router.actionForEvent(Qt.Key_Backspace,
                                       Qt.NoModifier,

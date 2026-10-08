@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
+import org.kde.kirigami as Kirigami
 import com.flufflinux.calculator
 
 ApplicationWindow {
@@ -32,8 +33,9 @@ ApplicationWindow {
     readonly property bool darkTheme: (palette.window.r * 0.2126 + palette.window.g * 0.7152 + palette.window.b * 0.0722) < 0.5
     readonly property string wrapHint: "\u200b"
     property bool inverse: false
-    property int programBase: backend.programmerBase
-    property int wordBits: backend.programmerWordBits
+    readonly property int programBase: backend.programmerBase
+    readonly property int wordBits: backend.programmerWordBits
+    readonly property var historyEntries: JSON.parse(backend.historyData || "[]")
     property bool programmerBitPanelEnabled: backend.programmerBitPanelEnabled
     readonly property string programmerPreviewData:
         mode === "programming" && backend.expression.trim().length > 0
@@ -329,7 +331,13 @@ ApplicationWindow {
         }
     }
 
-    Component.onCompleted: restoreWindowStateForMode(mode)
+    Component.onCompleted: {
+        restoreWindowStateForMode(mode)
+        Qt.callLater(restoreWindowTypingTarget)
+    }
+
+    onActiveChanged: Qt.callLater(restoreWindowTypingTarget)
+    onActiveFocusItemChanged: Qt.callLater(restoreWindowTypingTarget)
 
     onWidthChanged: {
         if (windowStateReady && visibility === Window.Windowed
@@ -458,10 +466,18 @@ ApplicationWindow {
     }
 
     function focusEditorAtEnd() {
+        programmerHistoryDrawer.cancelOpeningFocus()
         Qt.callLater(function() {
             editor.forceActiveFocus()
             editor.cursorPosition = editor.text.length
         })
+    }
+
+    HistoryRecall {
+        id: historyRecall
+        calculatorBackend: backend
+        expressionEditor: editor
+        onExpressionRestored: typingCursorVisibility.revealNow()
     }
 
     function auxiliaryTextInputHasFocus() {
@@ -481,21 +497,39 @@ ApplicationWindow {
         return programmerRules.typingAllowed(text, programBase, textBeforeCursor)
     }
 
+    function calculatorPopupVisible() {
+        return modeMenu.visible || mainMenu.visible || angleMenu.visible
+            || rootMenu.visible || about.visible || preferencesDialog.visible
+            || customRootDialog.visible || financeDialog.visible
+    }
+
+    function restoreWindowTypingTarget() {
+        if (!window.active || calculatorPopupVisible()) return
+        const focusedItem = window.activeFocusItem
+        if (focusedItem) {
+            let item = window.contentItem
+            while (item && item !== focusedItem) item = item.parent
+            if (!item) return
+        }
+        calculatorLayout.forceActiveFocus()
+    }
+
     function routeExpressionTyping(event) {
+        if (calculatorPopupVisible()) return
         if (mode === "conversion") {
-            if (modeMenu.opened || mainMenu.opened || about.visible
-                    || preferencesDialog.visible || financeDialog.visible) return
             if (conversionLoader.item) conversionLoader.item.routeTyping(event)
             return
         }
-        if (editor.activeFocus || auxiliaryTextInputHasFocus()
-                || modeMenu.opened || mainMenu.opened || angleMenu.opened
-                || rootMenu.opened || about.visible || customRootDialog.visible
-                || financeDialog.visible) return
+        if (editor.activeFocus || auxiliaryTextInputHasFocus()) return
 
         const action = expressionTypingRouter.actionForEvent(event.key,
                                                              event.modifiers,
                                                              event.text)
+        if (action === "calculate") {
+            calculate()
+            event.accepted = true
+            return
+        }
         if (action === "selectAll") {
             editor.forceActiveFocus()
             editor.selectAll()
@@ -556,8 +590,7 @@ ApplicationWindow {
             if (converted.length === 0) return
             backend.applyExpression(converted)
         }
-        programBase = nextBase
-        backend.saveProgrammerState(programBase,
+        backend.saveProgrammerState(nextBase,
                                     wordBits,
                                     programmerBitPanelEnabled)
         focusEditorAtEnd()
@@ -589,9 +622,8 @@ ApplicationWindow {
                 backend.applyExpression(resized)
             }
         }
-        wordBits = nextBits
         backend.saveProgrammerState(programBase,
-                                    wordBits,
+                                    nextBits,
                                     programmerBitPanelEnabled)
         focusEditorAtEnd()
     }
@@ -638,6 +670,12 @@ ApplicationWindow {
         focusEditorAtEnd()
     }
 
+    function recallHistoryEntry(index) {
+        programmerHistoryDrawer.cancelOpeningFocus()
+        backend.recallHistoryEntry(index)
+        historyRecall.restore(backend.expression)
+    }
+
     function clearAll() {
         backend.clear()
         backend.clearHistory()
@@ -651,11 +689,12 @@ ApplicationWindow {
 
     function switchMode(nextMode) {
         if (mode === nextMode) return
+        if (["basic", "advanced", "financial", "programming", "conversion"].indexOf(nextMode) < 0) return
         windowStateSaveTimer.stop()
         if (windowStateReady)
             saveCurrentWindowState(visibility === Window.Maximized)
         windowStateReady = false
-        backend.clearHistory()
+        backend.switchCalculationMode(mode, nextMode)
         if (programmerHistorySidecarActive) {
             programmerHistoryDrawer.close()
             finishProgrammerHistoryClose()
@@ -663,9 +702,17 @@ ApplicationWindow {
         mode = nextMode
         backend.setDigitGroupingActive(mode !== "programming"
                                        && backend.digitGroupingEnabled)
+        // Restore the caret even while the mode menu still owns focus.
+        if (mode !== "conversion") {
+            editor.deselect()
+            editor.cursorPosition = editor.text.length
+        }
         Qt.callLater(function() {
             window.restoreWindowStateForMode(nextMode)
             window.requestUpdate()
+            if (window.mode === nextMode && nextMode !== "conversion"
+                    && !window.calculatorPopupVisible())
+                window.focusEditorAtEnd()
         })
     }
 
@@ -835,10 +882,17 @@ ApplicationWindow {
             implicitHeight: Math.min(contentItem.implicitHeight + topPadding + bottomPadding, 360)
             padding: 1
             contentItem: ListView {
+                id: unitList
                 clip: true
                 implicitHeight: contentHeight
                 model: unitBox.popup.visible ? unitBox.delegateModel : null
                 currentIndex: unitBox.highlightedIndex
+                Kirigami.WheelHandler {
+                    target: unitList
+                    blockTargetWheel: true
+                    scrollFlickableTarget: true
+                    filterMouseEvents: false
+                }
                 ScrollBar.vertical: ScrollBar {
                     policy: ScrollBar.AlwaysOn
                 }
@@ -941,6 +995,7 @@ ApplicationWindow {
     }
 
     Menu { id: angleMenu
+        onClosed: Qt.callLater(window.restoreWindowTypingTarget)
         MenuItem { text: qsTr("Degrees"); onTriggered: backend.applyAngleUnit("degrees") }
         MenuItem { text: qsTr("Radians"); onTriggered: backend.applyAngleUnit("radians") }
         MenuItem { text: qsTr("Gradians"); onTriggered: backend.applyAngleUnit("gradians") }
@@ -948,6 +1003,7 @@ ApplicationWindow {
 
     Menu {
         id: rootMenu
+        onClosed: Qt.callLater(window.restoreWindowTypingTarget)
         MenuItem { text: qsTr("Square root  √"); onTriggered: window.insertRoot("√") }
         MenuItem { text: qsTr("Cube root  ∛"); onTriggered: window.insertRoot("∛") }
         MenuItem { text: qsTr("Fourth root  ∜"); onTriggered: window.insertRoot("∜") }
@@ -962,6 +1018,7 @@ ApplicationWindow {
         RowLayout { anchors.fill: parent; anchors.leftMargin: 0; anchors.rightMargin: 0; spacing: 0
             ToolButton { text: "☰"; font.pixelSize: 22; Layout.preferredWidth: 32; Layout.fillHeight: true; Accessible.name: qsTr("Select calculator mode"); ToolTip.visible: hovered && !modeMenu.opened; ToolTip.text: qsTr("Calculator modes"); onClicked: modeMenu.opened ? modeMenu.close() : modeMenu.open()
                 Menu { id: modeMenu; x: 0; y: parent.height + 2; closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                    onClosed: Qt.callLater(window.restoreWindowTypingTarget)
                     Repeater { model: [
                             { value: "basic", label: qsTr("Basic") },
                             { value: "advanced", label: qsTr("Advanced") },
@@ -1037,6 +1094,7 @@ ApplicationWindow {
             }
             ToolButton { text: "⋮"; font.pixelSize: 22; Layout.preferredWidth: 32; Layout.fillHeight: true; Accessible.name: qsTr("Options"); ToolTip.visible: hovered && !mainMenu.opened; ToolTip.text: qsTr("Options"); onClicked: mainMenu.opened ? mainMenu.close() : mainMenu.open()
                 Menu { id: mainMenu; x: parent.width - width; y: parent.height + 2; closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                    onClosed: Qt.callLater(window.restoreWindowTypingTarget)
                     MenuItem {
                         id: preferencesMenuItem
                         text: qsTr("Preferences")
@@ -1077,21 +1135,23 @@ ApplicationWindow {
         height: parent ? parent.height : window.height
         sidecarWidth: window.programmerHistoryPanelWidth
         enabled: window.mode === "programming"
-        entries: backend.historyData.length > 0
-            ? backend.historyData.split("\n") : []
+        entries: window.historyEntries
         canUndo: backend.canUndo
         canRedo: backend.canRedo
-        onUndoRequested: backend.undo()
-        onRedoRequested: backend.redo()
+        onUndoRequested: window.undoHistory()
+        onRedoRequested: window.redoHistory()
         onClearRequested: backend.clearHistory()
         onClosed: window.finishProgrammerHistoryClose()
+        onTypingRequested: function(event) { window.routeExpressionTyping(event) }
         onEntryRequested: function(expression, result, index) {
-            backend.applyExpression(result.length > 0 ? result : expression)
+            window.recallHistoryEntry(index)
         }
     }
 
     Dialog {
         id: about
+        focus: true
+        onClosed: Qt.callLater(window.restoreWindowTypingTarget)
         anchors.centerIn: parent
         width: Math.min(window.width - 24, 430)
         title: qsTr("Fluff Linux Calculator")
@@ -1104,7 +1164,7 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Calculator For Fluff Linux")
-                    + "\n" + qsTr("Version %1").arg("2026.09-3")
+                    + "\n" + qsTr("Version %1").arg("2026.10-1")
                     + "\n\nCopyright © 2026 FluffNet LLC"
                     + "\nGNU General Public License v3.0 or later"
                 wrapMode: Text.WordWrap
@@ -1140,6 +1200,8 @@ ApplicationWindow {
 
     Dialog {
         id: preferencesDialog
+        focus: true
+        onClosed: Qt.callLater(window.restoreWindowTypingTarget)
         readonly property bool rightToLeft: Qt.application.layoutDirection === Qt.RightToLeft
         anchors.centerIn: parent
         width: Math.max(1, window.width - 24)
@@ -1209,7 +1271,11 @@ ApplicationWindow {
                 id: groupingCheckBox
                 text: qsTr("Digit grouping")
                 checked: backend.digitGroupingEnabled
-                onClicked: backend.applyDigitGrouping(checked)
+                onClicked: {
+                    backend.applyDigitGrouping(checked)
+                    if (window.mode === "programming")
+                        backend.setDigitGroupingActive(false)
+                }
                 Layout.fillWidth: true
                 indicator: Rectangle {
                     implicitWidth: 20
@@ -1318,6 +1384,8 @@ ApplicationWindow {
 
     Dialog {
         id: customRootDialog
+        focus: true
+        onClosed: Qt.callLater(window.restoreWindowTypingTarget)
         anchors.centerIn: parent
         width: Math.min(window.width - 40, 340)
         modal: true
@@ -1354,6 +1422,8 @@ ApplicationWindow {
 
     Dialog {
         id: financeDialog
+        focus: true
+        onClosed: Qt.callLater(window.restoreWindowTypingTarget)
         anchors.centerIn: parent
         width: Math.min(window.width - 40, 520)
         modal: true
@@ -1371,6 +1441,7 @@ ApplicationWindow {
     }
 
     ColumnLayout {
+        id: calculatorLayout
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -1398,37 +1469,30 @@ ApplicationWindow {
                     color: palette.base
                     ListView {
                         id: historyView
+                        objectName: "calculationHistoryList"
                         anchors.fill: parent
                         clip: true
                         verticalLayoutDirection: ListView.TopToBottom
-                        model: backend.historyData.length ? backend.historyData.split("\n") : []
+                        model: window.historyEntries
+                        Kirigami.WheelHandler {
+                            target: historyView
+                            blockTargetWheel: true
+                            scrollFlickableTarget: true
+                            filterMouseEvents: false
+                        }
                         onCountChanged: Qt.callLater(function() {
                             if (historyView.contentHeight > historyView.height) historyView.positionViewAtEnd()
                         })
-                        delegate: Rectangle {
-                            required property string modelData
-                            readonly property string expressionText: modelData.split("\t")[0]
-                            readonly property string resultText: modelData.split("\t")[1]
+                        delegate: CalculationHistoryEntry {
+                            required property int index
+                            required property var modelData
+                            expressionText: modelData.expression
+                            resultText: modelData.result
+                            objectName: "calculationHistoryEntry" + index
                             width: ListView.view.width
-                            height: Math.max(46, historyRow.implicitHeight + 16)
-                            color: palette.base
-
-                            TextMetrics { id: historyEquationMetrics; font.pixelSize: 17; text: expressionText + " = " + resultText }
-
-                            Text {
-                                id: historyRow
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.leftMargin: 12
-                                anchors.rightMargin: 12
-                                text: window.escapedStyledText(expressionText) + " = <b>" + window.escapedStyledText(resultText) + "</b>"
-                                textFormat: Text.StyledText
-                                color: palette.text
-                                font.pixelSize: Math.max(12, Math.min(17, Math.floor(17 * Math.max(1, width) * 3 / Math.max(1, historyEquationMetrics.advanceWidth))))
-                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                            onExpressionRequested: function(expression) {
+                                window.recallHistoryEntry(index)
                             }
-                            Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 2; color: palette.mid; opacity: 0.55 }
                         }
                     }
                 }
@@ -1436,12 +1500,11 @@ ApplicationWindow {
                 Rectangle {
                     id: editorRow
                     readonly property real availableTextWidth: Math.max(1, width - 82)
-                    readonly property int singleLineFontSize: Math.max(10, Math.min(22,
+                    readonly property real availableTextHeight: Math.max(1, height - (backend.error.length > 0 ? 34 : 16))
+                    readonly property int fittedFontSize: Math.max(16, Math.min(22,
                         Math.floor(22 * availableTextWidth / Math.max(1, expressionMetrics.advanceWidth))))
-                    readonly property bool needsSecondLine: expressionMetrics.advanceWidth > availableTextWidth && singleLineFontSize < 16
-                    readonly property int fittedFontSize: needsSecondLine
-                        ? Math.max(10, Math.min(16, Math.floor(22 * availableTextWidth * 2 / Math.max(1, expressionMetrics.advanceWidth))))
-                        : singleLineFontSize
+                    readonly property bool needsSecondLine:
+                        expressionMetrics.advanceWidth * fittedFontSize > availableTextWidth * 22
                     Layout.fillWidth: true
                     Layout.preferredHeight: needsSecondLine || backend.error.length > 0 ? 96 : 60
                     color: palette.window
@@ -1452,100 +1515,112 @@ ApplicationWindow {
                         text: backend.expression.length > 0 ? backend.expression : "0"
                     }
 
-                    TextArea {
-                        id: editor
-                        property int cursorSyncRevision: 0
-                        anchors.fill: parent
+                    ExpressionViewport {
+                        id: editorViewport
+                        objectName: "expressionViewport"
+                        anchors.left: parent.left
+                        anchors.right: parent.right
                         anchors.leftMargin: 18
                         anchors.rightMargin: 58
-                        anchors.topMargin: 8
-                        anchors.bottomMargin: backend.error.length > 0 ? 26 : 8
-                        text: backend.expression; color: palette.text; selectionColor: palette.highlight; selectedTextColor: palette.highlightedText
-                        font.pixelSize: editorRow.fittedFontSize
-                        verticalAlignment: TextEdit.AlignVCenter
-                        wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                        selectByMouse: true
-                        focus: true
-                        clip: true
-                        padding: 0
-                        background: null
-                        cursorVisible: activeFocus && typingCursorVisibility.cursorVisible
-                        Keys.priority: Keys.BeforeItem
-                        onTextChanged: {
-                            cursorSyncRevision++
-                            if (text !== backend.expression) {
-                                if (activeFocus) typingCursorVisibility.typingActivity()
-                                const logicalIndex = window.logicalCursorIndex(text, cursorPosition)
-                                backend.applyExpression(text)
-                                const revision = ++cursorSyncRevision
-                                Qt.callLater(function() {
-                                    if (editor.activeFocus && revision === editor.cursorSyncRevision)
-                                        editor.cursorPosition = window.editorCursorPosition(editor.text, logicalIndex)
-                                })
+                        textFont: editor.font
+                        height: Math.min(editorRow.availableTextHeight, maximumTextHeight)
+                        y: 8 + (editorRow.availableTextHeight - height) / 2
+                        TextArea {
+                            id: editor
+                            objectName: "expressionEditor"
+                            property int cursorSyncRevision: 0
+                            width: editorViewport.availableWidth
+                            text: backend.expression; color: palette.text; selectionColor: palette.highlight; selectedTextColor: palette.highlightedText
+                            font.pixelSize: editorRow.fittedFontSize
+                            verticalAlignment: TextEdit.AlignVCenter
+                            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                            selectByMouse: !editorViewport.touchInputActive
+                            focus: true
+                            clip: true
+                            padding: 0
+                            background: null
+                            cursorVisible: activeFocus && typingCursorVisibility.cursorVisible
+                            Keys.priority: Keys.BeforeItem
+                            onTextChanged: {
+                                cursorSyncRevision++
+                                if (text !== backend.expression) {
+                                    if (activeFocus) typingCursorVisibility.typingActivity()
+                                    const logicalIndex = window.logicalCursorIndex(text, cursorPosition)
+                                    backend.applyExpression(text)
+                                    const revision = ++cursorSyncRevision
+                                    Qt.callLater(function() {
+                                        if (editor.activeFocus && revision === editor.cursorSyncRevision)
+                                            editor.cursorPosition = window.editorCursorPosition(editor.text, logicalIndex)
+                                    })
+                                }
                             }
-                        }
-                        Keys.onPressed: function(event) {
-                            if (!window.programmerTypingAllowed(event.text,
-                                                                event.modifiers)) {
-                                event.accepted = true
-                            } else if ([Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down,
-                                 Qt.Key_Home, Qt.Key_End, Qt.Key_PageUp,
-                                 Qt.Key_PageDown].indexOf(event.key) >= 0) {
-                                typingCursorVisibility.revealNow()
-                            }
-                            const shiftOnly = (event.modifiers & Qt.ShiftModifier) !== 0
-                                && (event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier)) === 0
-                            if (clearShortcuts.handleFocusedEditorKey(event.key,
-                                                                      event.modifiers)) {
-                                event.accepted = true
-                            } else if (undoShortcuts.handleFocusedEditorKey(event.key, event.modifiers)) {
-                                event.accepted = true
-                            } else if (shiftOnly && event.key === Qt.Key_C) {
-                                backend.clearHistory()
-                                event.accepted = true
-                            } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                                window.calculate()
-                                event.accepted = true
-                            } else if (selectionStart === selectionEnd && event.key === Qt.Key_Left
-                                       && cursorPosition > 0
-                                       && window.isEditorFormattingCharacter(text,
-                                                                             cursorPosition - 1)) {
-                                cursorPosition = Math.max(0, cursorPosition - 2)
-                                event.accepted = true
-                            } else if (selectionStart === selectionEnd && event.key === Qt.Key_Right
-                                       && cursorPosition < text.length
-                                       && window.isEditorFormattingCharacter(text,
-                                                                             cursorPosition)) {
-                                cursorPosition = Math.min(text.length, cursorPosition + 2)
-                                event.accepted = true
-                            } else if (selectionStart === selectionEnd && event.key === Qt.Key_Right
-                                       && cursorPosition + 1 < text.length
-                                       && window.isEditorFormattingCharacter(text,
-                                                                             cursorPosition + 1)) {
-                                cursorPosition = Math.min(text.length, cursorPosition + 2)
-                                event.accepted = true
-                            } else if (selectionStart === selectionEnd && event.key === Qt.Key_Backspace
-                                       && cursorPosition >= 2
-                                       && window.isEditorFormattingCharacter(text,
-                                                                             cursorPosition - 1)) {
-                                remove(cursorPosition - 2, cursorPosition)
-                                event.accepted = true
-                            } else if (selectionStart === selectionEnd && event.key === Qt.Key_Delete
-                                       && cursorPosition < text.length - 1
-                                       && window.isEditorFormattingCharacter(text,
-                                                                             cursorPosition)) {
-                                remove(cursorPosition, cursorPosition + 2)
-                                event.accepted = true
-                            } else if (selectionStart === selectionEnd && event.key === Qt.Key_Delete
-                                       && cursorPosition + 1 < text.length
-                                       && window.isEditorFormattingCharacter(text,
-                                                                             cursorPosition + 1)) {
-                                remove(cursorPosition, cursorPosition + 2)
-                                event.accepted = true
+                            Keys.onPressed: function(event) {
+                                if (!window.programmerTypingAllowed(event.text,
+                                                                    event.modifiers)) {
+                                    event.accepted = true
+                                } else if ([Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down,
+                                     Qt.Key_Home, Qt.Key_End, Qt.Key_PageUp,
+                                     Qt.Key_PageDown].indexOf(event.key) >= 0) {
+                                    typingCursorVisibility.revealNow()
+                                }
+                                const shiftOnly = (event.modifiers & Qt.ShiftModifier) !== 0
+                                    && (event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier)) === 0
+                                if (clearShortcuts.handleFocusedEditorKey(event.key,
+                                                                          event.modifiers)) {
+                                    event.accepted = true
+                                } else if (undoShortcuts.handleFocusedEditorKey(event.key, event.modifiers)) {
+                                    event.accepted = true
+                                } else if (shiftOnly && event.key === Qt.Key_C) {
+                                    backend.clearHistory()
+                                    event.accepted = true
+                                } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter
+                                           || expressionTypingRouter.actionForEvent(event.key,
+                                                                                     event.modifiers,
+                                                                                     event.text) === "calculate") {
+                                    window.calculate()
+                                    event.accepted = true
+                                } else if (selectionStart === selectionEnd && event.key === Qt.Key_Left
+                                           && cursorPosition > 0
+                                           && window.isEditorFormattingCharacter(text,
+                                                                                 cursorPosition - 1)) {
+                                    cursorPosition = Math.max(0, cursorPosition - 2)
+                                    event.accepted = true
+                                } else if (selectionStart === selectionEnd && event.key === Qt.Key_Right
+                                           && cursorPosition < text.length
+                                           && window.isEditorFormattingCharacter(text,
+                                                                                 cursorPosition)) {
+                                    cursorPosition = Math.min(text.length, cursorPosition + 2)
+                                    event.accepted = true
+                                } else if (selectionStart === selectionEnd && event.key === Qt.Key_Right
+                                           && cursorPosition + 1 < text.length
+                                           && window.isEditorFormattingCharacter(text,
+                                                                                 cursorPosition + 1)) {
+                                    cursorPosition = Math.min(text.length, cursorPosition + 2)
+                                    event.accepted = true
+                                } else if (selectionStart === selectionEnd && event.key === Qt.Key_Backspace
+                                           && cursorPosition >= 2
+                                           && window.isEditorFormattingCharacter(text,
+                                                                                 cursorPosition - 1)) {
+                                    remove(cursorPosition - 2, cursorPosition)
+                                    event.accepted = true
+                                } else if (selectionStart === selectionEnd && event.key === Qt.Key_Delete
+                                           && cursorPosition < text.length - 1
+                                           && window.isEditorFormattingCharacter(text,
+                                                                                 cursorPosition)) {
+                                    remove(cursorPosition, cursorPosition + 2)
+                                    event.accepted = true
+                                } else if (selectionStart === selectionEnd && event.key === Qt.Key_Delete
+                                           && cursorPosition + 1 < text.length
+                                           && window.isEditorFormattingCharacter(text,
+                                                                                 cursorPosition + 1)) {
+                                    remove(cursorPosition, cursorPosition + 2)
+                                    event.accepted = true
+                                }
                             }
                         }
                     }
                     ToolButton {
+                        objectName: "expressionBackspaceButton"
                         anchors.right: parent.right
                         anchors.rightMargin: 12
                         anchors.verticalCenter: parent.verticalCenter
@@ -1560,7 +1635,10 @@ ApplicationWindow {
                         Accessible.name: qsTr("Backspace")
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Backspace")
-                        onClicked: backend.backspace()
+                        onClicked: {
+                            backend.backspace()
+                            window.focusEditorAtEnd()
+                        }
                     }
                     Label { visible: backend.error.length > 0; anchors.left: parent.left; anchors.right: parent.right; anchors.bottom: parent.bottom; anchors.margins: 5; text: window.translatedErrorText(backend.error); color: "#c01c28"; horizontalAlignment: Text.AlignHCenter; elide: Text.ElideNone; wrapMode: Text.WordWrap }
                 }

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
 
 Control {
     id: root
@@ -38,6 +39,10 @@ Control {
     }
 
     padding: 0
+    topPadding: 0
+    bottomPadding: 0
+    leftPadding: 0
+    rightPadding: 0
     implicitHeight: 250
     Accessible.name: qsTr("Bit toggle panel")
 
@@ -75,6 +80,13 @@ Control {
             opacity: root.valueAvailable ? 1.0 : 0.16
 
             Component.onCompleted: initialPositionTimer.restart()
+
+            Kirigami.WheelHandler {
+                target: bitList
+                blockTargetWheel: true
+                scrollFlickableTarget: true
+                filterMouseEvents: false
+            }
 
             ScrollBar.vertical: ScrollBar {
                 id: bitScrollBar

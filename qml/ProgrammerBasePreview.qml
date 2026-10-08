@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
 
 Control {
     id: root
@@ -35,6 +36,9 @@ Control {
     }
 
     padding: 0
+    topPadding: 0
+    leftPadding: 0
+    rightPadding: 0
     bottomPadding: 8
     implicitHeight: 172
     clip: true
@@ -102,11 +106,16 @@ Control {
                         && root.rawValueAt(index).length > 0)
                 flat: true
                 padding: 0
+                topPadding: 0
+                bottomPadding: 0
+                leftPadding: 0
+                rightPadding: 0
                 hoverEnabled: true
                 focusPolicy: Qt.StrongFocus
                 Accessible.ignored: !root.visible
                 Accessible.name: qsTr("%1 value %2").arg(modelData.name).arg(shownValue)
                 ToolTip.visible: hovered
+                ToolTip.delay: Kirigami.Units.toolTipDelay
                 ToolTip.text: qsTr("Use %1  %2").arg(modelData.name).arg(modelData.shortcut)
                 onClicked: activateBase()
                 Keys.onReturnPressed: activateBase()
@@ -185,15 +194,23 @@ Control {
                             anchors.left: parent.left
                             anchors.right: parent.right
                             anchors.top: parent.top
-                            anchors.bottom: previewScrollBar.visible
-                                ? previewScrollBar.top : parent.bottom
-                            anchors.bottomMargin: previewScrollBar.visible ? 6 : 0
+                            anchors.bottom: parent.bottom
+                            anchors.bottomMargin: previewScrollBar.visible
+                                ? previewScrollBar.height + 9 : 0
                             clip: true
-                            interactive: false
+                            interactive: true
+                            acceptedButtons: Qt.NoButton
                             flickableDirection: Flickable.HorizontalFlick
                             boundsBehavior: Flickable.StopAtBounds
                             contentWidth: Math.max(width, previewValue.implicitWidth)
                             contentHeight: height
+
+                            Kirigami.WheelHandler {
+                                target: previewFlick
+                                blockTargetWheel: true
+                                scrollFlickableTarget: true
+                                filterMouseEvents: false
+                            }
 
                             Label {
                                 id: previewValue
@@ -210,23 +227,9 @@ Control {
 
                             MouseArea {
                                 anchors.fill: parent
+                                scrollGestureEnabled: false
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: baseRow.activateBase()
-                                onWheel: function(wheel) {
-                                    if (!baseRow.valueNeedsScrolling) {
-                                        wheel.accepted = false
-                                        return
-                                    }
-                                    const delta = wheel.angleDelta.x !== 0
-                                        ? wheel.angleDelta.x : wheel.angleDelta.y
-                                    if (delta === 0) {
-                                        wheel.accepted = false
-                                        return
-                                    }
-                                    const step = Math.max(24, previewFlick.width / 4)
-                                    baseRow.scrollPreviewBy(delta > 0 ? -step : step)
-                                    wheel.accepted = true
-                                }
                             }
 
                             ScrollBar.horizontal: ScrollBar {

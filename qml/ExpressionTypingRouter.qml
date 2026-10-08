@@ -12,6 +12,8 @@ QtObject {
             return "paste"
         if (controlPressed || unsupportedModifier)
             return "ignore"
+        if (key === Qt.Key_Equal)
+            return "calculate"
         if (key === Qt.Key_Escape)
             return "clear"
         if (key === Qt.Key_Backspace)

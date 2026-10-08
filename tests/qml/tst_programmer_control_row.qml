@@ -193,6 +193,7 @@ TestCase {
             compare(requestedBitwiseOperation,
                     controls.bitwiseActions[index].value)
             tryVerify(function() { return !controls.bitwiseMenuOpened })
+            tryCompare(action, "visible", false)
         }
     }
 
@@ -210,6 +211,7 @@ TestCase {
             compare(requestedBitShiftOperation,
                     controls.bitShiftActions[index].value)
             tryVerify(function() { return !controls.bitShiftMenuOpened })
+            tryCompare(action, "visible", false)
         }
     }
 

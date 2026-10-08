@@ -5,6 +5,9 @@ fn main() {
         CxxQtBuilder::new_qml_module(
             QmlModule::new("com.flufflinux.calculator")
                 .qml_file("qml/Main.qml")
+                .qml_file("qml/ExpressionViewport.qml")
+                .qml_file("qml/HistoryRecall.qml")
+                .qml_file("qml/CalculationHistoryEntry.qml")
                 .qml_file("qml/CheckmarkMenuItem.qml")
                 .qml_file("qml/TypingCursorVisibility.qml")
                 .qml_file("qml/ExpressionTypingRouter.qml")
