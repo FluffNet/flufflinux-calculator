@@ -43,6 +43,9 @@ Conversion mode supports length, mass, area, volume, temperature, time, speed, d
 - Optional digit grouping
 - Calculator style percentages such as `100-50% = 50`
 - Implicit multiplication
+- Clickable history entries restore the original expression for editing or recalculation
+- Redo remains available while editing until another calculation is run with Enter or equals, or calculation history is cleared
+- Basic, Advanced, Financial, and Programming each retain their own input, calculation history, undo, and redo while the app is open
 - Typed expressions and pasted Unicode multiplication or division symbols
 - High precision complex roots, powers, logarithms, and trigonometric functions
 - Per mode window size and maximized state memory
@@ -52,12 +55,12 @@ Conversion mode supports length, mass, area, volume, temperature, time, speed, d
 
 ### Requirements
 
-The project requires Rust, CMake, Ninja, a C++ compiler, Qt 6 Base, Qt 6 Declarative, Qt 6 Wayland, GMP, MPFR, and MPC.
+The project requires Rust, CMake, Ninja, a C++ compiler, Qt 6 Base, Qt 6 Declarative, Qt 6 Wayland, KDE Kirigami, the KDE Qt Quick Controls desktop style, GMP, MPFR, and MPC.
 
 On Arch Linux or Fluff Linux, install the build dependencies with:
 
 ```sh
-sudo pacman -S --needed base-devel rust cmake ninja qt6-base qt6-declarative qt6-wayland gmp mpfr libmpc
+sudo pacman -S --needed base-devel rust cmake ninja qt6-base qt6-declarative qt6-wayland kirigami qqc2-desktop-style gmp mpfr libmpc
 ```
 
 Build the release binary:
@@ -111,7 +114,7 @@ Run the staged application without installing it:
 Create a pacman package archive:
 
 ```sh
-bsdtar --zstd -cf flufflinux-calculator-2026.09-3-x86_64.pkg.tar.zst -C fakeroot .PKGINFO usr
+bsdtar --zstd -cf flufflinux-calculator-2026.10-1-x86_64.pkg.tar.zst -C fakeroot .PKGINFO usr
 ```
 
 Package build systems can install into their own staging directory:

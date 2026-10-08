@@ -64,6 +64,43 @@ TestCase {
         compare(selectedRows, 1)
     }
 
+    function test_horizontal_wheel_scrolls_long_binary_and_stops_at_bounds() {
+        preview.values = ["F".repeat(256), "9".repeat(256), "7".repeat(256), "1".repeat(1024)]
+        const row = preview.rowAt(3)
+        const value = findChild(row, "programmerBaseValueBIN")
+        const flickable = value.parent.parent
+        row.scrollPreviewTo(0)
+        mouseWheel(value, 20, value.height / 2, -120, 0, Qt.NoButton)
+        tryVerify(function() { return row.previewContentX > 0 })
+        compare(flickable.contentY, 0)
+        for (let index = 0; index < 8; ++index)
+            mouseWheel(flickable, 20, flickable.height / 2, 1200, 0, Qt.NoButton)
+        tryCompare(row, "previewContentX", 0)
+        row.scrollPreviewTo(row.maximumPreviewContentX)
+        mouseWheel(flickable, 20, flickable.height / 2, -1200, 0, Qt.NoButton)
+        wait(200)
+        verify(row.previewContentX <= row.maximumPreviewContentX + 1)
+    }
+
+    function test_touch_drag_scrolls_binary_without_switching_base() {
+        preview.values = ["F".repeat(256), "9".repeat(256), "7".repeat(256), "1".repeat(1024)]
+        const row = preview.rowAt(3)
+        const value = findChild(row, "programmerBaseValueBIN")
+        const flickable = value.parent.parent
+        row.scrollPreviewTo(0)
+        const sequence = touchEvent(flickable)
+        sequence.press(0, flickable, 160, flickable.height / 2).commit()
+        wait(20)
+        for (let x = 150; x >= 50; x -= 10) {
+            sequence.move(0, flickable, x, flickable.height / 2).commit()
+            wait(20)
+        }
+        sequence.release(0, flickable, 50, flickable.height / 2).commit()
+        tryVerify(function() { return row.previewContentX > 0 })
+        compare(requestCount, 0)
+        flickable.cancelFlick()
+    }
+
     function test_live_values_and_empty_state() {
         compare(preview.rowAt(0).shownValue, "FF")
         compare(preview.rowAt(1).shownValue, "255")
@@ -157,7 +194,7 @@ TestCase {
         compare(binaryRow.previewLeadingMargin,
                 preview.rowAt(0).previewLeadingMargin)
         verify(binaryRow.previewRightPadding >= 20)
-        verify(binaryRow.previewScrollBarVisible)
+        tryCompare(binaryRow, "previewScrollBarVisible", true)
         verify(binaryRow.previewScrollBarInteractive)
         verify(binaryRow.previewScrollBarHeight >= 8)
         verify(binaryRow.previewScrollClearance >= 7,

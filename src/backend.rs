@@ -584,20 +584,68 @@ fn save_preferences(preferences: &Preferences) -> io::Result<()> {
     fs::rename(temporary_path, path)
 }
 
+#[derive(Clone, Copy, Debug, PartialEq)]
+struct ProgrammerContext {
+    base: i32,
+    bits: i32,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+struct HistoryEntry {
+    expression: String,
+    result: String,
+    programmer: Option<ProgrammerContext>,
+}
+
 #[derive(Clone, Debug, PartialEq)]
 struct CalculatorSnapshot {
     expression: String,
     result: String,
     error: String,
-    history: Vec<(String, String)>,
+    history: Vec<HistoryEntry>,
+    programmer: Option<ProgrammerContext>,
 }
 
-fn serialize_history(history: &[(String, String)]) -> String {
-    history
+struct CalculatorWorkspace {
+    snapshot: CalculatorSnapshot,
+    undo_stack: Vec<CalculatorSnapshot>,
+    redo_stack: Vec<CalculatorSnapshot>,
+}
+
+fn serialize_history(history: &[HistoryEntry]) -> String {
+    let entries = history
         .iter()
-        .map(|(expression, result)| format!("{expression}\t{result}"))
-        .collect::<Vec<_>>()
-        .join("\n")
+        .map(|entry| {
+            let programmer = entry.programmer.map_or_else(
+                || "null".into(),
+                |context| format!("{{\"base\":{},\"bits\":{}}}", context.base, context.bits),
+            );
+            format!(
+                "{{\"expression\":{},\"result\":{},\"programmer\":{programmer}}}",
+                json_string(&entry.expression),
+                json_string(&entry.result)
+            )
+        })
+        .collect::<Vec<_>>();
+    format!("[{}]", entries.join(","))
+}
+
+fn json_string(value: &str) -> String {
+    let mut encoded = String::with_capacity(value.len() + 2);
+    encoded.push('"');
+    for character in value.chars() {
+        match character {
+            '"' => encoded.push_str("\\\""),
+            '\\' => encoded.push_str("\\\\"),
+            '\n' => encoded.push_str("\\n"),
+            '\r' => encoded.push_str("\\r"),
+            '\t' => encoded.push_str("\\t"),
+            '\u{0000}'..='\u{001f}' => encoded.push_str(&format!("\\u{:04x}", character as u32)),
+            _ => encoded.push(character),
+        }
+    }
+    encoded.push('"');
+    encoded
 }
 
 fn reformat_snapshot(snapshot: &mut CalculatorSnapshot, grouping_enabled: bool) {
@@ -606,9 +654,12 @@ fn reformat_snapshot(snapshot: &mut CalculatorSnapshot, grouping_enabled: bool) 
         grouping_enabled,
     ));
     snapshot.result = reformat_digit_grouping(&snapshot.result, grouping_enabled);
-    for (expression, result) in &mut snapshot.history {
-        *expression = add_wrap_hints(&reformat_digit_grouping(expression, grouping_enabled));
-        *result = reformat_digit_grouping(result, grouping_enabled);
+    for entry in &mut snapshot.history {
+        entry.expression = add_wrap_hints(&reformat_digit_grouping(
+            &entry.expression,
+            grouping_enabled,
+        ));
+        entry.result = reformat_digit_grouping(&entry.result, grouping_enabled);
     }
 }
 
@@ -667,6 +718,16 @@ pub mod qobject {
         #[qinvokable]
         #[cxx_name = "applyExpression"]
         fn apply_expression(self: Pin<&mut CalculatorBackend>, text: &QString);
+        #[qinvokable]
+        #[cxx_name = "recallHistoryEntry"]
+        fn recall_history_entry(self: Pin<&mut CalculatorBackend>, index: i32);
+        #[qinvokable]
+        #[cxx_name = "switchCalculationMode"]
+        fn switch_calculation_mode(
+            self: Pin<&mut CalculatorBackend>,
+            current: &QString,
+            next: &QString,
+        ) -> bool;
         #[qinvokable]
         #[cxx_name = "stripCurrencySymbols"]
         fn strip_currency_symbols_for_input(&self, text: &QString) -> QString;
@@ -779,7 +840,9 @@ pub struct CalculatorBackendRust {
     window_states: [WindowState; 5],
     undo_stack: Vec<CalculatorSnapshot>,
     redo_stack: Vec<CalculatorSnapshot>,
-    history: Vec<(String, String)>,
+    history: Vec<HistoryEntry>,
+    programming_active: bool,
+    mode_workspaces: [Option<CalculatorWorkspace>; 5],
 }
 
 impl Default for CalculatorBackendRust {
@@ -790,7 +853,7 @@ impl Default for CalculatorBackendRust {
             expression: QString::default(),
             result: "0".into(),
             error: QString::default(),
-            history_data: QString::default(),
+            history_data: "[]".into(),
             format: preferences.result_format.into(),
             precision: preferences.precision,
             angle_unit: preferences.angle_unit.into(),
@@ -810,17 +873,70 @@ impl Default for CalculatorBackendRust {
             undo_stack: vec![],
             redo_stack: vec![],
             history: vec![],
+            programming_active: false,
+            mode_workspaces: std::array::from_fn(|_| None),
         }
     }
 }
 
 impl CalculatorBackendRust {
+    fn switch_workspace(
+        &mut self,
+        current: CalculatorMode,
+        next: CalculatorMode,
+    ) -> CalculatorSnapshot {
+        let programmer = (current == CalculatorMode::Programming).then_some(ProgrammerContext {
+            base: self.programmer_base,
+            bits: self.programmer_word_bits,
+        });
+        self.mode_workspaces[current.index()] = Some(CalculatorWorkspace {
+            snapshot: CalculatorSnapshot {
+                expression: self.expression.to_string(),
+                result: self.result.to_string(),
+                error: self.error.to_string(),
+                history: std::mem::take(&mut self.history),
+                programmer,
+            },
+            undo_stack: std::mem::take(&mut self.undo_stack),
+            redo_stack: std::mem::take(&mut self.redo_stack),
+        });
+        let workspace = self.mode_workspaces[next.index()]
+            .take()
+            .unwrap_or_else(|| CalculatorWorkspace {
+                snapshot: CalculatorSnapshot {
+                    expression: String::new(),
+                    result: "0".into(),
+                    error: String::new(),
+                    history: vec![],
+                    programmer: (next == CalculatorMode::Programming).then_some(
+                        ProgrammerContext {
+                            base: self.programmer_base,
+                            bits: self.programmer_word_bits,
+                        },
+                    ),
+                },
+                undo_stack: vec![],
+                redo_stack: vec![],
+            });
+        self.undo_stack = workspace.undo_stack;
+        self.redo_stack = workspace.redo_stack;
+        workspace.snapshot
+    }
+
+    fn programmer_context(&self) -> Option<ProgrammerContext> {
+        self.programming_active.then_some(ProgrammerContext {
+            base: self.programmer_base,
+            bits: self.programmer_word_bits,
+        })
+    }
+
     fn snapshot(&self) -> CalculatorSnapshot {
         CalculatorSnapshot {
             expression: self.expression.to_string(),
             result: self.result.to_string(),
             error: self.error.to_string(),
             history: self.history.clone(),
+            programmer: self.programmer_context(),
         }
     }
 
@@ -828,7 +944,7 @@ impl CalculatorBackendRust {
         let last_result = self
             .history
             .last()
-            .map(|(_, result)| result.clone())
+            .map(|entry| entry.result.clone())
             .unwrap_or_else(|| "0".to_string());
         let expression = if self.history.is_empty() {
             String::new()
@@ -840,6 +956,10 @@ impl CalculatorBackendRust {
             result: last_result,
             error: String::new(),
             history: self.history.clone(),
+            programmer: self
+                .history
+                .last()
+                .map_or_else(|| self.programmer_context(), |entry| entry.programmer),
         }
     }
 
@@ -926,11 +1046,62 @@ impl qobject::CalculatorBackend {
 
     fn restore_snapshot(mut self: Pin<&mut Self>, snapshot: CalculatorSnapshot) {
         let history_data = serialize_history(&snapshot.history);
+        self.as_mut()
+            .restore_programmer_context(snapshot.programmer);
         self.as_mut().rust_mut().history = snapshot.history;
         self.as_mut().set_expression(snapshot.expression.into());
         self.as_mut().set_result(snapshot.result.into());
         self.as_mut().set_error(snapshot.error.into());
         self.as_mut().set_history_data(history_data.into());
+    }
+
+    fn restore_programmer_context(mut self: Pin<&mut Self>, context: Option<ProgrammerContext>) {
+        self.as_mut().rust_mut().programming_active = context.is_some();
+        if let Some(context) = context {
+            if *self.programmer_base() != context.base
+                || *self.programmer_word_bits() != context.bits
+            {
+                let bit_panel_enabled = *self.programmer_bit_panel_enabled();
+                self.as_mut()
+                    .save_programmer_state(context.base, context.bits, bit_panel_enabled);
+            }
+        }
+    }
+
+    pub fn recall_history_entry(mut self: Pin<&mut Self>, index: i32) {
+        let Some(entry) = usize::try_from(index)
+            .ok()
+            .and_then(|index| self.rust().history.get(index))
+            .cloned()
+        else {
+            return;
+        };
+        // Recalling history changes the draft, not the completed calculations.
+        // Keep Redo available until the user runs another calculation.
+        self.as_mut().restore_programmer_context(entry.programmer);
+        self.as_mut().set_expression(entry.expression.into());
+        self.as_mut().set_error(QString::default());
+        self.as_mut().update_history_action_availability();
+    }
+
+    pub fn switch_calculation_mode(
+        mut self: Pin<&mut Self>,
+        current: &QString,
+        next: &QString,
+    ) -> bool {
+        let Some(current) = CalculatorMode::from_name(&current.to_string()) else {
+            return false;
+        };
+        let Some(next) = CalculatorMode::from_name(&next.to_string()) else {
+            return false;
+        };
+        if current == next {
+            return false;
+        }
+        let snapshot = self.as_mut().rust_mut().switch_workspace(current, next);
+        self.as_mut().restore_snapshot(snapshot);
+        self.as_mut().update_history_action_availability();
+        true
     }
 
     fn update_digit_grouping_display(mut self: Pin<&mut Self>, enabled: bool) {
@@ -948,9 +1119,10 @@ impl qobject::CalculatorBackend {
             for snapshot in &mut rust.redo_stack {
                 reformat_snapshot(snapshot, enabled);
             }
-            for (expression, result) in &mut rust.history {
-                *expression = add_wrap_hints(&reformat_digit_grouping(expression, enabled));
-                *result = reformat_digit_grouping(result, enabled);
+            for entry in &mut rust.history {
+                entry.expression =
+                    add_wrap_hints(&reformat_digit_grouping(&entry.expression, enabled));
+                entry.result = reformat_digit_grouping(&entry.result, enabled);
             }
             serialize_history(&rust.history)
         };
@@ -960,7 +1132,6 @@ impl qobject::CalculatorBackend {
     }
 
     pub fn insert(mut self: Pin<&mut Self>, text: &QString) {
-        self.as_mut().rust_mut().abandon_redo();
         let mut next = self.expression().to_string();
         next.push_str(&text.to_string());
         let next = format_expression_for_display(&next, self.rust().digit_grouping_active);
@@ -975,7 +1146,6 @@ impl qobject::CalculatorBackend {
         if self.expression().to_string() == text {
             return;
         }
-        self.as_mut().rust_mut().abandon_redo();
         self.as_mut().set_expression(text.into());
         self.as_mut().set_error(QString::default());
         self.as_mut().update_history_action_availability();
@@ -986,7 +1156,6 @@ impl qobject::CalculatorBackend {
     }
 
     pub fn clear(mut self: Pin<&mut Self>) {
-        self.as_mut().rust_mut().abandon_redo();
         self.as_mut().set_expression(QString::default());
         self.as_mut().set_result("0".into());
         self.as_mut().set_error(QString::default());
@@ -998,20 +1167,22 @@ impl qobject::CalculatorBackend {
         if current.is_empty() {
             return;
         }
-        self.as_mut().rust_mut().abandon_redo();
         let mut chars: Vec<char> = current.chars().collect();
         chars.pop();
         let text = chars.into_iter().collect::<String>();
         let text = format_expression_for_display(&text, self.rust().digit_grouping_active);
         self.as_mut().set_expression(text.into());
+        self.as_mut().set_error(QString::default());
         self.as_mut().update_history_action_availability();
     }
 
     pub fn calculate(mut self: Pin<&mut Self>) {
+        self.as_mut().rust_mut().programming_active = false;
         let expression = self.expression().to_string();
         if expression.trim().is_empty() {
             return;
         }
+        self.as_mut().rust_mut().abandon_redo();
         let angle = AngleUnit::from_name(&self.angle_unit().to_string());
         match crate::complex::evaluate(&expression, angle, *self.precision()) {
             Ok(value) => {
@@ -1025,10 +1196,11 @@ impl qobject::CalculatorBackend {
                     format_number_for_display(&rendered, self.rust().digit_grouping_active);
                 self.as_mut().set_result(rendered.clone().into());
                 self.as_mut().set_error(QString::default());
-                self.as_mut()
-                    .rust_mut()
-                    .history
-                    .push((expression, rendered.clone()));
+                self.as_mut().rust_mut().history.push(HistoryEntry {
+                    expression,
+                    result: rendered.clone(),
+                    programmer: None,
+                });
                 let data = serialize_history(&self.rust().history);
                 self.as_mut().set_history_data(data.into());
                 // Like GNOME Calculator, a completed result becomes the next
@@ -1038,7 +1210,6 @@ impl qobject::CalculatorBackend {
                 self.as_mut().set_expression(next_expression.into());
             }
             Err(message) => {
-                self.as_mut().rust_mut().abandon_redo();
                 self.as_mut().set_error(message.into());
             }
         }
@@ -1046,10 +1217,12 @@ impl qobject::CalculatorBackend {
     }
 
     pub fn calculate_programmer(mut self: Pin<&mut Self>, base: i32, bits: i32) {
+        self.as_mut().rust_mut().programming_active = true;
         let expression = self.expression().to_string();
         if expression.trim().is_empty() {
             return;
         }
+        self.as_mut().rust_mut().abandon_redo();
         let angle = AngleUnit::from_name(&self.angle_unit().to_string());
         match programmer_calculation_text(
             &expression,
@@ -1068,17 +1241,17 @@ impl qobject::CalculatorBackend {
                 self.as_mut().set_result(rendered.clone().into());
                 self.as_mut().set_error(QString::default());
                 if record_history {
-                    self.as_mut()
-                        .rust_mut()
-                        .history
-                        .push((expression, rendered.clone()));
+                    self.as_mut().rust_mut().history.push(HistoryEntry {
+                        expression,
+                        result: rendered.clone(),
+                        programmer: Some(ProgrammerContext { base, bits }),
+                    });
                     let data = serialize_history(&self.rust().history);
                     self.as_mut().set_history_data(data.into());
                 }
                 self.as_mut().set_expression(rendered.into());
             }
             Err(message) => {
-                self.as_mut().rust_mut().abandon_redo();
                 self.as_mut().set_error(message.into());
             }
         }
@@ -1107,7 +1280,8 @@ impl qobject::CalculatorBackend {
         rust.undo_stack.clear();
         rust.undo_stack.shrink_to_fit();
         rust.abandon_redo();
-        self.as_mut().set_history_data(QString::default());
+        rust.programming_active = false;
+        self.as_mut().set_history_data("[]".into());
         self.as_mut().update_history_action_availability();
     }
 
@@ -1188,6 +1362,24 @@ impl qobject::CalculatorBackend {
     ) {
         if !is_valid_programmer_base(base) || !is_valid_programmer_word_bits(word_bits) {
             return;
+        }
+        let next_context = ProgrammerContext {
+            base,
+            bits: word_bits,
+        };
+        if let Some(previous_context) = self.rust().programmer_context() {
+            if previous_context != next_context {
+                let angle = AngleUnit::from_name(&self.angle_unit().to_string());
+                if let Ok(result) = programmer_context_value_text_with_angle(
+                    &self.result().to_string(),
+                    previous_context,
+                    next_context,
+                    *self.precision(),
+                    angle,
+                ) {
+                    self.as_mut().set_result(result.into());
+                }
+            }
         }
         self.as_mut().set_programmer_base(base);
         self.as_mut().set_programmer_word_bits(word_bits);
@@ -1497,12 +1689,35 @@ fn programmer_resized_value_text_with_angle(
     precision: i32,
     angle: AngleUnit,
 ) -> Result<String, String> {
-    let value = precise::evaluate_programmer(expression, angle, precision, base, old_bits)?;
+    programmer_context_value_text_with_angle(
+        expression,
+        ProgrammerContext {
+            base,
+            bits: old_bits,
+        },
+        ProgrammerContext {
+            base,
+            bits: new_bits,
+        },
+        precision,
+        angle,
+    )
+}
+
+fn programmer_context_value_text_with_angle(
+    expression: &str,
+    previous: ProgrammerContext,
+    next: ProgrammerContext,
+    precision: i32,
+    angle: AngleUnit,
+) -> Result<String, String> {
+    let value =
+        precise::evaluate_programmer(expression, angle, precision, previous.base, previous.bits)?;
     let precise::ProgrammerValue::Integer(integer) = value else {
         return Err("Word size requires a whole-number result".to_string());
     };
-    let signed = signed_programmer_integer(&integer, old_bits);
-    render_programmer_integer(&signed, base, new_bits)
+    let signed = signed_programmer_integer(&integer, previous.bits);
+    render_programmer_integer(&signed, next.base, next.bits)
 }
 
 #[cfg(test)]
@@ -2081,7 +2296,11 @@ mod tests {
             backend.expression = result.into();
             backend.result = result.into();
             backend.error = QString::default();
-            backend.history.push((expression.into(), result.into()));
+            backend.history.push(HistoryEntry {
+                expression: expression.into(),
+                result: result.into(),
+                programmer: None,
+            });
         }
         assert_eq!(backend.undo_stack.len(), 3);
 
@@ -2089,7 +2308,8 @@ mod tests {
         assert_eq!(previous_record.expression, "7");
         assert_eq!(previous_record.result, "7");
         assert_eq!(previous_record.history.len(), 2);
-        assert_eq!(previous_record.history[1], ("4+3".into(), "7".into()));
+        assert_eq!(previous_record.history[1].expression, "4+3");
+        assert_eq!(previous_record.history[1].result, "7");
         assert_eq!(backend.redo_stack[0].history.len(), 3);
 
         backend.expression = previous_record.expression.into();
@@ -2114,7 +2334,11 @@ mod tests {
         assert_eq!(backend.history_action_availability(), (false, false));
 
         backend.checkpoint_history();
-        backend.history.push(("2+2".into(), "4".into()));
+        backend.history.push(HistoryEntry {
+            expression: "2+2".into(),
+            result: "4".into(),
+            programmer: None,
+        });
         assert_eq!(backend.history_action_availability(), (true, false));
 
         let previous = backend.take_undo_snapshot().unwrap();
@@ -2128,6 +2352,316 @@ mod tests {
         backend.abandon_redo();
         backend.undo_stack.clear();
         assert_eq!(backend.history_action_availability(), (false, false));
+    }
+
+    #[test]
+    fn redo_restores_completed_history_and_undo_returns_the_edited_draft() {
+        for draft in ["7+", "7+(", "", "99", "2000+\n\t2000"] {
+            for error in ["", "Invalid expression"] {
+                let mut backend = CalculatorBackendRust::default();
+                for (expression, result) in [("2+2", "4"), ("4+3", "7"), ("7*2", "14")] {
+                    backend.checkpoint_history();
+                    backend.expression = result.into();
+                    backend.result = result.into();
+                    backend.history.push(HistoryEntry {
+                        expression: expression.into(),
+                        result: result.into(),
+                        programmer: None,
+                    });
+                }
+                let completed = backend.snapshot();
+                let previous = backend.take_undo_snapshot().unwrap();
+                backend.expression = draft.into();
+                backend.result = previous.result.into();
+                backend.error = error.into();
+                backend.history = previous.history;
+                let edited = backend.snapshot();
+                assert_eq!(backend.history_action_availability(), (true, true));
+                let restored = backend.take_redo_snapshot().unwrap();
+                assert_eq!(restored, completed);
+                backend.expression = restored.expression.into();
+                backend.result = restored.result.into();
+                backend.error = restored.error.into();
+                backend.history = restored.history;
+                assert_eq!(backend.take_undo_snapshot().unwrap(), edited);
+            }
+        }
+    }
+
+    #[test]
+    fn recording_a_calculation_replaces_redo_but_does_not_record_the_unfinished_draft() {
+        let mut backend = CalculatorBackendRust::default();
+        for (expression, result) in [("2+2", "4"), ("4+3", "7"), ("7*2", "14")] {
+            backend.checkpoint_history();
+            backend.expression = result.into();
+            backend.result = result.into();
+            backend.history.push(HistoryEntry {
+                expression: expression.into(),
+                result: result.into(),
+                programmer: None,
+            });
+        }
+        let previous = backend.take_undo_snapshot().unwrap();
+        backend.expression = "7+1".into();
+        backend.result = previous.result.into();
+        backend.history = previous.history;
+        assert!(backend.history_action_availability().1);
+        backend.checkpoint_history();
+        assert!(!backend.history_action_availability().1);
+        let completed = backend.take_undo_snapshot().unwrap();
+        assert_eq!(completed.expression, "7");
+        assert_eq!(completed.history.len(), 2);
+    }
+
+    #[test]
+    fn first_visit_to_a_mode_starts_empty_without_erasing_the_previous_workspace() {
+        for next in [
+            CalculatorMode::Advanced,
+            CalculatorMode::Financial,
+            CalculatorMode::Programming,
+            CalculatorMode::Conversion,
+        ] {
+            let mut backend = CalculatorBackendRust::default();
+            backend.checkpoint_history();
+            backend.expression = "255".into();
+            backend.result = "255".into();
+            backend.history.push(HistoryEntry {
+                expression: "250+5".into(),
+                result: "255".into(),
+                programmer: None,
+            });
+            let empty = backend.switch_workspace(CalculatorMode::Basic, next);
+            assert_eq!(empty.expression, "");
+            assert_eq!(empty.result, "0");
+            assert!(empty.history.is_empty());
+            assert_eq!(backend.history_action_availability(), (false, false));
+            backend.expression = empty.expression.into();
+            backend.result = empty.result.into();
+            backend.history = empty.history;
+            let restored = backend.switch_workspace(next, CalculatorMode::Basic);
+            assert_eq!(restored.expression, "255");
+            assert_eq!(restored.result, "255");
+            assert_eq!(restored.history.len(), 1);
+            assert!(restored.programmer.is_none());
+            assert_eq!(backend.history_action_availability(), (true, false));
+        }
+    }
+
+    #[test]
+    fn a_mode_keeps_its_redo_branch_while_another_mode_is_used() {
+        let mut backend = CalculatorBackendRust::default();
+        backend.checkpoint_history();
+        backend.history.push(HistoryEntry {
+            expression: "2+2".into(),
+            result: "4".into(),
+            programmer: None,
+        });
+        backend.expression = "4".into();
+        backend.result = "4".into();
+        backend.checkpoint_history();
+        backend.history.push(HistoryEntry {
+            expression: "4+3".into(),
+            result: "7".into(),
+            programmer: None,
+        });
+        backend.expression = "7".into();
+        backend.result = "7".into();
+        let previous = backend.take_undo_snapshot().unwrap();
+        backend.expression = previous.expression.into();
+        backend.result = previous.result.into();
+        backend.history = previous.history;
+        let empty = backend.switch_workspace(CalculatorMode::Basic, CalculatorMode::Advanced);
+        backend.expression = empty.expression.into();
+        backend.result = empty.result.into();
+        backend.history = empty.history;
+        backend.checkpoint_history();
+        backend.history.push(HistoryEntry {
+            expression: "6*7".into(),
+            result: "42".into(),
+            programmer: None,
+        });
+        backend.expression = "42".into();
+        backend.result = "42".into();
+        let basic = backend.switch_workspace(CalculatorMode::Advanced, CalculatorMode::Basic);
+        assert_eq!(basic.expression, "4");
+        assert_eq!(basic.history.len(), 1);
+        assert_eq!(backend.history_action_availability(), (true, true));
+        backend.expression = basic.expression.into();
+        backend.result = basic.result.into();
+        backend.history = basic.history;
+        let redone = backend.take_redo_snapshot().unwrap();
+        assert_eq!(redone.result, "7");
+        assert_eq!(redone.history.len(), 2);
+        assert_eq!(
+            backend.mode_workspaces[CalculatorMode::Advanced.index()]
+                .as_ref()
+                .unwrap()
+                .snapshot
+                .result,
+            "42"
+        );
+    }
+
+    #[test]
+    fn an_unfinished_programmer_draft_keeps_its_base_and_word_size() {
+        let mut backend = CalculatorBackendRust::default();
+        backend.expression = "FF+".into();
+        backend.programmer_base = 16;
+        backend.programmer_word_bits = 8;
+        assert!(!backend.programming_active);
+        let empty = backend.switch_workspace(CalculatorMode::Programming, CalculatorMode::Basic);
+        backend.expression = empty.expression.into();
+        backend.result = empty.result.into();
+        backend.history = empty.history;
+        backend.programmer_base = 10;
+        backend.programmer_word_bits = 16;
+        let draft = backend.switch_workspace(CalculatorMode::Basic, CalculatorMode::Programming);
+        assert_eq!(draft.expression, "FF+");
+        assert_eq!(
+            draft.programmer,
+            Some(ProgrammerContext { base: 16, bits: 8 })
+        );
+        assert!(draft.history.is_empty());
+    }
+
+    #[test]
+    fn programming_results_follow_base_and_word_size_changes() {
+        for base in [2, 8, 10, 16] {
+            for bits in [8, 16, 64, 4096] {
+                let previous = ProgrammerContext { base, bits };
+                for value in [-129, -128, -1, 0, 1, 127, 128, 255] {
+                    let integer = Integer::from(value);
+                    let source = render_programmer_integer(&integer, base, bits).unwrap();
+                    let signed = signed_programmer_integer(&integer, bits);
+                    for next_base in [2, 8, 10, 16] {
+                        for next_bits in [8, 16, 4096] {
+                            let next = ProgrammerContext {
+                                base: next_base,
+                                bits: next_bits,
+                            };
+                            assert_eq!(
+                                programmer_context_value_text_with_angle(
+                                    &source,
+                                    previous,
+                                    next,
+                                    9,
+                                    AngleUnit::Degrees
+                                )
+                                .unwrap(),
+                                render_programmer_integer(&signed, next_base, next_bits).unwrap()
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn history_json_preserves_multiline_tabs_and_unicode() {
+        let expression = "2000+\n\t2000\r\n\"\\\u{0001}ש";
+        let history = vec![HistoryEntry {
+            expression: expression.into(),
+            result: "4000".into(),
+            programmer: None,
+        }];
+        assert_eq!(
+            serialize_history(&history),
+            "[{\"expression\":\"2000+\\n\\t2000\\r\\n\\\"\\\\\\u0001ש\",\"result\":\"4000\",\"programmer\":null}]"
+        );
+        assert_eq!(serialize_history(&[]), "[]");
+        for code in 0..32 {
+            let character = char::from_u32(code).unwrap();
+            let encoded = json_string(&character.to_string());
+            assert!(!encoded.chars().any(|character| character < ' '));
+        }
+    }
+
+    #[test]
+    fn completed_history_snapshot_restores_the_recorded_programmer_context() {
+        let mut backend = CalculatorBackendRust::default();
+        backend.programming_active = true;
+        backend.history = vec![HistoryEntry {
+            expression: "FE+1".into(),
+            result: "FF".into(),
+            programmer: Some(ProgrammerContext { base: 16, bits: 8 }),
+        }];
+        // The settings may change between calculations. The last completed
+        // result still belongs to the context in which it was recorded.
+        backend.programmer_base = 10;
+        backend.programmer_word_bits = 16;
+        backend.expression = "-1".into();
+        let completed = backend.completed_history_snapshot();
+        assert_eq!(completed.expression, "FF");
+        assert_eq!(
+            completed.programmer,
+            Some(ProgrammerContext { base: 16, bits: 8 })
+        );
+        let current = backend.snapshot();
+        assert_eq!(
+            current.programmer,
+            Some(ProgrammerContext { base: 10, bits: 16 })
+        );
+        backend.checkpoint_history();
+        assert_eq!(backend.undo_stack.last().unwrap(), &completed);
+        let undone = backend.take_undo_snapshot().unwrap();
+        assert_eq!(undone, completed);
+        assert_eq!(backend.redo_stack.last().unwrap(), &current);
+    }
+
+    #[test]
+    fn history_retains_individual_programming_contexts() {
+        let entries = vec![
+            HistoryEntry {
+                expression: "A+1".into(),
+                result: "B".into(),
+                programmer: Some(ProgrammerContext { base: 16, bits: 8 }),
+            },
+            HistoryEntry {
+                expression: "11+1".into(),
+                result: "12".into(),
+                programmer: Some(ProgrammerContext { base: 10, bits: 16 }),
+            },
+        ];
+        assert_eq!(
+            serialize_history(&entries),
+            "[{\"expression\":\"A+1\",\"result\":\"B\",\"programmer\":{\"base\":16,\"bits\":8}},{\"expression\":\"11+1\",\"result\":\"12\",\"programmer\":{\"base\":10,\"bits\":16}}]"
+        );
+    }
+
+    #[test]
+    fn undo_history_bound_and_branching_survive_repeated_cycles() {
+        let mut backend = CalculatorBackendRust::default();
+        for value in 1..=150 {
+            backend.checkpoint_history();
+            backend.history.push(HistoryEntry {
+                expression: format!("{value}+1"),
+                result: (value + 1).to_string(),
+                programmer: None,
+            });
+            backend.expression = (value + 1).to_string().into();
+            backend.result = backend.expression.clone();
+        }
+        assert_eq!(backend.undo_stack.len(), 100);
+        let completed = backend.snapshot();
+        for _ in 0..500 {
+            let previous = backend.take_undo_snapshot().unwrap();
+            backend.expression = previous.expression.into();
+            backend.result = previous.result.into();
+            backend.error = previous.error.into();
+            backend.history = previous.history;
+            let next = backend.take_redo_snapshot().unwrap();
+            assert_eq!(next, completed);
+            backend.expression = next.expression.into();
+            backend.result = next.result.into();
+            backend.error = next.error.into();
+            backend.history = next.history;
+            assert_eq!(backend.undo_stack.len(), 100);
+        }
+        let previous = backend.take_undo_snapshot().unwrap();
+        backend.history = previous.history;
+        backend.checkpoint_history();
+        assert!(backend.redo_stack.is_empty());
     }
 
     #[test]

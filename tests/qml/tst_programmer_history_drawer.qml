@@ -13,6 +13,7 @@ TestCase {
     property int undoRequestCount: 0
     property int redoRequestCount: 0
     property int entryRequestCount: 0
+    property var typingRequests: []
     property string requestedExpression: ""
     property string requestedResult: ""
     property int requestedIndex: -1
@@ -22,6 +23,12 @@ TestCase {
         width: 340
         height: 560
         visible: true
+
+        TextField {
+            id: expressionEditor
+            y: 520
+            width: parent.width
+        }
 
         Calculator.ProgrammerHistoryDrawer {
             id: drawer
@@ -35,6 +42,9 @@ TestCase {
             }
             onUndoRequested: testCase.undoRequestCount++
             onRedoRequested: testCase.redoRequestCount++
+            onTypingRequested: function(event) {
+                testCase.typingRequests.push(event.key)
+            }
             onEntryRequested: function(expression, result, index) {
                 testCase.entryRequestCount++
                 testCase.requestedExpression = expression
@@ -58,6 +68,7 @@ TestCase {
         undoRequestCount = 0
         redoRequestCount = 0
         entryRequestCount = 0
+        typingRequests = []
         requestedExpression = ""
         requestedResult = ""
         requestedIndex = -1
@@ -77,6 +88,36 @@ TestCase {
         const newest = drawer.entryAt(drawer.count - 1)
         verify(newest)
         tryCompare(newest, "activeFocus", true)
+    }
+
+    function test_typing_is_forwarded_from_history_without_recalling_an_entry() {
+        openDrawer()
+        const newest = drawer.entryAt(drawer.count - 1)
+        verify(newest)
+        newest.forceActiveFocus()
+        keyClick(Qt.Key_2)
+        compare(typingRequests.length, 1)
+        compare(typingRequests[0], Qt.Key_2)
+        compare(entryRequestCount, 0)
+        verify(drawer.opened)
+    }
+
+    function test_editor_action_during_opening_cancels_initial_focus() {
+        drawer.open()
+        drawer.cancelOpeningFocus()
+        expressionEditor.forceActiveFocus()
+        tryVerify(function() { return drawer.opened })
+        wait(30)
+        verify(expressionEditor.activeFocus)
+    }
+
+    function test_empty_history_does_not_steal_focus_from_the_editor() {
+        openDrawer()
+        expressionEditor.forceActiveFocus()
+        historyEntries = []
+        tryCompare(drawer, "count", 0)
+        wait(30)
+        verify(expressionEditor.activeFocus)
     }
 
     function test_right_side_shell_and_theme_colors() {
