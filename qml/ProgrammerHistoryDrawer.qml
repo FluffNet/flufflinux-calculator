@@ -257,9 +257,9 @@ Drawer {
                 })
 
                 ScrollBar.vertical: ScrollBar {
+                    id: historyScrollBar
                     policy: ScrollBar.AsNeeded
                     interactive: true
-                    width: 8
                     Accessible.name: qsTr("History scrollbar")
                 }
 
@@ -274,10 +274,11 @@ Drawer {
                         root.entryResult(modelData)
                     readonly property bool preservesFullText:
                         equationLabel.elide === Text.ElideNone
-                            && equationLabel.wrapMode === Text.WrapAnywhere
+                            && equationLabel.wrapMode === Text.WrapAtWordBoundaryOrAnywhere
 
                     objectName: "programmerHistoryEntry" + index
-                    width: Math.max(0, ListView.view.width - 10)
+                    width: Math.max(0, ListView.view.width
+                        - (historyScrollBar.visible ? historyScrollBar.width + 2 : 0))
                     height: equationLabel.implicitHeight + 20
                     padding: 10
                     focusPolicy: Qt.StrongFocus
@@ -310,7 +311,7 @@ Drawer {
                             + " = <b>" + root.escapedText(historyEntry.resultText) + "</b>"
                         color: historyEntry.palette.text
                         textFormat: Text.StyledText
-                        wrapMode: Text.WrapAnywhere
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         elide: Text.ElideNone
                         verticalAlignment: Text.AlignVCenter
                     }

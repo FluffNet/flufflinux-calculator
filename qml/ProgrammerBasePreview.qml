@@ -40,7 +40,7 @@ Control {
     leftPadding: 0
     rightPadding: 0
     bottomPadding: 8
-    implicitHeight: 172
+    implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
     clip: true
     Accessible.ignored: !visible
 
@@ -98,8 +98,9 @@ Control {
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.minimumHeight: 41
-                Layout.preferredHeight: root.height / root.rows.length
+                Layout.minimumHeight: Math.max(41, previewValue.implicitHeight
+                    + (previewScrollBar.visible ? previewScrollBar.height + 15 : 8))
+                Layout.preferredHeight: Layout.minimumHeight
                 objectName: "programmerBaseRow" + modelData.label
                 enabled: !root.hasExpression
                     || (root.values && root.values.length === 4
@@ -248,7 +249,6 @@ Control {
                                     ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
                                 interactive: true
                                 minimumSize: 0.08
-                                height: 8
                                 focusPolicy: Qt.StrongFocus
                                 Accessible.name: qsTr("%1 value scrollbar").arg(baseRow.modelData.name)
                             }

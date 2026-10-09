@@ -117,6 +117,58 @@ TestCase {
         tryCompare(editor, "cursorPosition", editor.text.length)
     }
 
+    function test_history_wraps_operator_with_following_number_data() {
+        return [{tag: "narrow", width: 290}, {tag: "user_width", width: 340},
+                {tag: "wider", width: 420}, {tag: "programming", width: 340, programming: true}]
+    }
+
+    function test_history_wraps_operator_with_following_number(data) {
+        const calculation = "200+200+200+100+600+50+200+200+100+100+100"
+        const expression = calculation.replace(/\+/g, "\u200b+")
+        backend.entries = [{expression: expression, result: "2,050"}]
+        tryCompare(history, "count", 1)
+        let entry
+        if (data.programming) {
+            drawer.open()
+            tryVerify(function() { return drawer.opened })
+            entry = drawer.entryAt(0)
+        } else {
+            history.width = data.width
+            entry = history.itemAtIndex(0)
+        }
+        verify(entry)
+        const label = entry.contentItem
+        label.forceLayout()
+        verify(waitForRendering(label))
+        const lineCount = label.lineCount
+        verify(lineCount > 1)
+        // Invisible links let us measure the actual styled history layout.
+        // They keep the same glyphs, font, wrapping, and bold result.
+        label.linkColor = label.color
+        const terms = expression.split("\u200b")
+        label.text = terms.map(function(term, index) {
+            if (index === 0) return term
+            return '<a href="operator' + index + '">+</a><a href="operand'
+                + index + '">' + term[1] + '</a>' + term.slice(2)
+        }).join("\u200b") + " = <b>2,050</b>"
+        verify(waitForRendering(label))
+        compare(label.lineCount, lineCount)
+        const rows = {}
+        for (let y = 0; y < label.height; y += 2) {
+            for (let x = 0; x < label.width; x += 2) {
+                const link = label.linkAt(x, y)
+                if (link.length > 0 && rows[link] === undefined) rows[link] = y
+            }
+        }
+        for (let index = 1; index < terms.length; index++) {
+            verify(rows["operator" + index] !== undefined, "operator must be visible")
+            verify(rows["operand" + index] !== undefined, "following number must be visible")
+            compare(rows["operator" + index], rows["operand" + index],
+                    "each + must share a line with the number that follows it")
+        }
+        history.width = 330
+    }
+
     function test_click_restores_expression_not_result_without_calculating() {
         clickEntry(0)
         tryCompare(restored, "count", 1)

@@ -6,6 +6,8 @@ fn main() {
             QmlModule::new("com.flufflinux.calculator")
                 .qml_file("qml/Main.qml")
                 .qml_file("qml/ExpressionViewport.qml")
+                .qml_file("qml/ValueViewport.qml")
+                .qml_file("qml/ExpressionEditorSync.qml")
                 .qml_file("qml/HistoryRecall.qml")
                 .qml_file("qml/CalculationHistoryEntry.qml")
                 .qml_file("qml/CheckmarkMenuItem.qml")

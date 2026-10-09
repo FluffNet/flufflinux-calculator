@@ -58,11 +58,11 @@ fn add_wrap_hints(input: &str) -> String {
     let mut output = String::with_capacity(input.len());
 
     for (index, character) in chars.iter().copied().enumerate() {
-        output.push(character);
         if !matches!(
             character,
             '+' | '-' | '−' | '*' | '×' | '/' | '÷' | '^' | '∧' | '∨' | '⊻'
         ) {
+            output.push(character);
             continue;
         }
 
@@ -70,7 +70,6 @@ fn add_wrap_hints(input: &str) -> String {
             .iter()
             .rposition(|c| !c.is_whitespace())
             .map(|position| (position, chars[position]));
-        let next = chars[index + 1..].iter().find(|c| !c.is_whitespace());
         let has_left_operand = previous
             .map(|(_, c)| {
                 !matches!(
@@ -91,9 +90,11 @@ fn add_wrap_hints(input: &str) -> String {
                 })
                 .unwrap_or(false);
 
-        if has_left_operand && next.is_some() && !exponent_sign {
+        // A wrapped term starts with its operator, including while it is being typed.
+        if has_left_operand && !exponent_sign {
             output.push(WRAP_HINT);
         }
+        output.push(character);
     }
 
     output
@@ -2699,9 +2700,23 @@ mod tests {
         assert_eq!(checked, 50);
         assert_eq!(
             add_wrap_hints("192.168.0.129+192.168.0.23453+2121"),
-            "192.168.0.129+\u{200b}192.168.0.23453+\u{200b}2121"
+            "192.168.0.129\u{200b}+192.168.0.23453\u{200b}+2121"
         );
-        assert_eq!(add_wrap_hints("-12+1e-10"), "-12+\u{200b}1e-10");
+        assert_eq!(add_wrap_hints("-12+1e-10"), "-12\u{200b}+1e-10");
+    }
+
+    #[test]
+    fn wrap_hints_keep_operators_with_following_terms() {
+        let calculation = "200+200+200+100+600+50+200+200+100+100+100";
+        let expected = "200\u{200b}+200\u{200b}+200\u{200b}+100\u{200b}+600\u{200b}+50\u{200b}+200\u{200b}+200\u{200b}+100\u{200b}+100\u{200b}+100";
+        assert_eq!(add_wrap_hints(calculation), expected);
+        assert_eq!(evaluate(&expected, AngleUnit::Degrees).unwrap(), 2050.0);
+        assert_eq!(add_wrap_hints("123+"), "123\u{200b}+");
+        assert_eq!(
+            add_wrap_hints("-12*-3+1e-10"),
+            "-12\u{200b}*-3\u{200b}+1e-10"
+        );
+        assert_eq!(add_wrap_hints("12+\u{200b}3"), "12\u{200b}+3");
     }
 
     #[test]
@@ -2732,11 +2747,11 @@ mod tests {
         }
         assert_eq!(
             format_expression_for_display("1000+20000", true),
-            "1,000+\u{200b}20,000"
+            "1,000\u{200b}+20,000"
         );
         assert_eq!(
             format_expression_for_display("1,000+20,000", false),
-            "1,000+\u{200b}20,000"
+            "1,000\u{200b}+20,000"
         );
         assert_eq!(
             reformat_digit_grouping("1,000+\u{200b}20,000", false),
