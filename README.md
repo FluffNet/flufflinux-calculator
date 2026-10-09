@@ -114,7 +114,7 @@ Run the staged application without installing it:
 Create a pacman package archive:
 
 ```sh
-bsdtar --zstd -cf flufflinux-calculator-2026.10-1-x86_64.pkg.tar.zst -C fakeroot .PKGINFO usr
+bsdtar --zstd -cf flufflinux-calculator-2026.10-2-x86_64.pkg.tar.zst -C fakeroot .PKGINFO usr
 ```
 
 Package build systems can install into their own staging directory:

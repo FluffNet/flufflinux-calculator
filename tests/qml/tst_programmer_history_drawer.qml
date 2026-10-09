@@ -176,7 +176,7 @@ TestCase {
 
     function test_structured_and_tab_separated_entries_are_supported() {
         openDrawer()
-        tryVerify(function() { return drawer.entryAt(1) !== null })
+        tryVerify(function() { return drawer.entryAt(0) !== null && drawer.entryAt(1) !== null })
         const first = drawer.entryAt(0)
         const second = drawer.entryAt(1)
         compare(first.expressionText, "FF + 1")
@@ -211,6 +211,27 @@ TestCase {
         compare(entry.resultText, longResult)
         verify(entry.preservesFullText)
         verify(entry.height > 46)
+    }
+
+    function test_scrollbar_and_entries_fit_without_overlap() {
+        historyEntries = Array.from({ length: 40 }, function(_, index) {
+            return { expression: "F".repeat(64) + "+" + index, result: "1".repeat(64) }
+        })
+        openDrawer()
+        const list = findChild(drawer.contentItem, "programmerHistoryList")
+        const bar = list.ScrollBar.vertical
+        tryCompare(bar, "visible", true)
+        verify(bar.width >= bar.implicitWidth,
+               "history scrollbar must fit the native style")
+        const entry = drawer.entryAt(drawer.count - 1)
+        verify(entry)
+        verify(entry.mapToItem(list, entry.width, 0).x <= bar.x - 2,
+               "history text must stop before the scrollbar")
+        const endPosition = list.contentY
+        mouseWheel(list, list.width / 2, list.height / 2, 0, 120, Qt.NoButton)
+        tryVerify(function() { return list.contentY < endPosition })
+        wait(250)
+        list.cancelFlick()
     }
 
     function test_history_actions_are_keyboard_accessible() {

@@ -149,6 +149,15 @@ ApplicationWindow {
     }
 
     CalculatorBackend { id: backend }
+    ExpressionEditorSync {
+        calculatorBackend: backend
+        expressionEditor: editor
+        logicalCursorIndex: window.logicalCursorIndex
+        editorCursorPosition: window.editorCursorPosition
+        onInputEdited: {
+            if (editor.activeFocus) typingCursorVisibility.typingActivity()
+        }
+    }
     ProgrammerKeyRules { id: programmerRules }
     ProgrammerKeySet { id: programmerKeySet }
     ExpressionTypingRouter { id: expressionTypingRouter }
@@ -1164,7 +1173,7 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Calculator For Fluff Linux")
-                    + "\n" + qsTr("Version %1").arg("2026.10-1")
+                    + "\n" + qsTr("Version %1").arg("2026.10-2")
                     + "\n\nCopyright © 2026 FluffNet LLC"
                     + "\nGNU General Public License v3.0 or later"
                 wrapMode: Text.WordWrap
@@ -1457,8 +1466,7 @@ ApplicationWindow {
             Layout.fillHeight: visible && window.mode !== "programming"
             Layout.preferredHeight: !visible ? 0
                 : window.mode === "programming"
-                    ? (editorRow.needsSecondLine || backend.error.length > 0
-                        ? 269 : 233)
+                    ? programmerBasePreview.implicitHeight + editorRow.Layout.preferredHeight + 1
                     : 245
             ColumnLayout { anchors.fill: parent; spacing: 0
                 Rectangle {
@@ -1506,7 +1514,9 @@ ApplicationWindow {
                     readonly property bool needsSecondLine:
                         expressionMetrics.advanceWidth * fittedFontSize > availableTextWidth * 22
                     Layout.fillWidth: true
-                    Layout.preferredHeight: needsSecondLine || backend.error.length > 0 ? 96 : 60
+                    Layout.preferredHeight: needsSecondLine || backend.error.length > 0
+                        ? Math.max(96, editorViewport.maximumViewportHeight
+                                   + (backend.error.length > 0 ? 34 : 16)) : 60
                     color: palette.window
 
                     TextMetrics {
@@ -1523,37 +1533,25 @@ ApplicationWindow {
                         anchors.leftMargin: 18
                         anchors.rightMargin: 58
                         textFont: editor.font
-                        height: Math.min(editorRow.availableTextHeight, maximumTextHeight)
+                        expressionEditor: editor
+                        height: Math.min(editorRow.availableTextHeight, maximumViewportHeight)
                         y: 8 + (editorRow.availableTextHeight - height) / 2
                         TextArea {
                             id: editor
                             objectName: "expressionEditor"
-                            property int cursorSyncRevision: 0
                             width: editorViewport.availableWidth
-                            text: backend.expression; color: palette.text; selectionColor: palette.highlight; selectedTextColor: palette.highlightedText
+                            color: palette.text; selectionColor: palette.highlight; selectedTextColor: palette.highlightedText
                             font.pixelSize: editorRow.fittedFontSize
                             verticalAlignment: TextEdit.AlignVCenter
-                            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                            // Wrap between terms; keep a long number intact and scroll it horizontally.
+                            wrapMode: TextEdit.WordWrap
+                            textFormat: TextEdit.PlainText
                             selectByMouse: !editorViewport.touchInputActive
                             focus: true
-                            clip: true
                             padding: 0
                             background: null
                             cursorVisible: activeFocus && typingCursorVisibility.cursorVisible
                             Keys.priority: Keys.BeforeItem
-                            onTextChanged: {
-                                cursorSyncRevision++
-                                if (text !== backend.expression) {
-                                    if (activeFocus) typingCursorVisibility.typingActivity()
-                                    const logicalIndex = window.logicalCursorIndex(text, cursorPosition)
-                                    backend.applyExpression(text)
-                                    const revision = ++cursorSyncRevision
-                                    Qt.callLater(function() {
-                                        if (editor.activeFocus && revision === editor.cursorSyncRevision)
-                                            editor.cursorPosition = window.editorCursorPosition(editor.text, logicalIndex)
-                                    })
-                                }
-                            }
                             Keys.onPressed: function(event) {
                                 if (!window.programmerTypingAllowed(event.text,
                                                                     event.modifiers)) {
@@ -1646,8 +1644,8 @@ ApplicationWindow {
                     id: programmerBasePreview
                     visible: window.mode === "programming"
                     Layout.fillWidth: true
-                    Layout.minimumHeight: visible ? 172 : 0
-                    Layout.preferredHeight: visible ? 172 : 0
+                    Layout.minimumHeight: visible ? implicitHeight : 0
+                    Layout.preferredHeight: visible ? implicitHeight : 0
                     currentBase: window.programBase
                     values: window.programmerPreviewParts
                     hasExpression: backend.expression.trim().length > 0
@@ -2028,23 +2026,32 @@ ApplicationWindow {
                                 Item {
                                     Layout.fillWidth: true
                                     Layout.preferredWidth: 1
-                                    Layout.preferredHeight: fromValue.implicitHeight
-                                    TextField {
-                                        id: fromValue
-                                        objectName: "auxiliaryTextInput"
+                                    Layout.preferredHeight: fromValueViewport.implicitHeight
+                                    ValueViewport {
+                                        id: fromValueViewport
+                                        objectName: "fromValueViewport"
                                         anchors.fill: parent
-                                        visible: !conversionPanel.isErrorText(text)
-                                        placeholderText: qsTr("Value")
-                                        font.pixelSize: 18
-                                        horizontalAlignment: Qt.application.layoutDirection === Qt.RightToLeft
-                                            ? TextInput.AlignRight : TextInput.AlignLeft
-                                        selectByMouse: true
-                                        onActiveFocusChanged: {
-                                            if (activeFocus) conversionPanel.activeValueField = fromValue
-                                        }
-                                        onTextEdited: {
-                                            window.stripCurrencySymbolsFromField(fromValue)
-                                            conversionPanel.updateOther(fromValue)
+                                        visible: !conversionPanel.isErrorText(fromValue.text)
+                                        valueField: fromValue
+                                        TextField {
+                                            id: fromValue
+                                            objectName: "auxiliaryTextInput"
+                                            width: fromValueViewport.contentWidth
+                                            autoScroll: false
+                                            background: null
+                                            visible: !conversionPanel.isErrorText(text)
+                                            placeholderText: qsTr("Value")
+                                            font.pixelSize: 18
+                                            horizontalAlignment: Qt.application.layoutDirection === Qt.RightToLeft
+                                                ? TextInput.AlignRight : TextInput.AlignLeft
+                                            selectByMouse: !fromValueViewport.touchInputActive
+                                            onActiveFocusChanged: {
+                                                if (activeFocus) conversionPanel.activeValueField = fromValue
+                                            }
+                                            onTextEdited: {
+                                                window.stripCurrencySymbolsFromField(fromValue)
+                                                conversionPanel.updateOther(fromValue)
+                                            }
                                         }
                                     }
                                     Text {
@@ -2108,23 +2115,32 @@ ApplicationWindow {
                                 Item {
                                     Layout.fillWidth: true
                                     Layout.preferredWidth: 1
-                                    Layout.preferredHeight: toValue.implicitHeight
-                                    TextField {
-                                        id: toValue
-                                        objectName: "auxiliaryTextInput"
+                                    Layout.preferredHeight: toValueViewport.implicitHeight
+                                    ValueViewport {
+                                        id: toValueViewport
+                                        objectName: "toValueViewport"
                                         anchors.fill: parent
-                                        visible: !conversionPanel.isErrorText(text)
-                                        placeholderText: qsTr("Value")
-                                        font.pixelSize: 18
-                                        horizontalAlignment: Qt.application.layoutDirection === Qt.RightToLeft
-                                            ? TextInput.AlignRight : TextInput.AlignLeft
-                                        selectByMouse: true
-                                        onActiveFocusChanged: {
-                                            if (activeFocus) conversionPanel.activeValueField = toValue
-                                        }
-                                        onTextEdited: {
-                                            window.stripCurrencySymbolsFromField(toValue)
-                                            conversionPanel.updateOther(toValue)
+                                        visible: !conversionPanel.isErrorText(toValue.text)
+                                        valueField: toValue
+                                        TextField {
+                                            id: toValue
+                                            objectName: "auxiliaryTextInput"
+                                            width: toValueViewport.contentWidth
+                                            autoScroll: false
+                                            background: null
+                                            visible: !conversionPanel.isErrorText(text)
+                                            placeholderText: qsTr("Value")
+                                            font.pixelSize: 18
+                                            horizontalAlignment: Qt.application.layoutDirection === Qt.RightToLeft
+                                                ? TextInput.AlignRight : TextInput.AlignLeft
+                                            selectByMouse: !toValueViewport.touchInputActive
+                                            onActiveFocusChanged: {
+                                                if (activeFocus) conversionPanel.activeValueField = toValue
+                                            }
+                                            onTextEdited: {
+                                                window.stripCurrencySymbolsFromField(toValue)
+                                                conversionPanel.updateOther(toValue)
+                                            }
                                         }
                                     }
                                     Text {

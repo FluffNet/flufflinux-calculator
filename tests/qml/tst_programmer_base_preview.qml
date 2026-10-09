@@ -14,12 +14,14 @@ TestCase {
     ApplicationWindow {
         id: testWindow
         width: 520
-        height: 172
+        // Leave room for platform window insets while testing the minimum preview size.
+        height: Math.max(172, preview.implicitHeight) + 64
         visible: true
 
         Calculator.ProgrammerBasePreview {
             id: preview
-            anchors.fill: parent
+            width: parent.width
+            height: implicitHeight
             currentBase: 16
             hasExpression: true
             values: ["FF", "255", "377", "11111111"]
@@ -31,6 +33,7 @@ TestCase {
     }
 
     function init() {
+        testWindow.width = 520
         requestedBase = 0
         requestCount = 0
         preview.currentBase = 16
@@ -186,6 +189,61 @@ TestCase {
         compare(preview.width, originalWidth)
     }
 
+    function test_all_scrollbars_and_text_fit_data() {
+        return [{ tag: "narrow", width: 340 }, { tag: "default", width: 370 },
+                { tag: "wide", width: 600 }]
+    }
+
+    function test_all_scrollbars_and_text_fit(data) {
+        testWindow.width = data.width
+        preview.values = ["F".repeat(256), "9".repeat(256),
+                          "7".repeat(256), "1".repeat(1024)]
+        for (let index = 0; index < 4; index++) {
+            const row = preview.rowAt(index)
+            const label = row.modelData.label
+            const bar = findChild(row, "programmerBaseScroll" + label)
+            const value = findChild(row, "programmerBaseValue" + label)
+            tryCompare(bar, "visible", true)
+            verify(bar.height >= bar.implicitHeight,
+                   label + " scrollbar must fit the native style")
+            const barTop = bar.mapToItem(preview, 0, 0).y
+            verify(barTop >= 0 && barTop + bar.height <= preview.height,
+                   label + " scrollbar must fit inside the preview")
+            const textTop = value.mapToItem(row, 0, 0).y
+            verify(textTop >= 0 && value.height <= value.parent.parent.height,
+                   label + " text must fit its clipping viewport")
+            verify(row.previewScrollClearance >= 7,
+                   label + " text must stay clear of the scrollbar")
+        }
+    }
+
+    function test_scrollbar_drag_and_middle_click_scroll_without_switching_base() {
+        preview.values = ["F".repeat(256), "9".repeat(256),
+                          "7".repeat(256), "1".repeat(1024)]
+        const row = preview.rowAt(3)
+        const bar = findChild(row, "programmerBaseScrollBIN")
+        tryCompare(bar, "visible", true)
+        tryVerify(function() {
+            return preview.height >= preview.implicitHeight
+        })
+        row.scrollPreviewTo(0)
+        const handleX = bar.leftPadding + bar.availableWidth * bar.visualSize / 2
+        mouseMove(bar, handleX, bar.height / 2)
+        mouseDrag(bar, handleX, bar.height / 2, bar.width / 3, 0, Qt.LeftButton)
+        tryVerify(function() { return row.previewContentX > 0 })
+        // KDE's native scrollbar also supports middle-click positioning.
+        if (bar.background && (bar.background.acceptedButtons & Qt.MiddleButton)) {
+            const value = findChild(row, "programmerBaseValueBIN")
+            value.parent.parent.cancelFlick()
+            row.scrollPreviewTo(0)
+            verify(waitForRendering(bar))
+            mouseMove(bar, bar.width * 0.75, bar.height / 2)
+            mouseClick(bar, bar.width * 0.75, bar.height / 2, Qt.MiddleButton)
+            tryVerify(function() { return row.previewContentX > 0 })
+        }
+        compare(requestCount, 0)
+    }
+
     function test_long_values_have_real_keyboard_scrolling() {
         preview.values = ["F".repeat(1024), "9".repeat(1000),
                           "7".repeat(1200), "1".repeat(4096)]
@@ -197,8 +255,8 @@ TestCase {
         tryCompare(binaryRow, "previewScrollBarVisible", true)
         verify(binaryRow.previewScrollBarInteractive)
         verify(binaryRow.previewScrollBarHeight >= 8)
-        verify(binaryRow.previewScrollClearance >= 7,
-               "long value text must not touch its scrollbar")
+        tryVerify(function() { return binaryRow.previewScrollClearance >= 7 },
+                  1000, "long value text must not touch its scrollbar")
 
         binaryRow.scrollPreviewTo(0)
         binaryRow.forceActiveFocus(Qt.TabFocusReason)

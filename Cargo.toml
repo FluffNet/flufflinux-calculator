@@ -1,12 +1,12 @@
 [package]
 name = "flufflinux-calculator"
-version = "2026.10.0-1"
+version = "2026.10.0-2"
 edition = "2024"
 license = "GPL-3.0-or-later"
 description = "A Rust and Qt calculator for Fluff Linux"
 
 [package.metadata.flufflinux]
-release = "2026.10-1"
+release = "2026.10-2"
 
 [dependencies]
 cxx = "1"
