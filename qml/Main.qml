@@ -845,7 +845,7 @@ ApplicationWindow {
             required property int index
             required property var modelData
             width: Math.max(0, unitBox.width - unitBox.scrollBarGutter)
-            height: modelData.header ? 34 : Math.max(40, unitLabel.implicitHeight + 14)
+            height: Math.max(modelData.header ? 34 : 40, unitLabel.implicitHeight + 14)
             enabled: !modelData.header
             opacity: 1
             clip: true
@@ -874,7 +874,7 @@ ApplicationWindow {
                         : (unitBox.rightToLeft ? Text.AlignRight : Text.AlignLeft)
                     Layout.fillWidth: true
                     elide: Text.ElideNone
-                    wrapMode: Text.WordWrap
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
                 Rectangle {
                     visible: unitItem.modelData.header
@@ -1009,6 +1009,7 @@ ApplicationWindow {
                                     color: modeItem.enabled ? modeItem.palette.text : modeItem.palette.mid
                                     font: modeItem.font
                                     verticalAlignment: Text.AlignVCenter
+                                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                                 }
                             }
                             onTriggered: {
@@ -1125,7 +1126,7 @@ ApplicationWindow {
                     + "\n" + qsTr("Version %1").arg("2026.10-3")
                     + "\n\nCopyright © 2026 FluffNet LLC"
                     + "\nGNU General Public License v3.0 or later"
-                wrapMode: Text.WordWrap
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
             }
         }
@@ -1175,7 +1176,11 @@ ApplicationWindow {
         width: Math.min(window.width - 40, 340)
         modal: true
         title: qsTr("Custom root")
-        standardButtons: Dialog.Cancel | Dialog.Ok
+        standardButtons: Dialog.NoButton
+        footer: DialogButtonBox {
+            Button { text: qsTr("Cancel"); DialogButtonBox.buttonRole: DialogButtonBox.RejectRole }
+            Button { text: qsTr("OK"); DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole }
+        }
         onAccepted: {
             window.customRootDegree = rootDegreeBox.value
             window.insertRoot(rootNotation.symbol(rootDegreeBox.value))
@@ -1198,7 +1203,7 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Choose 3 for a cube root, 4 for a fourth root, or any higher degree.")
-                wrapMode: Text.WordWrap
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 color: palette.text
                 opacity: 0.8
             }
@@ -1214,10 +1219,14 @@ ApplicationWindow {
         modal: true
         title: qsTr("Financial Calculation") + "  " + financeOperation
         property string financeOperation: "Fv"
-        standardButtons: Dialog.Cancel | Dialog.Ok
+        standardButtons: Dialog.NoButton
+        footer: DialogButtonBox {
+            Button { text: qsTr("Cancel"); DialogButtonBox.buttonRole: DialogButtonBox.RejectRole }
+            Button { text: qsTr("OK"); DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole }
+        }
         onAccepted: backend.applyExpression(backend.financialValue(financeOperation, finPrincipal.text, finRate.text, finPeriods.text, finPayment.text))
         ColumnLayout { width: parent.width
-            Label { text: qsTr("Use only the fields needed by this calculation."); wrapMode: Text.WordWrap; Layout.fillWidth: true }
+            Label { text: qsTr("Use only the fields needed by this calculation."); wrapMode: Text.WrapAtWordBoundaryOrAnywhere; Layout.fillWidth: true }
             TextField { id: finPrincipal; Layout.fillWidth: true; placeholderText: qsTr("Principal / cost / present value"); onTextEdited: window.stripCurrencySymbolsFromField(finPrincipal) }
             TextField { id: finRate; Layout.fillWidth: true; placeholderText: qsTr("Rate (%)"); onTextEdited: window.stripCurrencySymbolsFromField(finRate) }
             TextField { id: finPeriods; Layout.fillWidth: true; placeholderText: qsTr("Periods / life"); onTextEdited: window.stripCurrencySymbolsFromField(finPeriods) }
@@ -1414,7 +1423,7 @@ ApplicationWindow {
                             window.focusEditorAtEnd()
                         }
                     }
-                    Label { visible: backend.error.length > 0; anchors.left: parent.left; anchors.right: parent.right; anchors.bottom: parent.bottom; anchors.margins: 5; text: window.translatedErrorText(backend.error); color: "#c01c28"; horizontalAlignment: Text.AlignHCenter; elide: Text.ElideNone; wrapMode: Text.WordWrap }
+                    Label { visible: backend.error.length > 0; anchors.left: parent.left; anchors.right: parent.right; anchors.bottom: parent.bottom; anchors.margins: 5; text: window.translatedErrorText(backend.error); color: "#c01c28"; horizontalAlignment: Text.AlignHCenter; elide: Text.ElideNone; wrapMode: Text.WrapAtWordBoundaryOrAnywhere }
                 }
                 ProgrammerBasePreview {
                     id: programmerBasePreview

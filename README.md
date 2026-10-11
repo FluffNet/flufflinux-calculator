@@ -126,7 +126,7 @@ make DESTDIR="$pkgdir" install
 
 ## Translating
 
-English and 42 translation catalogs cover all 43 supported Fluff Linux languages. Translation sources are stored in `translations`. Qt Linguist can be used to edit an existing `.ts` catalog.
+English and 95 language/script catalogs cover all 96 supported Fluff Linux choices, with 172 country locales. Swiss German and Brazilian Portuguese have additional wording catalogs. Calculator follows KDE/FluffSetup language and regional selections, preserves script variants and glibc modifiers, and supports all seven RTL languages. Translation sources are stored in `translations`. Qt Linguist can be used to edit an existing `.ts` catalog.
 
 ```sh
 linguist translations/flufflinux-calculator_de.ts

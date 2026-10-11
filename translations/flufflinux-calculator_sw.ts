@@ -20,7 +20,7 @@
     <message>
         <location line="-2"/>
         <location line="+902"/>
-        <location filename="../qml/PreferencesWindow.qml" line="+287"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+299"/>
         <source>Degrees</source>
         <translation>Digrii</translation>
     </message>
@@ -356,12 +356,12 @@
     </message>
     <message>
         <location line="-863"/>
-        <location line="+1488"/>
+        <location line="+1497"/>
         <source>Invalid input</source>
         <translation>Ingizo batili</translation>
     </message>
     <message>
-        <location line="-1487"/>
+        <location line="-1496"/>
         <source>Invalid value</source>
         <translation>Thamani batili</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1464"/>
+        <location line="+1473"/>
         <source>Whole number required</source>
         <translation>Namba kamili inahitajika</translation>
     </message>
     <message>
-        <location line="-842"/>
+        <location line="-851"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>Mzizi wa mraba. Bofya kulia au shikilia kwa mizizi mingine</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+208"/>
+        <location line="+209"/>
         <source>Custom root</source>
         <translation>Mzizi maalumu</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="-201"/>
         <source>Select calculator mode</source>
         <translation>Chagua hali ya kikokotoo</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>Hali za kikokotoo</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+46"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>Tendua</translation>
@@ -568,7 +568,7 @@
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../qml/PreferencesWindow.qml" line="-271"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-283"/>
         <source>Preferences</source>
         <translation>Mapendeleo</translation>
     </message>
@@ -610,6 +610,8 @@
     <message>
         <location line="+7"/>
         <location line="+2"/>
+        <location line="+30"/>
+        <location line="+43"/>
         <source>OK</source>
         <translation>Sawa</translation>
     </message>
@@ -619,12 +621,12 @@
         <translation>Mwonekano</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>Digit grouping</source>
         <translation>Kupanga tarakimu kwa makundi</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+22"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>Huongeza vitenganishi katika namba kubwa. Mfano: 1000000 huwa 1,000,000. Haitumiki katika Upangaji programu.</translation>
     </message>
@@ -714,7 +716,7 @@
         <translation>Hutumia gradiani 400 kwa mzunguko mzima. Mfano: sin(50) ni takriban 0.707.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="+38"/>
+        <location filename="../qml/Main.qml" line="-31"/>
         <source>Root degree</source>
         <translation>Kiwango cha mzizi</translation>
     </message>
@@ -729,7 +731,7 @@
         <translation>Ukokotoaji wa Fedha</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>Use only the fields needed by this calculation.</source>
         <translation>Tumia sehemu zinazohitajika tu kwa ukokotoaji huu.</translation>
     </message>
@@ -787,14 +789,20 @@
         <translation>Kwenda</translation>
     </message>
     <message>
-        <location filename="../qml/PreferencesWindow.qml" line="+15"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+20"/>
         <source>Reset settings</source>
         <translation>Rejesha mipangilio</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+10"/>
         <source>Close</source>
         <translation>Funga</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="-710"/>
+        <location line="+43"/>
+        <source>Cancel</source>
+        <translation>Ghairi</translation>
     </message>
 </context>
 <context>

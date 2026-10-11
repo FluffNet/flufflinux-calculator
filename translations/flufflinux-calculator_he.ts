@@ -20,7 +20,7 @@
     <message>
         <location line="-2"/>
         <location line="+902"/>
-        <location filename="../qml/PreferencesWindow.qml" line="+287"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+299"/>
         <source>Degrees</source>
         <translation>מעלות</translation>
     </message>
@@ -356,12 +356,12 @@
     </message>
     <message>
         <location line="-863"/>
-        <location line="+1488"/>
+        <location line="+1497"/>
         <source>Invalid input</source>
         <translation>קלט לא חוקי</translation>
     </message>
     <message>
-        <location line="-1487"/>
+        <location line="-1496"/>
         <source>Invalid value</source>
         <translation>ערך לא חוקי</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1464"/>
+        <location line="+1473"/>
         <source>Whole number required</source>
         <translation>נדרש מספר שלם</translation>
     </message>
     <message>
-        <location line="-842"/>
+        <location line="-851"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>שורש ריבועי. לחץ לחיצה ימנית או החזק עבור שורשים נוספים</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+208"/>
+        <location line="+209"/>
         <source>Custom root</source>
         <translation>שורש מותאם אישית</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="-201"/>
         <source>Select calculator mode</source>
         <translation>בחר מצב מחשבון</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>מצבי מחשבון</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+46"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>ביטול פעולה</translation>
@@ -568,7 +568,7 @@
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../qml/PreferencesWindow.qml" line="-271"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-283"/>
         <source>Preferences</source>
         <translation>העדפות</translation>
     </message>
@@ -610,6 +610,8 @@
     <message>
         <location line="+7"/>
         <location line="+2"/>
+        <location line="+30"/>
+        <location line="+43"/>
         <source>OK</source>
         <translation>אישור</translation>
     </message>
@@ -619,12 +621,12 @@
         <translation>תצוגה</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>Digit grouping</source>
         <translation>קיבוץ ספרות</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+22"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>מוסיף פסיקים למספרים גדולים. דוגמה: 1000000 הופך ל-1,000,000. לא בשימוש בתכנות.</translation>
     </message>
@@ -714,7 +716,7 @@
         <translation>משתמש ב-400 גרדיאנים לכל סיבוב מלא. דוגמה: sin(50) הוא בערך 0.707.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="+38"/>
+        <location filename="../qml/Main.qml" line="-31"/>
         <source>Root degree</source>
         <translation>תואר שורש</translation>
     </message>
@@ -729,7 +731,7 @@
         <translation>חישוב פיננסי</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>Use only the fields needed by this calculation.</source>
         <translation>השתמש רק בשדות הדרושים לחישוב זה.</translation>
     </message>
@@ -787,14 +789,20 @@
         <translation>ל</translation>
     </message>
     <message>
-        <location filename="../qml/PreferencesWindow.qml" line="+15"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+20"/>
         <source>Reset settings</source>
         <translation>איפוס הגדרות</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+10"/>
         <source>Close</source>
         <translation>סגירה</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="-710"/>
+        <location line="+43"/>
+        <source>Cancel</source>
+        <translation>ביטול</translation>
     </message>
 </context>
 <context>

@@ -20,7 +20,7 @@
     <message>
         <location line="-2"/>
         <location line="+902"/>
-        <location filename="../qml/PreferencesWindow.qml" line="+287"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+299"/>
         <source>Degrees</source>
         <translation>Digri</translation>
     </message>
@@ -356,12 +356,12 @@
     </message>
     <message>
         <location line="-863"/>
-        <location line="+1488"/>
+        <location line="+1497"/>
         <source>Invalid input</source>
         <translation>Di-wastong input</translation>
     </message>
     <message>
-        <location line="-1487"/>
+        <location line="-1496"/>
         <source>Invalid value</source>
         <translation>Di-wastong halaga</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1464"/>
+        <location line="+1473"/>
         <source>Whole number required</source>
         <translation>Kailangan ng buong numero</translation>
     </message>
     <message>
-        <location line="-842"/>
+        <location line="-851"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>Square root. Mag-right click o pindutin nang matagal para sa iba pang ugat</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+208"/>
+        <location line="+209"/>
         <source>Custom root</source>
         <translation>Pasadyang ugat</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="-201"/>
         <source>Select calculator mode</source>
         <translation>Piliin ang mode ng kalkulator</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>Mga mode ng kalkulator</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+46"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>I-undo</translation>
@@ -568,7 +568,7 @@
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../qml/PreferencesWindow.qml" line="-271"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-283"/>
         <source>Preferences</source>
         <translation>Mga kagustuhan</translation>
     </message>
@@ -610,6 +610,8 @@
     <message>
         <location line="+7"/>
         <location line="+2"/>
+        <location line="+30"/>
+        <location line="+43"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -619,12 +621,12 @@
         <translation>Display</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>Digit grouping</source>
         <translation>Pagpapangkat ng mga digit</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+22"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>Nagdaragdag ng mga separator sa malalaking numero. Halimbawa: nagiging 1,000,000 ang 1000000. Hindi ginagamit sa Programming.</translation>
     </message>
@@ -714,7 +716,7 @@
         <translation>Gumagamit ng 400 gradian bawat buong ikot. Halimbawa: humigit-kumulang 0.707 ang sin(50).</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="+38"/>
+        <location filename="../qml/Main.qml" line="-31"/>
         <source>Root degree</source>
         <translation>Antas ng ugat</translation>
     </message>
@@ -729,7 +731,7 @@
         <translation>Pagkalkulang Pampinansyal</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>Use only the fields needed by this calculation.</source>
         <translation>Gamitin lamang ang mga field na kailangan para sa pagkalkulang ito.</translation>
     </message>
@@ -787,14 +789,20 @@
         <translation>Patungo</translation>
     </message>
     <message>
-        <location filename="../qml/PreferencesWindow.qml" line="+15"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+20"/>
         <source>Reset settings</source>
         <translation>I-reset ang mga setting</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+10"/>
         <source>Close</source>
         <translation>Isara</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="-710"/>
+        <location line="+43"/>
+        <source>Cancel</source>
+        <translation>Kanselahin</translation>
     </message>
 </context>
 <context>

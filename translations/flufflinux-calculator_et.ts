@@ -20,7 +20,7 @@
     <message>
         <location line="-2"/>
         <location line="+902"/>
-        <location filename="../qml/PreferencesWindow.qml" line="+287"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+299"/>
         <source>Degrees</source>
         <translation>Kraadid</translation>
     </message>
@@ -356,12 +356,12 @@
     </message>
     <message>
         <location line="-863"/>
-        <location line="+1488"/>
+        <location line="+1497"/>
         <source>Invalid input</source>
         <translation>Vigane sisend</translation>
     </message>
     <message>
-        <location line="-1487"/>
+        <location line="-1496"/>
         <source>Invalid value</source>
         <translation>Vigane väärtus</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1464"/>
+        <location line="+1473"/>
         <source>Whole number required</source>
         <translation>Nõutakse täisarvu</translation>
     </message>
     <message>
-        <location line="-842"/>
+        <location line="-851"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>Ruutjuur. Täpiklik klõps või hoia all, et näha rohkem juuri</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+208"/>
+        <location line="+209"/>
         <source>Custom root</source>
         <translation>Kohandatud juur</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="-201"/>
         <source>Select calculator mode</source>
         <translation>Valige kalkulaatori režiim</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>Kalkulaatori režiimid</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+46"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>Võta tagasi</translation>
@@ -568,7 +568,7 @@
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../qml/PreferencesWindow.qml" line="-271"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-283"/>
         <source>Preferences</source>
         <translation>Eelistused</translation>
     </message>
@@ -610,6 +610,8 @@
     <message>
         <location line="+7"/>
         <location line="+2"/>
+        <location line="+30"/>
+        <location line="+43"/>
         <source>OK</source>
         <translation>Sobib</translation>
     </message>
@@ -619,12 +621,12 @@
         <translation>Kuva</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>Digit grouping</source>
         <translation>Arvude grupeerimine</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+22"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>Lisab suurtele arvudele eraldajad. Näide: 1000000 muutub 1,000,000. Programmeerimisel ei kasutata.</translation>
     </message>
@@ -714,7 +716,7 @@
         <translation>Kasutab ühe täispöörde kohta 400 gradiaani. Näide: sin(50) on umbes 0,707.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="+38"/>
+        <location filename="../qml/Main.qml" line="-31"/>
         <source>Root degree</source>
         <translation>Juure astme määr</translation>
     </message>
@@ -729,7 +731,7 @@
         <translation>Finantsarvutus</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>Use only the fields needed by this calculation.</source>
         <translation>Kasutage ainult neid välju, mida see arvutus vajab.</translation>
     </message>
@@ -787,14 +789,20 @@
         <translation>Kuni</translation>
     </message>
     <message>
-        <location filename="../qml/PreferencesWindow.qml" line="+15"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+20"/>
         <source>Reset settings</source>
         <translation>Lähtesta sätted</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+10"/>
         <source>Close</source>
         <translation>Sulge</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="-710"/>
+        <location line="+43"/>
+        <source>Cancel</source>
+        <translation>Tühista</translation>
     </message>
 </context>
 <context>

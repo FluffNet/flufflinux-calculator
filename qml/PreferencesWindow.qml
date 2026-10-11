@@ -182,12 +182,24 @@ ApplicationWindow {
                         id: groupingCheckBox
                         objectName: "groupingCheckBox"
                         Layout.fillWidth: true
-                        implicitHeight: 40 * root.uiScale
+                        implicitHeight: Math.max(40 * root.uiScale,
+                            implicitContentHeight + topPadding + bottomPadding)
                         font.pixelSize: Math.round(16 * root.uiScale)
                         text: qsTranslate("Main", "Digit grouping")
                         checked: root.calculatorBackend.digitGroupingEnabled
                         LayoutMirroring.enabled: root.rightToLeft
                         LayoutMirroring.childrenInherit: true
+                        contentItem: Label {
+                            text: groupingCheckBox.text
+                            font: groupingCheckBox.font
+                            color: groupingCheckBox.palette.windowText
+                            leftPadding: root.rightToLeft ? 0 : groupingCheckBox.indicator.width + groupingCheckBox.spacing
+                            rightPadding: root.rightToLeft ? groupingCheckBox.indicator.width + groupingCheckBox.spacing : 0
+                            LayoutMirroring.enabled: false
+                            horizontalAlignment: root.rightToLeft ? Text.AlignRight : Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
                         onClicked: {
                             root.calculatorBackend.applyDigitGrouping(checked)
                             if (root.programmerMode)
@@ -304,18 +316,26 @@ ApplicationWindow {
     footer: ToolBar {
         padding: 16 * root.uiScale
         RowLayout {
+            id: footerRow
             anchors.fill: parent
             layoutDirection: root.rightToLeft ? Qt.RightToLeft : Qt.LeftToRight
             spacing: 16 * root.uiScale
+            readonly property real buttonSpace: Math.max(1, width - 2 * spacing)
             SettingButton {
                 objectName: "resetSettingsButton"
+                Layout.minimumWidth: 0
+                Layout.maximumWidth: footerRow.buttonSpace
+                    - Math.min(closeSettingsButton.implicitWidth, closeSettingsButton.Layout.maximumWidth)
                 text: qsTranslate("Main", "Reset settings")
                 enabled: root.calculatorBackend.preferencesModified
                 onClicked: root.calculatorBackend.resetPreferences(root.programmerMode)
             }
             Item { Layout.fillWidth: true }
             SettingButton {
+                id: closeSettingsButton
                 objectName: "closeSettingsButton"
+                Layout.minimumWidth: 0
+                Layout.maximumWidth: footerRow.buttonSpace * 0.4
                 text: qsTranslate("Main", "Close")
                 onClicked: root.close()
             }

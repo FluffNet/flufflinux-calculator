@@ -30,6 +30,7 @@ MenuItem {
             color: item.enabled ? item.palette.text : item.palette.mid
             font: item.font
             verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         }
     }
 }

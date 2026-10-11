@@ -190,12 +190,24 @@ TestCase {
         tryVerify(function() { return control("precisionBox").height > originalHeight })
         verify(control("formatLabel").font.pixelSize > originalFontSize)
         verify(preferences.uiScale <= 1.6)
-        for (const name of ["resultFormatBox", "angleUnitBox", "resetSettingsButton", "closeSettingsButton"]) {
+        for (const name of ["groupingCheckBox", "resultFormatBox", "angleUnitBox", "resetSettingsButton", "closeSettingsButton"]) {
             const item = control(name)
             compare(item.contentItem.font.pixelSize, Math.round(16 * preferences.uiScale))
         }
         compare(host.width, 340)
         compare(host.height, 540)
+    }
+
+    function test_long_checkbox_label_wraps_and_grows() {
+        preferences.width = preferences.minimumWidth
+        preferences.height = preferences.minimumHeight
+        const grouping = control("groupingCheckBox")
+        grouping.text = "ZusammengehörigeZiffernFürDieErgebnisdarstellungAutomatischGruppieren"
+        tryVerify(function() { return grouping.contentItem.lineCount > 1 })
+        tryVerify(function() { return grouping.contentItem.contentHeight <= grouping.contentItem.height + 1 })
+        verify(!grouping.contentItem.truncated)
+        verify(grouping.contentItem.contentWidth <= grouping.contentItem.width + 1)
+        grouping.text = Qt.binding(function() { return qsTranslate("Main", "Digit grouping") })
     }
 
     function test_dropdown_popup_changes_the_selected_format() {
@@ -218,19 +230,24 @@ TestCase {
         preferences.height = preferences.minimumHeight
         const reset = control("resetSettingsButton")
         reset.text = "Standardeinstellungen wiederherstellen und alle geänderten Einstellungen zurücksetzen"
+        const close = control("closeSettingsButton")
+        close.text = "Dieses Einstellungsfenster vollständig schließen"
         const combo = control("resultFormatBox")
         combo.model = ["WissenschaftlicheErgebnisdarstellungMitNachkommastellen"]
         combo.currentIndex = 0
         tryVerify(function() { return reset.contentItem.lineCount > 1 && combo.contentItem.lineCount > 1 })
-        for (const item of [reset, combo]) {
+        for (const item of [reset, close, combo]) {
             verify(!item.contentItem.truncated)
             verify(item.contentItem.contentWidth <= item.contentItem.width + 1)
             tryVerify(function() { return item.contentItem.contentHeight <= item.contentItem.height + 1 }, 1000, item.objectName + ": " + item.contentItem.contentHeight + " > " + item.contentItem.height)
         }
-        const close = control("closeSettingsButton")
         verify(reset.x + reset.width <= close.x)
+        verify(close.x + close.width <= preferences.footer.width + 1,
+            "close bounds: " + close.x + ", " + close.width + ", " + preferences.footer.width)
+        verify(reset.x >= -1)
         // Restore text and model bindings for subsequent tests.
         reset.text = Qt.binding(function() { return qsTranslate("Main", "Reset settings") })
+        close.text = Qt.binding(function() { return qsTranslate("Main", "Close") })
         combo.model = Qt.binding(function() {
             return [qsTranslate("Main", "Automatic"), qsTranslate("Main", "Fixed"), qsTranslate("Main", "Scientific"), qsTranslate("Main", "Engineering")]
         })
