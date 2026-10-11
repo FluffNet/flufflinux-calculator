@@ -1,6 +1,6 @@
 # Translating Calculator
 
-Calculator follows the language selected in KDE Plasma. Translation files are stored in the `translations` folder.
+Calculator follows the language selected in KDE Plasma. English is the source language; the 42 catalogs in `translations/LANGUAGES` provide all 43 supported Fluff Linux languages. Translation files are stored in the `translations` folder.
 
 ## Edit an existing language
 
@@ -30,7 +30,7 @@ make update-translations
 Open the new `.ts` file in Qt Linguist, complete it, and run the validation command.
 The update command also adds the compiled catalog to the application resources.
 
-Hebrew is available for manual review with native right to left layout mirroring. Mathematical expressions, digits, bits, and operators still require visual review. Arabic requires a separate translation and visual review before it is enabled.
+Arabic, Hebrew, Persian, and Urdu include native right to left layout mirroring. Mathematical expressions, digits, bits, and operators remain left to right. Review both the translated text and the layout when updating these languages.
 
 ## Test one language
 

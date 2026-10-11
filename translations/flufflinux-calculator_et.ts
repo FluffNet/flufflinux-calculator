@@ -4,13 +4,13 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="+17"/>
+        <location filename="../qml/Main.qml" line="+18"/>
         <location line="+1"/>
         <source>Calculator</source>
         <translation>Kalkulaator</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -19,27 +19,27 @@
     </message>
     <message>
         <location line="-2"/>
-        <location line="+880"/>
-        <location line="+349"/>
+        <location line="+902"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+287"/>
         <source>Degrees</source>
         <translation>Kraadid</translation>
     </message>
     <message>
-        <location line="-1228"/>
-        <location line="+881"/>
-        <location line="+347"/>
+        <location line="-901"/>
+        <location line="+903"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Gradians</source>
         <translation>Goonid</translation>
     </message>
     <message>
-        <location line="-1227"/>
-        <location line="+879"/>
-        <location line="+348"/>
+        <location line="-902"/>
+        <location line="+901"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Radians</source>
         <translation>Radiaanid</translation>
     </message>
     <message>
-        <location line="-1226"/>
+        <location line="-900"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -326,42 +326,42 @@
     </message>
     <message>
         <location line="+5"/>
-        <location line="+846"/>
+        <location line="+870"/>
         <source>Basic</source>
         <translation>Elementaarne</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Advanced</source>
         <translation>Laiendatud</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Financial</source>
         <translation>Rahandus</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Programming</source>
         <translation>Programmeerimine</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Conversion</source>
         <translation>Konversioon</translation>
     </message>
     <message>
-        <location line="-839"/>
-        <location line="+1617"/>
+        <location line="-863"/>
+        <location line="+1488"/>
         <source>Invalid input</source>
         <translation>Vigane sisend</translation>
     </message>
     <message>
-        <location line="-1616"/>
+        <location line="-1487"/>
         <source>Invalid value</source>
         <translation>Vigane väärtus</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1593"/>
+        <location line="+1464"/>
         <source>Whole number required</source>
         <translation>Nõutakse täisarvu</translation>
     </message>
     <message>
-        <location line="-1036"/>
+        <location line="-842"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>Ruutjuur. Täpiklik klõps või hoia all, et näha rohkem juuri</translation>
     </message>
@@ -492,7 +492,7 @@
         <translation>Tühjenda. Ajaloo tühjendamiseks klõpsa Shiftiga</translation>
     </message>
     <message>
-        <location line="+237"/>
+        <location line="+195"/>
         <source>Square root  √</source>
         <translation>Ruutjuur  √</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+359"/>
+        <location line="+208"/>
         <source>Custom root</source>
         <translation>Kohandatud juur</translation>
     </message>
     <message>
-        <location line="-351"/>
+        <location line="-200"/>
         <source>Select calculator mode</source>
         <translation>Valige kalkulaatori režiim</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>Kalkulaatori režiimid</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+45"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>Võta tagasi</translation>
@@ -567,18 +567,18 @@
         <translation>Valikud</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+81"/>
+        <location line="+5"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-271"/>
         <source>Preferences</source>
         <translation>Eelistused</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="+14"/>
         <source>About</source>
         <translation>Programmist</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+43"/>
         <source>Fluff Linux Calculator</source>
         <translation>Fluff Linux Kalkulaator</translation>
     </message>
@@ -614,32 +614,32 @@
         <translation>Sobib</translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+157"/>
         <source>Display</source>
         <translation>Kuva</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+14"/>
         <source>Digit grouping</source>
         <translation>Arvude grupeerimine</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+11"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>Lisab suurtele arvudele eraldajad. Näide: 1000000 muutub 1,000,000. Programmeerimisel ei kasutata.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+5"/>
         <source>Result format and decimal places apply to Basic, Advanced, and Financial. Conversion chooses a sensible precision automatically.</source>
         <translation>Tulemuse vorming ja kümnendkohad kehtivad põhi-, täiustatud ja finantsrežiimile. Ümberarvestus valib automaatselt mõistliku täpsuse.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+10"/>
         <source>Result format</source>
         <translation>Tulemuse vorming</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Automatic</source>
         <translation>Automaatne</translation>
     </message>
@@ -679,27 +679,27 @@
         <translation>Inseneriteadus kasutab astmeid kolmekaupa. Näide: 12&#xa0;000 näidatakse kasutades e3.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>Decimal places</source>
         <translation>Kümnendkohad</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+25"/>
         <source>For Basic, Advanced, and Financial, sets digits after the decimal in Fixed, Scientific, and Engineering. With 3 places, 2.5 becomes 2.500.</source>
         <translation>Põhi-, Täiustatud- ja Finantsrežiimis määrab arvu pärast komakohaga Fikseeritud, Teadus- ja Insenerivormingus. Kolme kohaga muutub 2,5 väärtuseks 2,500.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+7"/>
         <source>Calculation</source>
         <translation>Arvutus</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+12"/>
         <source>Angle unit</source>
         <translation>Nurgamõõt</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Uses 360 degrees per full turn. Example: sin(30) = 0.5.</source>
         <translation>Kasutab ühe täispöörde kohta 360 kraadi. Näide: sin(30) = 0,5.</translation>
     </message>
@@ -714,7 +714,7 @@
         <translation>Kasutab ühe täispöörde kohta 400 gradiaani. Näide: sin(50) on umbes 0,707.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location filename="../qml/Main.qml" line="+38"/>
         <source>Root degree</source>
         <translation>Juure astme määr</translation>
     </message>
@@ -724,7 +724,7 @@
         <translation>Valige 3 kuubjuure jaoks, 4 neljanda juure jaoks või mõni kõrgem aste.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+15"/>
         <source>Financial Calculation</source>
         <translation>Finantsarvutus</translation>
     </message>
@@ -754,13 +754,13 @@
         <translation>Makset / jääkväärtus / tulevikuväärtus</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+185"/>
         <location line="+2"/>
         <source>Backspace</source>
         <translation>Tagasi</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+121"/>
         <source>Programmer word size</source>
         <translation>Programmeerija sõnasuurus</translation>
     </message>
@@ -770,13 +770,13 @@
         <translation>Alates</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <location line="+77"/>
+        <location line="+26"/>
+        <location line="+89"/>
         <source>Value</source>
         <translation>Väärtus</translation>
     </message>
     <message>
-        <location line="-31"/>
+        <location line="-39"/>
         <location line="+2"/>
         <source>Swap values and units</source>
         <translation>Vaheta väärtusi ja ühikuid</translation>
@@ -786,11 +786,21 @@
         <source>To</source>
         <translation>Kuni</translation>
     </message>
+    <message>
+        <location filename="../qml/PreferencesWindow.qml" line="+15"/>
+        <source>Reset settings</source>
+        <translation>Lähtesta sätted</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Close</source>
+        <translation>Sulge</translation>
+    </message>
 </context>
 <context>
     <name>ProgrammerBasePreview</name>
     <message>
-        <location filename="../qml/ProgrammerBasePreview.qml" line="+14"/>
+        <location filename="../qml/ProgrammerBasePreview.qml" line="+15"/>
         <source>Hexadecimal</source>
         <translation>Kuueteistkümnendsüsteem</translation>
     </message>
@@ -820,17 +830,17 @@
         <translation>Pole saadaval</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+86"/>
         <source>%1 value %2</source>
         <translation>%1 väärtus %2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Use %1  %2</source>
         <translation>Kasuta %1 %2</translation>
     </message>
     <message>
-        <location line="+140"/>
+        <location line="+133"/>
         <source>%1 value scrollbar</source>
         <translation>%1 väärtuse kerimisriba</translation>
     </message>
@@ -838,17 +848,17 @@
 <context>
     <name>ProgrammerBitPanel</name>
     <message>
-        <location filename="../qml/ProgrammerBitPanel.qml" line="+11"/>
+        <location filename="../qml/ProgrammerBitPanel.qml" line="+12"/>
         <source>Whole number required</source>
         <translation>Nõutakse täisarvu</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+35"/>
         <source>Bit toggle panel</source>
         <translation>Biti lülituspaneel</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+58"/>
         <source>Bit panel scrollbar</source>
         <translation>Biti paneeli kerimisriba</translation>
     </message>
@@ -959,7 +969,7 @@
 <context>
     <name>ProgrammerHistoryDrawer</name>
     <message>
-        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+8"/>
+        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+9"/>
         <source>History</source>
         <translation>Ajalugu</translation>
     </message>
@@ -969,7 +979,7 @@
         <translation>Ajalugu puudub</translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+165"/>
         <location line="+8"/>
         <location line="+2"/>
         <source>Undo</source>
@@ -999,12 +1009,12 @@
         <translation>%1 kirjet</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+17"/>
         <source>History scrollbar</source>
         <translation>Ajaloo kerimisriba</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>%1 equals %2</source>
         <translation>%1 võrdub %2</translation>
     </message>

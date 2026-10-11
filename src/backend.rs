@@ -394,6 +394,16 @@ impl Default for Preferences {
     }
 }
 
+impl Preferences {
+    fn calculation_options_are_default(&self) -> bool {
+        let defaults = Self::default();
+        self.result_format == defaults.result_format
+            && self.precision == defaults.precision
+            && self.angle_unit == defaults.angle_unit
+            && self.digit_grouping == defaults.digit_grouping
+    }
+}
+
 fn parse_preferences(text: &str) -> Preferences {
     let mut preferences = Preferences::default();
     let mut legacy_width = None;
@@ -682,6 +692,7 @@ pub mod qobject {
         #[qproperty(i32, precision)]
         #[qproperty(QString, angle_unit, cxx_name = "angleUnit")]
         #[qproperty(bool, digit_grouping_enabled, cxx_name = "digitGroupingEnabled")]
+        #[qproperty(bool, preferences_modified, cxx_name = "preferencesModified")]
         #[qproperty(QString, conversion_from_unit, cxx_name = "conversionFromUnit")]
         #[qproperty(QString, conversion_to_unit, cxx_name = "conversionToUnit")]
         #[qproperty(bool, can_undo, cxx_name = "canUndo")]
@@ -741,6 +752,9 @@ pub mod qobject {
         #[qinvokable]
         #[cxx_name = "applyDigitGrouping"]
         fn apply_digit_grouping(self: Pin<&mut CalculatorBackend>, enabled: bool);
+        #[qinvokable]
+        #[cxx_name = "resetPreferences"]
+        fn reset_preferences(self: Pin<&mut CalculatorBackend>, programming: bool);
         #[qinvokable]
         #[cxx_name = "setDigitGroupingActive"]
         fn set_digit_grouping_active(self: Pin<&mut CalculatorBackend>, enabled: bool);
@@ -827,6 +841,7 @@ pub struct CalculatorBackendRust {
     precision: i32,
     angle_unit: QString,
     digit_grouping_enabled: bool,
+    preferences_modified: bool,
     conversion_from_unit: QString,
     conversion_to_unit: QString,
     can_undo: bool,
@@ -849,6 +864,7 @@ pub struct CalculatorBackendRust {
 impl Default for CalculatorBackendRust {
     fn default() -> Self {
         let preferences = load_preferences();
+        let preferences_modified = !preferences.calculation_options_are_default();
         let basic_window = preferences.window_states[CalculatorMode::Basic.index()];
         Self {
             expression: QString::default(),
@@ -859,6 +875,7 @@ impl Default for CalculatorBackendRust {
             precision: preferences.precision,
             angle_unit: preferences.angle_unit.into(),
             digit_grouping_enabled: preferences.digit_grouping,
+            preferences_modified,
             conversion_from_unit: preferences.conversion_from_unit.into(),
             conversion_to_unit: preferences.conversion_to_unit.into(),
             can_undo: false,
@@ -1286,20 +1303,44 @@ impl qobject::CalculatorBackend {
         self.as_mut().update_history_action_availability();
     }
 
+    fn update_preferences_modified(mut self: Pin<&mut Self>) {
+        let modified = !self.rust().preferences().calculation_options_are_default();
+        self.as_mut().set_preferences_modified(modified);
+    }
+
     pub fn set_formatting(mut self: Pin<&mut Self>, format: &QString, precision: i32) {
         self.as_mut().set_format(format.to_string().into());
         self.as_mut().set_precision(precision.clamp(1, 100));
+        self.as_mut().update_preferences_modified();
         self.rust().persist_preferences();
     }
 
     pub fn apply_angle_unit(mut self: Pin<&mut Self>, unit: &QString) {
         self.as_mut().set_angle_unit(unit.to_string().into());
+        self.as_mut().update_preferences_modified();
         self.rust().persist_preferences();
     }
 
     pub fn apply_digit_grouping(mut self: Pin<&mut Self>, enabled: bool) {
         self.as_mut().update_digit_grouping_display(enabled);
         self.as_mut().set_digit_grouping_enabled(enabled);
+        self.as_mut().update_preferences_modified();
+        self.rust().persist_preferences();
+    }
+
+    pub fn reset_preferences(mut self: Pin<&mut Self>, programming: bool) {
+        if !self.rust().preferences_modified {
+            return;
+        }
+        let defaults = Preferences::default();
+        self.as_mut().set_format(defaults.result_format.into());
+        self.as_mut().set_precision(defaults.precision);
+        self.as_mut().set_angle_unit(defaults.angle_unit.into());
+        self.as_mut()
+            .update_digit_grouping_display(defaults.digit_grouping && !programming);
+        self.as_mut()
+            .set_digit_grouping_enabled(defaults.digit_grouping);
+        self.as_mut().update_preferences_modified();
         self.rust().persist_preferences();
     }
 
@@ -2041,6 +2082,43 @@ mod tests {
 
         assert_eq!(strip_currency_symbols("100-20%"), "100-20%");
         assert_eq!(strip_currency_symbols("5×9+3"), "5×9+3");
+    }
+
+    #[test]
+    fn reset_availability_tracks_only_the_preferences_window_options() {
+        let defaults = Preferences::default();
+        assert!(defaults.calculation_options_are_default());
+        for changed in [
+            Preferences {
+                result_format: "fixed".into(),
+                ..defaults.clone()
+            },
+            Preferences {
+                precision: 12,
+                ..defaults.clone()
+            },
+            Preferences {
+                angle_unit: "radians".into(),
+                ..defaults.clone()
+            },
+            Preferences {
+                digit_grouping: false,
+                ..defaults.clone()
+            },
+        ] {
+            assert!(!changed.calculation_options_are_default());
+            assert!(
+                !parse_preferences(&serialize_preferences(&changed))
+                    .calculation_options_are_default()
+            );
+        }
+        let mut unrelated = defaults;
+        unrelated.conversion_from_unit = "Meters".into();
+        unrelated.programmer_base = 16;
+        unrelated.programmer_word_bits = 32;
+        unrelated.programmer_bit_panel_enabled = true;
+        unrelated.window_states[0].width = 800;
+        assert!(unrelated.calculation_options_are_default());
     }
 
     #[test]

@@ -4,13 +4,13 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="+17"/>
+        <location filename="../qml/Main.qml" line="+18"/>
         <location line="+1"/>
         <source>Calculator</source>
         <translation>Laskin</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -19,27 +19,27 @@
     </message>
     <message>
         <location line="-2"/>
-        <location line="+880"/>
-        <location line="+349"/>
+        <location line="+902"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+287"/>
         <source>Degrees</source>
         <translation>Asteet</translation>
     </message>
     <message>
-        <location line="-1228"/>
-        <location line="+881"/>
-        <location line="+347"/>
+        <location line="-901"/>
+        <location line="+903"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Gradians</source>
         <translation>Gradiaanit</translation>
     </message>
     <message>
-        <location line="-1227"/>
-        <location line="+879"/>
-        <location line="+348"/>
+        <location line="-902"/>
+        <location line="+901"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Radians</source>
         <translation>Radiaanit</translation>
     </message>
     <message>
-        <location line="-1226"/>
+        <location line="-900"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -326,42 +326,42 @@
     </message>
     <message>
         <location line="+5"/>
-        <location line="+846"/>
+        <location line="+870"/>
         <source>Basic</source>
         <translation>Perus</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Advanced</source>
         <translation>Edistynyt</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Financial</source>
         <translation>Taloustila</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Programming</source>
         <translation>Ohjelmointi</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Conversion</source>
         <translation>Muunnos</translation>
     </message>
     <message>
-        <location line="-839"/>
-        <location line="+1617"/>
+        <location line="-863"/>
+        <location line="+1488"/>
         <source>Invalid input</source>
         <translation>Virheellinen syöte</translation>
     </message>
     <message>
-        <location line="-1616"/>
+        <location line="-1487"/>
         <source>Invalid value</source>
         <translation>Virheellinen arvo</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1593"/>
+        <location line="+1464"/>
         <source>Whole number required</source>
         <translation>Kokonaisluku vaaditaan</translation>
     </message>
     <message>
-        <location line="-1036"/>
+        <location line="-842"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>Neliöjuuri. Oikea klikkaus tai pidä pohjassa nähdäksesi enemmän juuria</translation>
     </message>
@@ -492,7 +492,7 @@
         <translation>Tyhjennä. Shift-klikkaus tyhjentää historian</translation>
     </message>
     <message>
-        <location line="+237"/>
+        <location line="+195"/>
         <source>Square root  √</source>
         <translation>Neliöjuuri √</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+359"/>
+        <location line="+208"/>
         <source>Custom root</source>
         <translation>Mukautettu juuri</translation>
     </message>
     <message>
-        <location line="-351"/>
+        <location line="-200"/>
         <source>Select calculator mode</source>
         <translation>Valitse laskimen tila</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>Laskimen tilat</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+45"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>Kumoa</translation>
@@ -567,18 +567,18 @@
         <translation>Optiot</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+81"/>
+        <location line="+5"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-271"/>
         <source>Preferences</source>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="+14"/>
         <source>About</source>
         <translation>Tietoja</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+43"/>
         <source>Fluff Linux Calculator</source>
         <translation>Fluff Linuxin laskin</translation>
     </message>
@@ -614,32 +614,32 @@
         <translation>Hyvä on</translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+157"/>
         <source>Display</source>
         <translation>Näyttö</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+14"/>
         <source>Digit grouping</source>
         <translation>Lukualueiden ryhmittely</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+11"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>Lisää erottimia isoihin lukuihin. Esimerkki: 1000000 muuttuu 1,000,000. Ei käytetä ohjelmoinnissa.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+5"/>
         <source>Result format and decimal places apply to Basic, Advanced, and Financial. Conversion chooses a sensible precision automatically.</source>
         <translation>Tulosmuoto ja desimaalit koskevat Perus, Edistynyt ja Talous tiloja. Muunnos valitsee sopivan tarkkuuden automaattisesti.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+10"/>
         <source>Result format</source>
         <translation>Tuloksen muoto</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Automatic</source>
         <translation>Automaattinen</translation>
     </message>
@@ -679,27 +679,27 @@
         <translation>Insinööri käyttää kymmenpotensseja kolmen välein. Esimerkki: 12,000 esitetään muodossa e3.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>Decimal places</source>
         <translation>Desimaalit</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+25"/>
         <source>For Basic, Advanced, and Financial, sets digits after the decimal in Fixed, Scientific, and Engineering. With 3 places, 2.5 becomes 2.500.</source>
         <translation>Perus, Edistynyt ja Talous tiloissa tämä määrittää desimaalien määrän Kiinteä, Tieteellinen ja Tekninen muodoissa. Kolmella desimaalilla 2,5 muuttuu muotoon 2,500.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+7"/>
         <source>Calculation</source>
         <translation>Laskenta</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+12"/>
         <source>Angle unit</source>
         <translation>Kulmayksikkö</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Uses 360 degrees per full turn. Example: sin(30) = 0.5.</source>
         <translation>Käyttää 360 astetta täyttä kierrosta kohden. Esimerkki: sin(30) = 0,5.</translation>
     </message>
@@ -714,7 +714,7 @@
         <translation>Käyttää 400 gradiaania täyttä kierrosta kohden. Esimerkki: sin(50) on noin 0,707.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location filename="../qml/Main.qml" line="+38"/>
         <source>Root degree</source>
         <translation>Juuren aste</translation>
     </message>
@@ -724,7 +724,7 @@
         <translation>Valitse 3 kuutiojuurelle, 4 neljännelle juurelle tai mikä tahansa korkeampi aste.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+15"/>
         <source>Financial Calculation</source>
         <translation>Talouslaskenta</translation>
     </message>
@@ -754,13 +754,13 @@
         <translation>Maksu / jäännös / tuleva arvo</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+185"/>
         <location line="+2"/>
         <source>Backspace</source>
         <translation>Askelpalautin</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+121"/>
         <source>Programmer word size</source>
         <translation>Ohjelmoijan sanakoko</translation>
     </message>
@@ -770,13 +770,13 @@
         <translation>Lähde</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <location line="+77"/>
+        <location line="+26"/>
+        <location line="+89"/>
         <source>Value</source>
         <translation>Arvo</translation>
     </message>
     <message>
-        <location line="-31"/>
+        <location line="-39"/>
         <location line="+2"/>
         <source>Swap values and units</source>
         <translation>Vaihda arvot ja yksiköt</translation>
@@ -786,11 +786,21 @@
         <source>To</source>
         <translation>Kohde</translation>
     </message>
+    <message>
+        <location filename="../qml/PreferencesWindow.qml" line="+15"/>
+        <source>Reset settings</source>
+        <translation>Palauta asetukset</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Close</source>
+        <translation>Sulje</translation>
+    </message>
 </context>
 <context>
     <name>ProgrammerBasePreview</name>
     <message>
-        <location filename="../qml/ProgrammerBasePreview.qml" line="+14"/>
+        <location filename="../qml/ProgrammerBasePreview.qml" line="+15"/>
         <source>Hexadecimal</source>
         <translation>Heksadesimaali</translation>
     </message>
@@ -820,17 +830,17 @@
         <translation>Ei saatavilla</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+86"/>
         <source>%1 value %2</source>
         <translation>%1 arvo %2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Use %1  %2</source>
         <translation>Käytä %1  %2</translation>
     </message>
     <message>
-        <location line="+140"/>
+        <location line="+133"/>
         <source>%1 value scrollbar</source>
         <translation>%1 arvo liukusäädin</translation>
     </message>
@@ -838,17 +848,17 @@
 <context>
     <name>ProgrammerBitPanel</name>
     <message>
-        <location filename="../qml/ProgrammerBitPanel.qml" line="+11"/>
+        <location filename="../qml/ProgrammerBitPanel.qml" line="+12"/>
         <source>Whole number required</source>
         <translation>Kokonaisluku vaaditaan</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+35"/>
         <source>Bit toggle panel</source>
         <translation>Bit-vaihtopaneeli</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+58"/>
         <source>Bit panel scrollbar</source>
         <translation>Bit-paneelin liukusäädin</translation>
     </message>
@@ -959,7 +969,7 @@
 <context>
     <name>ProgrammerHistoryDrawer</name>
     <message>
-        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+8"/>
+        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+9"/>
         <source>History</source>
         <translation>Historia</translation>
     </message>
@@ -969,7 +979,7 @@
         <translation>Ei vielä historiaa</translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+165"/>
         <location line="+8"/>
         <location line="+2"/>
         <source>Undo</source>
@@ -999,12 +1009,12 @@
         <translation>%1 merkintää</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+17"/>
         <source>History scrollbar</source>
         <translation>Historian liukusäädin</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>%1 equals %2</source>
         <translation>%1 yhtää %2</translation>
     </message>

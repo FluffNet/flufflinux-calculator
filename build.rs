@@ -5,6 +5,7 @@ fn main() {
         CxxQtBuilder::new_qml_module(
             QmlModule::new("com.flufflinux.calculator")
                 .qml_file("qml/Main.qml")
+                .qml_file("qml/PreferencesWindow.qml")
                 .qml_file("qml/ExpressionViewport.qml")
                 .qml_file("qml/ValueViewport.qml")
                 .qml_file("qml/ExpressionEditorSync.qml")

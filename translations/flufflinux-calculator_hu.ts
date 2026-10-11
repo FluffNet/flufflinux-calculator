@@ -4,13 +4,13 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="+17"/>
+        <location filename="../qml/Main.qml" line="+18"/>
         <location line="+1"/>
         <source>Calculator</source>
         <translation>Számológép</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -19,27 +19,27 @@
     </message>
     <message>
         <location line="-2"/>
-        <location line="+880"/>
-        <location line="+349"/>
+        <location line="+902"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+287"/>
         <source>Degrees</source>
         <translation>Fok</translation>
     </message>
     <message>
-        <location line="-1228"/>
-        <location line="+881"/>
-        <location line="+347"/>
+        <location line="-901"/>
+        <location line="+903"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Gradians</source>
         <translation>Gradián</translation>
     </message>
     <message>
-        <location line="-1227"/>
-        <location line="+879"/>
-        <location line="+348"/>
+        <location line="-902"/>
+        <location line="+901"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Radians</source>
         <translation>Radián</translation>
     </message>
     <message>
-        <location line="-1226"/>
+        <location line="-900"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -326,42 +326,42 @@
     </message>
     <message>
         <location line="+5"/>
-        <location line="+846"/>
+        <location line="+870"/>
         <source>Basic</source>
         <translation>Alap</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Advanced</source>
         <translation>Speciális</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Financial</source>
         <translation>Pénzügyi</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Programming</source>
         <translation>Programozói</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Conversion</source>
         <translation>Átváltás</translation>
     </message>
     <message>
-        <location line="-839"/>
-        <location line="+1617"/>
+        <location line="-863"/>
+        <location line="+1488"/>
         <source>Invalid input</source>
         <translation>Érvénytelen bemenet</translation>
     </message>
     <message>
-        <location line="-1616"/>
+        <location line="-1487"/>
         <source>Invalid value</source>
         <translation>Érvénytelen érték</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1593"/>
+        <location line="+1464"/>
         <source>Whole number required</source>
         <translation>Egész szám szükséges</translation>
     </message>
     <message>
-        <location line="-1036"/>
+        <location line="-842"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>Négyzetgyök. Kattintson jobb gombbal vagy tartsa lenyomva a további gyökökért</translation>
     </message>
@@ -492,7 +492,7 @@
         <translation>Törlés. Shift-kattintással törölhető a történelem</translation>
     </message>
     <message>
-        <location line="+237"/>
+        <location line="+195"/>
         <source>Square root  √</source>
         <translation>Négyzetgyök  √</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+359"/>
+        <location line="+208"/>
         <source>Custom root</source>
         <translation>Egyéni gyök</translation>
     </message>
     <message>
-        <location line="-351"/>
+        <location line="-200"/>
         <source>Select calculator mode</source>
         <translation>Számológép mód kiválasztása</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>Számológép módok</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+45"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>Visszavonás</translation>
@@ -567,18 +567,18 @@
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+81"/>
+        <location line="+5"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-271"/>
         <source>Preferences</source>
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="+14"/>
         <source>About</source>
         <translation>Névjegy</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+43"/>
         <source>Fluff Linux Calculator</source>
         <translation>Fluff Linux számológép</translation>
     </message>
@@ -614,32 +614,32 @@
         <translation>_OK</translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+157"/>
         <source>Display</source>
         <translation>Megjelenítés</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+14"/>
         <source>Digit grouping</source>
         <translation>Számjegyek csoportosítása</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+11"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>Hozzáad elválasztókat a nagy számokhoz. Példa: 1000000 lesz 1 000 000. Nem használják programozásban.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+5"/>
         <source>Result format and decimal places apply to Basic, Advanced, and Financial. Conversion chooses a sensible precision automatically.</source>
         <translation>Az eredmény formátuma és a tizedesjegyek a Basic, Advanced és Financial beállításokra vonatkoznak. Az átváltás automatikusan választ értelmes pontosságot.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+10"/>
         <source>Result format</source>
         <translation>Eredmény formátuma</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Automatic</source>
         <translation>Automatikus</translation>
     </message>
@@ -679,27 +679,27 @@
         <translation>Engineering a hármas léptékű hatványokat használ. Példa: 12 000 e3 formátumban jelenik meg.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>Decimal places</source>
         <translation>Tizedesjegyek</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+25"/>
         <source>For Basic, Advanced, and Financial, sets digits after the decimal in Fixed, Scientific, and Engineering. With 3 places, 2.5 becomes 2.500.</source>
         <translation>A Basic, Advanced és Financial esetében beállítja a tizedesjegyek számát Fixed, Scientific és Engineering formátumban. Három tizedesjeggyel 2.5 lesz 2.500.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+7"/>
         <source>Calculation</source>
         <translation>Számítás</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+12"/>
         <source>Angle unit</source>
         <translation>Szögmérték</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Uses 360 degrees per full turn. Example: sin(30) = 0.5.</source>
         <translation>Teljes fordulatnál 360 fokot használ. Példa: sin(30) = 0,5.</translation>
     </message>
@@ -714,7 +714,7 @@
         <translation>Teljes fordulatnál 400 gon-t használ. Példa: sin(50) körülbelül 0,707.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location filename="../qml/Main.qml" line="+38"/>
         <source>Root degree</source>
         <translation>Gyökfok</translation>
     </message>
@@ -724,7 +724,7 @@
         <translation>Válasszon 3-at köbgyökhöz, 4-et negyedik gyökhöz vagy bármilyen magasabb fokhoz.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+15"/>
         <source>Financial Calculation</source>
         <translation>Pénzügyi számítás</translation>
     </message>
@@ -754,13 +754,13 @@
         <translation>Fizetés / maradvány / jövőérték</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+185"/>
         <location line="+2"/>
         <source>Backspace</source>
         <translation>Visszalép</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+121"/>
         <source>Programmer word size</source>
         <translation>Programozói szószám</translation>
     </message>
@@ -770,13 +770,13 @@
         <translation>Innen</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <location line="+77"/>
+        <location line="+26"/>
+        <location line="+89"/>
         <source>Value</source>
         <translation>Érték</translation>
     </message>
     <message>
-        <location line="-31"/>
+        <location line="-39"/>
         <location line="+2"/>
         <source>Swap values and units</source>
         <translation>Értékek és egységek felcserélése</translation>
@@ -786,11 +786,21 @@
         <source>To</source>
         <translation>to</translation>
     </message>
+    <message>
+        <location filename="../qml/PreferencesWindow.qml" line="+15"/>
+        <source>Reset settings</source>
+        <translation>Beállítások visszaállítása</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Close</source>
+        <translation>Bezárás</translation>
+    </message>
 </context>
 <context>
     <name>ProgrammerBasePreview</name>
     <message>
-        <location filename="../qml/ProgrammerBasePreview.qml" line="+14"/>
+        <location filename="../qml/ProgrammerBasePreview.qml" line="+15"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimális</translation>
     </message>
@@ -820,17 +830,17 @@
         <translation>Nem érhető el</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+86"/>
         <source>%1 value %2</source>
         <translation>%1 érték %2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Use %1  %2</source>
         <translation>%1 használata %2</translation>
     </message>
     <message>
-        <location line="+140"/>
+        <location line="+133"/>
         <source>%1 value scrollbar</source>
         <translation>%1 érték görgetősáv</translation>
     </message>
@@ -838,17 +848,17 @@
 <context>
     <name>ProgrammerBitPanel</name>
     <message>
-        <location filename="../qml/ProgrammerBitPanel.qml" line="+11"/>
+        <location filename="../qml/ProgrammerBitPanel.qml" line="+12"/>
         <source>Whole number required</source>
         <translation>Egész szám szükséges</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+35"/>
         <source>Bit toggle panel</source>
         <translation>Bit váltó panel</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+58"/>
         <source>Bit panel scrollbar</source>
         <translation>Bit panel görgetősáv</translation>
     </message>
@@ -959,7 +969,7 @@
 <context>
     <name>ProgrammerHistoryDrawer</name>
     <message>
-        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+8"/>
+        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+9"/>
         <source>History</source>
         <translation>Előzmények</translation>
     </message>
@@ -969,7 +979,7 @@
         <translation>Még nincs előzmény</translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+165"/>
         <location line="+8"/>
         <location line="+2"/>
         <source>Undo</source>
@@ -999,12 +1009,12 @@
         <translation>%1 bejegyzés</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+17"/>
         <source>History scrollbar</source>
         <translation>Előzmény görgetősáv</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>%1 equals %2</source>
         <translation>%1 egyenlő %2</translation>
     </message>

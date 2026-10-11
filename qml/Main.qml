@@ -508,7 +508,7 @@ ApplicationWindow {
 
     function calculatorPopupVisible() {
         return modeMenu.visible || mainMenu.visible || angleMenu.visible
-            || rootMenu.visible || about.visible || preferencesDialog.visible
+            || rootMenu.visible || about.visible || preferencesWindow.visible
             || customRootDialog.visible || financeDialog.visible
     }
 
@@ -915,66 +915,15 @@ ApplicationWindow {
         }
     }
 
-    component PreferenceHelp: Label {
-        Layout.fillWidth: true
-        Layout.leftMargin: 8
-        Layout.rightMargin: 8
-        color: palette.text
-        opacity: 0.8
-        wrapMode: Text.WordWrap
-        horizontalAlignment: Qt.application.layoutDirection === Qt.RightToLeft
-            ? Text.AlignRight : Text.AlignLeft
-        font.pixelSize: 12
-    }
-
-    component PreferenceComboBox: ComboBox {
-        readonly property bool rightToLeft: Qt.application.layoutDirection === Qt.RightToLeft
-        Layout.minimumWidth: 112
-        Layout.preferredWidth: 150
-        Layout.maximumWidth: Math.min(170, preferencesContent.width * 0.48)
-
-        contentItem: Label {
-            leftPadding: parent.rightToLeft ? 30 : 10
-            rightPadding: parent.rightToLeft ? 10 : 30
-            text: parent.displayText
-            color: parent.palette.buttonText
-            font: parent.font
-            fontSizeMode: Text.HorizontalFit
-            minimumPixelSize: 9
-            horizontalAlignment: parent.rightToLeft
-                ? Text.AlignRight : Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideNone
-        }
-
-        indicator: Label {
-            x: parent.rightToLeft ? 10 : parent.width - width - 10
-            anchors.verticalCenter: parent.verticalCenter
-            text: "▾"
-            color: parent.palette.buttonText
-            font.pixelSize: 12
-        }
-
-        background: Rectangle {
-            color: parent.down
-                ? Qt.darker(parent.palette.button, 1.08)
-                : parent.palette.button
-            border.width: parent.visualFocus ? 2 : 1
-            border.color: parent.visualFocus
-                ? parent.palette.highlight : parent.palette.mid
-            radius: 6
-        }
-    }
-
     UndoShortcuts {
         id: undoShortcuts
-        enabled: window.mode !== "conversion"
+        enabled: window.mode !== "conversion" && !preferencesWindow.visible
         onUndoRequested: { if (enabled) window.undoHistory() }
         onRedoRequested: { if (enabled) window.redoHistory() }
     }
     ClearShortcuts {
         id: clearShortcuts
-        enabled: window.mode !== "conversion"
+        enabled: window.mode !== "conversion" && !preferencesWindow.visible
         onClearRequested: {
             if (enabled) {
                 backend.clear()
@@ -986,18 +935,18 @@ ApplicationWindow {
         id: typingCursorVisibility
         revealDelay: 1000
     }
-    Shortcut { sequence: "Shift+C"; enabled: window.mode !== "conversion"; context: Qt.ApplicationShortcut; onActivated: backend.clearHistory() }
-    Shortcut { sequence: "="; enabled: window.mode !== "conversion" && !customRootDialog.visible; onActivated: window.calculate() }
-    Shortcut { sequence: "Return"; enabled: window.mode !== "conversion" && !customRootDialog.visible && editor.activeFocus; onActivated: window.calculate() }
-    Shortcut { sequence: "Enter"; enabled: window.mode !== "conversion" && !customRootDialog.visible && editor.activeFocus; onActivated: window.calculate() }
+    Shortcut { sequence: "Shift+C"; enabled: window.mode !== "conversion" && !preferencesWindow.visible; context: Qt.ApplicationShortcut; onActivated: backend.clearHistory() }
+    Shortcut { sequence: "="; enabled: window.mode !== "conversion" && !preferencesWindow.visible && !customRootDialog.visible; onActivated: window.calculate() }
+    Shortcut { sequence: "Return"; enabled: window.mode !== "conversion" && !preferencesWindow.visible && !customRootDialog.visible && editor.activeFocus; onActivated: window.calculate() }
+    Shortcut { sequence: "Enter"; enabled: window.mode !== "conversion" && !preferencesWindow.visible && !customRootDialog.visible && editor.activeFocus; onActivated: window.calculate() }
     Shortcut {
         sequence: "Ctrl+H"
-        enabled: window.mode === "programming"
+        enabled: window.mode === "programming" && !preferencesWindow.visible
         context: Qt.ApplicationShortcut
         onActivated: window.toggleProgrammerHistory()
     }
     ProgrammerBaseShortcuts {
-        shortcutsEnabled: window.mode === "programming"
+        shortcutsEnabled: window.mode === "programming" && !preferencesWindow.visible
         onBaseRequested: function(baseValue) {
             window.switchProgrammerBase(baseValue)
         }
@@ -1070,8 +1019,8 @@ ApplicationWindow {
             }
             }
             Item { Layout.fillWidth: true }
-            ToolButton { visible: window.mode !== "programming"; text: "↶"; enabled: window.mode !== "conversion" && backend.canUndo; font.pixelSize: 20; Layout.preferredWidth: visible ? 32 : 0; Layout.fillHeight: true; Accessible.name: qsTr("Undo"); ToolTip.visible: hovered; ToolTip.text: qsTr("Undo") + "  \u2066Ctrl+Z\u2069"; onClicked: window.undoHistory() }
-            ToolButton { visible: window.mode !== "programming"; text: "↷"; enabled: window.mode !== "conversion" && backend.canRedo; font.pixelSize: 20; Layout.preferredWidth: visible ? 32 : 0; Layout.fillHeight: true; Accessible.name: qsTr("Redo"); ToolTip.visible: hovered; ToolTip.text: qsTr("Redo") + "  \u2066Ctrl+Y\u2069 / \u2066Ctrl+Shift+Z\u2069"; onClicked: window.redoHistory() }
+            ToolButton { visible: window.mode !== "programming"; text: "↶"; enabled: window.mode !== "conversion" && !preferencesWindow.visible && backend.canUndo; font.pixelSize: 20; Layout.preferredWidth: visible ? 32 : 0; Layout.fillHeight: true; Accessible.name: qsTr("Undo"); ToolTip.visible: hovered; ToolTip.text: qsTr("Undo") + "  \u2066Ctrl+Z\u2069"; onClicked: window.undoHistory() }
+            ToolButton { visible: window.mode !== "programming"; text: "↷"; enabled: window.mode !== "conversion" && !preferencesWindow.visible && backend.canRedo; font.pixelSize: 20; Layout.preferredWidth: visible ? 32 : 0; Layout.fillHeight: true; Accessible.name: qsTr("Redo"); ToolTip.visible: hovered; ToolTip.text: qsTr("Redo") + "  \u2066Ctrl+Y\u2069 / \u2066Ctrl+Shift+Z\u2069"; onClicked: window.redoHistory() }
             ToolButton {
                 id: historyToolButton
                 Layout.preferredWidth: window.mode === "programming" ? 52 : 32
@@ -1080,7 +1029,7 @@ ApplicationWindow {
                 icon.width: 20
                 icon.height: 20
                 icon.color: palette.buttonText
-                enabled: window.mode !== "conversion"
+                enabled: window.mode !== "conversion" && !preferencesWindow.visible
                 text: programmerHistorySidecarActive ? "←" : "→"
                 display: window.mode === "programming"
                     ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
@@ -1116,7 +1065,7 @@ ApplicationWindow {
                                 ? Text.AlignRight : Text.AlignLeft
                             verticalAlignment: Text.AlignVCenter
                         }
-                        onTriggered: preferencesDialog.open()
+                        onTriggered: preferencesWindow.open()
                     }
                     MenuItem {
                         id: aboutMenuItem
@@ -1143,7 +1092,7 @@ ApplicationWindow {
         y: 0
         height: parent ? parent.height : window.height
         sidecarWidth: window.programmerHistoryPanelWidth
-        enabled: window.mode === "programming"
+        enabled: window.mode === "programming" && !preferencesWindow.visible
         entries: window.historyEntries
         canUndo: backend.canUndo
         canRedo: backend.canRedo
@@ -1173,7 +1122,7 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Calculator For Fluff Linux")
-                    + "\n" + qsTr("Version %1").arg("2026.10-2")
+                    + "\n" + qsTr("Version %1").arg("2026.10-3")
                     + "\n\nCopyright © 2026 FluffNet LLC"
                     + "\nGNU General Public License v3.0 or later"
                 wrapMode: Text.WordWrap
@@ -1207,187 +1156,14 @@ ApplicationWindow {
         }
     }
 
-    Dialog {
-        id: preferencesDialog
-        focus: true
-        onClosed: Qt.callLater(window.restoreWindowTypingTarget)
-        readonly property bool rightToLeft: Qt.application.layoutDirection === Qt.RightToLeft
-        anchors.centerIn: parent
-        width: Math.max(1, window.width - 24)
-        height: Math.max(1, window.height - 24)
-        modal: true
-        title: qsTr("Preferences")
-        standardButtons: Dialog.Close
-        onOpened: {
-            if (footer)
-                footer.alignment = rightToLeft ? Qt.AlignLeft : Qt.AlignRight
-        }
-
-        header: Control {
-            implicitHeight: 52
-            contentItem: Item {
-                Label {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: 52
-                    anchors.rightMargin: 52
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: preferencesDialog.title
-                    color: preferencesDialog.palette.windowText
-                    font.pixelSize: 18
-                    fontSizeMode: Text.HorizontalFit
-                    minimumPixelSize: 12
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                ToolButton {
-                    x: preferencesDialog.rightToLeft ? 0 : parent.width - width
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 48
-                    height: parent.height
-                    text: "×"
-                    font.pixelSize: 24
-                    Accessible.name: preferencesDialog.title
-                    onClicked: preferencesDialog.reject()
-                }
-            }
-            background: Rectangle {
-                color: preferencesDialog.palette.window
-                Rectangle {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    height: 1
-                    color: preferencesDialog.palette.mid
-                    opacity: 0.65
-                }
-            }
-        }
-
-        ColumnLayout {
-            id: preferencesContent
-            width: parent.width
-            spacing: 8
-
-            Label {
-                text: qsTr("Display")
-                font.bold: true
-                Layout.fillWidth: true
-                horizontalAlignment: preferencesDialog.rightToLeft
-                    ? Text.AlignRight : Text.AlignLeft
-            }
-            CheckBox {
-                id: groupingCheckBox
-                text: qsTr("Digit grouping")
-                checked: backend.digitGroupingEnabled
-                onClicked: {
-                    backend.applyDigitGrouping(checked)
-                    if (window.mode === "programming")
-                        backend.setDigitGroupingActive(false)
-                }
-                Layout.fillWidth: true
-                indicator: Rectangle {
-                    implicitWidth: 20
-                    implicitHeight: 20
-                    x: preferencesDialog.rightToLeft
-                        ? groupingCheckBox.width - groupingCheckBox.rightPadding - width
-                        : groupingCheckBox.leftPadding
-                    y: groupingCheckBox.topPadding
-                        + (groupingCheckBox.availableHeight - height) / 2
-                    radius: 4
-                    color: "transparent"
-                    border.width: 1
-                    border.color: groupingCheckBox.activeFocus
-                        ? groupingCheckBox.palette.highlight : groupingCheckBox.palette.mid
-                    Text {
-                        anchors.centerIn: parent
-                        visible: groupingCheckBox.checked
-                        text: "✓"
-                        color: window.darkTheme ? "#ffffff" : "#000000"
-                        font.bold: true
-                        font.pixelSize: 15
-                    }
-                }
-                contentItem: Label {
-                    leftPadding: preferencesDialog.rightToLeft ? 0
-                        : groupingCheckBox.indicator.width + groupingCheckBox.spacing
-                    rightPadding: preferencesDialog.rightToLeft
-                        ? groupingCheckBox.indicator.width + groupingCheckBox.spacing : 0
-                    text: groupingCheckBox.text
-                    color: groupingCheckBox.palette.windowText
-                    font: groupingCheckBox.font
-                    horizontalAlignment: preferencesDialog.rightToLeft
-                        ? Text.AlignRight : Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WordWrap
-                }
-            }
-            PreferenceHelp {
-                text: qsTr("Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.")
-            }
-            PreferenceHelp {
-                text: qsTr("Result format and decimal places apply to Basic, Advanced, and Financial. Conversion chooses a sensible precision automatically.")
-            }
-            RowLayout {
-                Layout.fillWidth: true
-                layoutDirection: preferencesDialog.rightToLeft
-                    ? Qt.RightToLeft : Qt.LeftToRight
-                Label { text: qsTr("Result format"); Layout.fillWidth: true; wrapMode: Text.WordWrap; horizontalAlignment: preferencesDialog.rightToLeft ? Text.AlignRight : Text.AlignLeft }
-                PreferenceComboBox {
-                    id: resultFormatBox
-                    model: [qsTr("Automatic"), qsTr("Fixed"), qsTr("Scientific"), qsTr("Engineering")]
-                    currentIndex: ["automatic", "fixed", "scientific", "engineering"].indexOf(backend.format)
-                    onActivated: backend.setFormatting(["automatic", "fixed", "scientific", "engineering"][currentIndex], backend.precision)
-                }
-            }
-            PreferenceHelp {
-                text: resultFormatBox.currentIndex === 0
-                    ? qsTr("Automatic removes extra zeros. Example: 2.500 becomes 2.5.")
-                    : resultFormatBox.currentIndex === 1
-                    ? qsTr("Fixed always shows the selected decimal places. Example: 2.5 can become 2.500.")
-                    : resultFormatBox.currentIndex === 2
-                    ? qsTr("Scientific uses powers of ten. Example: 1,000,000 is shown using e6.")
-                    : qsTr("Engineering uses powers in steps of three. Example: 12,000 is shown using e3.")
-            }
-            RowLayout {
-                Layout.fillWidth: true
-                layoutDirection: preferencesDialog.rightToLeft
-                    ? Qt.RightToLeft : Qt.LeftToRight
-                Label { text: qsTr("Decimal places"); Layout.fillWidth: true; wrapMode: Text.WordWrap; horizontalAlignment: preferencesDialog.rightToLeft ? Text.AlignRight : Text.AlignLeft }
-                SpinBox {
-                    Layout.minimumWidth: 100
-                    Layout.preferredWidth: 120
-                    Layout.maximumWidth: 130
-                    from: 1
-                    to: 100
-                    value: backend.precision
-                    editable: true
-                    onValueModified: backend.setFormatting(backend.format, value)
-                }
-            }
-            PreferenceHelp {
-                text: qsTr("For Basic, Advanced, and Financial, sets digits after the decimal in Fixed, Scientific, and Engineering. With 3 places, 2.5 becomes 2.500.")
-            }
-            MenuSeparator { Layout.fillWidth: true }
-            Label { text: qsTr("Calculation"); font.bold: true; Layout.fillWidth: true; horizontalAlignment: preferencesDialog.rightToLeft ? Text.AlignRight : Text.AlignLeft }
-            RowLayout {
-                Layout.fillWidth: true
-                layoutDirection: preferencesDialog.rightToLeft
-                    ? Qt.RightToLeft : Qt.LeftToRight
-                Label { text: qsTr("Angle unit"); Layout.fillWidth: true; wrapMode: Text.WordWrap; horizontalAlignment: preferencesDialog.rightToLeft ? Text.AlignRight : Text.AlignLeft }
-                PreferenceComboBox {
-                    model: [qsTr("Degrees"), qsTr("Radians"), qsTr("Gradians")]
-                    currentIndex: ["degrees", "radians", "gradians"].indexOf(backend.angleUnit)
-                    onActivated: backend.applyAngleUnit(["degrees", "radians", "gradians"][currentIndex])
-                }
-            }
-            PreferenceHelp {
-                text: backend.angleUnit === "degrees"
-                    ? qsTr("Uses 360 degrees per full turn. Example: sin(30) = 0.5.")
-                    : backend.angleUnit === "radians"
-                    ? qsTr("Uses 2π radians per full turn. Example: sin(π / 2) = 1.")
-                    : qsTr("Uses 400 gradians per full turn. Example: sin(50) is about 0.707.")
-            }
+    PreferencesWindow {
+        id: preferencesWindow
+        calculatorBackend: backend
+        transientParent: window
+        programmerMode: window.mode === "programming"
+        onDismissed: {
+            window.requestActivate()
+            Qt.callLater(window.restoreWindowTypingTarget)
         }
     }
 
