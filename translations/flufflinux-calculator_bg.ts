@@ -4,13 +4,13 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="+17"/>
+        <location filename="../qml/Main.qml" line="+18"/>
         <location line="+1"/>
         <source>Calculator</source>
         <translation>Калкулатор</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -19,27 +19,27 @@
     </message>
     <message>
         <location line="-2"/>
-        <location line="+880"/>
-        <location line="+349"/>
+        <location line="+902"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+299"/>
         <source>Degrees</source>
         <translation>градуси</translation>
     </message>
     <message>
-        <location line="-1228"/>
-        <location line="+881"/>
-        <location line="+347"/>
+        <location line="-901"/>
+        <location line="+903"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Gradians</source>
         <translation>градиани</translation>
     </message>
     <message>
-        <location line="-1227"/>
-        <location line="+879"/>
-        <location line="+348"/>
+        <location line="-902"/>
+        <location line="+901"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Radians</source>
         <translation>радиани</translation>
     </message>
     <message>
-        <location line="-1226"/>
+        <location line="-900"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -326,42 +326,42 @@
     </message>
     <message>
         <location line="+5"/>
-        <location line="+846"/>
+        <location line="+870"/>
         <source>Basic</source>
         <translation>Основен</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Advanced</source>
         <translation>Разширен</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Financial</source>
         <translation>Финансов</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Programming</source>
         <translation>Програмиране</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Conversion</source>
         <translation>Преобразуване</translation>
     </message>
     <message>
-        <location line="-839"/>
-        <location line="+1617"/>
+        <location line="-863"/>
+        <location line="+1497"/>
         <source>Invalid input</source>
         <translation>Невалиден вход</translation>
     </message>
     <message>
-        <location line="-1616"/>
+        <location line="-1496"/>
         <source>Invalid value</source>
         <translation>Неправилна стойност</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1593"/>
+        <location line="+1473"/>
         <source>Whole number required</source>
         <translation>Изисква се цяло число</translation>
     </message>
     <message>
-        <location line="-1036"/>
+        <location line="-851"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>Корен квадратен. Щракнете с десния бутон или задръжте за повече корени</translation>
     </message>
@@ -492,7 +492,7 @@
         <translation>Изчистване. Shift щракнете, за да изчистите хронологията</translation>
     </message>
     <message>
-        <location line="+237"/>
+        <location line="+195"/>
         <source>Square root  √</source>
         <translation>Квадратен корен √</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+359"/>
+        <location line="+209"/>
         <source>Custom root</source>
         <translation>Персонализиран корен</translation>
     </message>
     <message>
-        <location line="-351"/>
+        <location line="-201"/>
         <source>Select calculator mode</source>
         <translation>Изберете режим на калкулатор</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>Режими на калкулатор</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+46"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>Отмяна</translation>
@@ -567,18 +567,18 @@
         <translation>Опции</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+81"/>
+        <location line="+5"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-283"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="+14"/>
         <source>About</source>
         <translation>Относно</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+43"/>
         <source>Fluff Linux Calculator</source>
         <translation>Калкулатор на Fluff Linux</translation>
     </message>
@@ -610,36 +610,38 @@
     <message>
         <location line="+7"/>
         <location line="+2"/>
+        <location line="+30"/>
+        <location line="+43"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+157"/>
         <source>Display</source>
         <translation>Показване</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+15"/>
         <source>Digit grouping</source>
         <translation>Групиране на цифри</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+22"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>Добавя разделители към големи числа. Пример: 1000000 става 1 000 000. Не се използва в програмирането.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+5"/>
         <source>Result format and decimal places apply to Basic, Advanced, and Financial. Conversion chooses a sensible precision automatically.</source>
         <translation>Форматът на резултата и десетичните знаци се прилагат за Basic, Advanced и Financial. Преобразуването автоматично избира разумна точност.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+10"/>
         <source>Result format</source>
         <translation>Формат на резултата</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Automatic</source>
         <translation>Автоматично</translation>
     </message>
@@ -679,27 +681,27 @@
         <translation>Engineering използва мощности на стъпки от три. Пример: 12 000 е показано с e3.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>Decimal places</source>
         <translation>Знаци след десетичната запетая</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+25"/>
         <source>For Basic, Advanced, and Financial, sets digits after the decimal in Fixed, Scientific, and Engineering. With 3 places, 2.5 becomes 2.500.</source>
         <translation>За Basic, Advanced и Financial, задава цифри след десетичната запетая във Fixed, Scientific и Engineering. С 3 места 2,5 става 2,500.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+7"/>
         <source>Calculation</source>
         <translation>Изчисление</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+12"/>
         <source>Angle unit</source>
         <translation>Ъглова единица</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Uses 360 degrees per full turn. Example: sin(30) = 0.5.</source>
         <translation>Използва 360 градуса на пълен завой. Пример: sin(30) = 0,5.</translation>
     </message>
@@ -714,7 +716,7 @@
         <translation>Използва 400 градиана на пълен ход. Пример: sin(50) е около 0,707.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location filename="../qml/Main.qml" line="-31"/>
         <source>Root degree</source>
         <translation>Коренна степен</translation>
     </message>
@@ -724,12 +726,12 @@
         <translation>Изберете 3 за кубичен корен, 4 за четвърти корен или всяка по-висока степен.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+15"/>
         <source>Financial Calculation</source>
         <translation>Финансово изчисление</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>Use only the fields needed by this calculation.</source>
         <translation>Използвайте само полетата, необходими за това изчисление.</translation>
     </message>
@@ -754,13 +756,13 @@
         <translation>Плащане / спасяване / бъдеща стойност</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+185"/>
         <location line="+2"/>
         <source>Backspace</source>
         <translation>Клавиш за изтриване</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+121"/>
         <source>Programmer word size</source>
         <translation>Размер на думата на програмиста</translation>
     </message>
@@ -770,13 +772,13 @@
         <translation>От</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <location line="+77"/>
+        <location line="+26"/>
+        <location line="+89"/>
         <source>Value</source>
         <translation>Стойност</translation>
     </message>
     <message>
-        <location line="-31"/>
+        <location line="-39"/>
         <location line="+2"/>
         <source>Swap values and units</source>
         <translation>Разменете стойности и единици</translation>
@@ -786,11 +788,27 @@
         <source>To</source>
         <translation>Към</translation>
     </message>
+    <message>
+        <location filename="../qml/PreferencesWindow.qml" line="+20"/>
+        <source>Reset settings</source>
+        <translation>Нулиране на настройките</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Close</source>
+        <translation>Затваряне</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="-710"/>
+        <location line="+43"/>
+        <source>Cancel</source>
+        <translation>Отказ</translation>
+    </message>
 </context>
 <context>
     <name>ProgrammerBasePreview</name>
     <message>
-        <location filename="../qml/ProgrammerBasePreview.qml" line="+14"/>
+        <location filename="../qml/ProgrammerBasePreview.qml" line="+15"/>
         <source>Hexadecimal</source>
         <translation>Шестнайсетична</translation>
     </message>
@@ -820,17 +838,17 @@
         <translation>Не е достъпен</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+86"/>
         <source>%1 value %2</source>
         <translation>%1 стойност %2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Use %1  %2</source>
         <translation>Използвайте %1 %2</translation>
     </message>
     <message>
-        <location line="+140"/>
+        <location line="+133"/>
         <source>%1 value scrollbar</source>
         <translation>%1 лента за превъртане на стойност</translation>
     </message>
@@ -838,17 +856,17 @@
 <context>
     <name>ProgrammerBitPanel</name>
     <message>
-        <location filename="../qml/ProgrammerBitPanel.qml" line="+11"/>
+        <location filename="../qml/ProgrammerBitPanel.qml" line="+12"/>
         <source>Whole number required</source>
         <translation>Изисква се цяло число</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+35"/>
         <source>Bit toggle panel</source>
         <translation>Панел за превключване на битове</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+58"/>
         <source>Bit panel scrollbar</source>
         <translation>Лента за превъртане на панел с битове</translation>
     </message>
@@ -959,7 +977,7 @@
 <context>
     <name>ProgrammerHistoryDrawer</name>
     <message>
-        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+8"/>
+        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+9"/>
         <source>History</source>
         <translation>История</translation>
     </message>
@@ -969,7 +987,7 @@
         <translation>Все още няма история</translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+165"/>
         <location line="+8"/>
         <location line="+2"/>
         <source>Undo</source>
@@ -999,12 +1017,12 @@
         <translation>%1 записи</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+17"/>
         <source>History scrollbar</source>
         <translation>Лента за превъртане на историята</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>%1 equals %2</source>
         <translation>%1 е равно на %2</translation>
     </message>

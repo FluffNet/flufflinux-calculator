@@ -3,11 +3,10 @@
 #include <QtGui/QGuiApplication>
 #include <QtGui/QIcon>
 #include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QLocale>
-#include <QtCore/QSettings>
 #include <QtCore/QStandardPaths>
-#include <QtCore/QStringList>
 #include <QtCore/QTranslator>
 
 namespace flufflinux {
@@ -19,64 +18,41 @@ void set_application_icon()
         QIcon::fromTheme(QStringLiteral("com.flufflinux.calculator"), fallback));
 }
 
-void install_application_translator()
+rust::Vec<rust::String> system_ui_languages()
+{
+    rust::Vec<rust::String> result;
+    for (const QString &language : QLocale::system().uiLanguages()) {
+        result.push_back(language.toStdString());
+    }
+    return result;
+}
+
+rust::Vec<rust::String> translation_directories()
+{
+    rust::Vec<rust::String> result;
+    for (const QString &directory : QStandardPaths::locateAll(
+             QStandardPaths::GenericDataLocation,
+             QStringLiteral("flufflinux-calculator/translations"),
+             QStandardPaths::LocateDirectory)) {
+        result.push_back(directory.toStdString());
+    }
+    return result;
+}
+
+bool load_application_catalog(rust::Str path)
 {
     static QTranslator translator;
-    QStringList languages;
-
-    const QString environmentLanguages = qEnvironmentVariable("LANGUAGE");
-    if (!environmentLanguages.trimmed().isEmpty()) {
-        languages.append(environmentLanguages.split(QLatin1Char(':'),
-                                                    Qt::SkipEmptyParts));
+    const QString filename = QString::fromUtf8(path.data(), static_cast<qsizetype>(path.size()));
+    // Load the exact file. Qt's automatic filename truncation must not cross scripts.
+    if (!translator.load(filename, QString(), QStringLiteral(""))) {
+        return false;
     }
+    return QCoreApplication::installTranslator(&translator);
+}
 
-    const QString plasmaLocalePath =
-        QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation)
-        + QStringLiteral("/plasma-localerc");
-    QSettings plasmaLocale(plasmaLocalePath, QSettings::IniFormat);
-    plasmaLocale.beginGroup(QStringLiteral("Translations"));
-    const QString configuredLanguages =
-        plasmaLocale.value(QStringLiteral("LANGUAGE")).toString();
-    plasmaLocale.endGroup();
-    if (!configuredLanguages.trimmed().isEmpty()) {
-        languages.append(configuredLanguages.split(QLatin1Char(':'),
-                                                   Qt::SkipEmptyParts));
-    }
-    languages.append(QLocale::system().uiLanguages());
-
-    QStringList candidates;
-    for (QString language : languages) {
-        language = language.trimmed().replace(QLatin1Char('-'), QLatin1Char('_'));
-        if (language.isEmpty()) {
-            continue;
-        }
-        if (!candidates.contains(language)) {
-            candidates.append(language);
-        }
-        const QString baseLanguage = language.section(QLatin1Char('_'), 0, 0);
-        if (!baseLanguage.isEmpty() && !candidates.contains(baseLanguage)) {
-            candidates.append(baseLanguage);
-        }
-    }
-
-    QStringList translationDirectories = QStandardPaths::locateAll(
-        QStandardPaths::GenericDataLocation,
-        QStringLiteral("flufflinux-calculator/translations"),
-        QStandardPaths::LocateDirectory);
-    translationDirectories.append(
-        QStringLiteral(":/com/flufflinux/calculator/translations"));
-
-    for (const QString &directory : translationDirectories) {
-        for (const QString &language : candidates) {
-            if (translator.load(QStringLiteral("flufflinux-calculator_") + language,
-                                directory)) {
-                QCoreApplication::installTranslator(&translator);
-                QGuiApplication::setLayoutDirection(
-                    QLocale(language).textDirection());
-                return;
-            }
-        }
-    }
+void set_application_layout_direction(bool right_to_left)
+{
+    QGuiApplication::setLayoutDirection(right_to_left ? Qt::RightToLeft : Qt::LeftToRight);
 }
 
 }

@@ -39,9 +39,18 @@ TestCase {
     function init() {
         undoCount = 0
         redoCount = 0
+        shortcuts.enabled = true
         testWindow.requestActivate()
         focusedEditor.forceActiveFocus()
         tryVerify(function() { return focusedEditor.activeFocus })
+    }
+
+    function test_disabled_shortcuts_leave_editor_keys_unhandled() {
+        shortcuts.enabled = false
+        verify(!shortcuts.handleFocusedEditorKey(Qt.Key_Z, Qt.ControlModifier))
+        keyClick(Qt.Key_Z, Qt.ControlModifier)
+        compare(undoCount, 0)
+        compare(redoCount, 0)
     }
 
     function test_ctrl_z_with_editor_focus() {

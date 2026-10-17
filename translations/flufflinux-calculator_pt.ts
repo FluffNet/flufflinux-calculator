@@ -4,13 +4,13 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="+17"/>
+        <location filename="../qml/Main.qml" line="+18"/>
         <location line="+1"/>
         <source>Calculator</source>
         <translation>Calculadora</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -19,27 +19,27 @@
     </message>
     <message>
         <location line="-2"/>
-        <location line="+880"/>
-        <location line="+349"/>
+        <location line="+902"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+299"/>
         <source>Degrees</source>
         <translation>Graus</translation>
     </message>
     <message>
-        <location line="-1228"/>
-        <location line="+881"/>
-        <location line="+347"/>
+        <location line="-901"/>
+        <location line="+903"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Gradians</source>
         <translation>Grados</translation>
     </message>
     <message>
-        <location line="-1227"/>
-        <location line="+879"/>
-        <location line="+348"/>
+        <location line="-902"/>
+        <location line="+901"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Radians</source>
         <translation>Radianos</translation>
     </message>
     <message>
-        <location line="-1226"/>
+        <location line="-900"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -326,42 +326,42 @@
     </message>
     <message>
         <location line="+5"/>
-        <location line="+846"/>
+        <location line="+870"/>
         <source>Basic</source>
         <translation>Básico</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Advanced</source>
         <translation>Avançado</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Financial</source>
         <translation>Financeiro</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Programming</source>
         <translation>Programador</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Conversion</source>
         <translation>Conversão</translation>
     </message>
     <message>
-        <location line="-839"/>
-        <location line="+1617"/>
+        <location line="-863"/>
+        <location line="+1497"/>
         <source>Invalid input</source>
         <translation>Entrada inválida</translation>
     </message>
     <message>
-        <location line="-1616"/>
+        <location line="-1496"/>
         <source>Invalid value</source>
         <translation>Valor inválido</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1593"/>
+        <location line="+1473"/>
         <source>Whole number required</source>
         <translation>O número inteiro é necessário</translation>
     </message>
     <message>
-        <location line="-1036"/>
+        <location line="-851"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>Raiz quadrada. Clique com o botão direito ou segure para obter mais raízes</translation>
     </message>
@@ -492,7 +492,7 @@
         <translation>Limpar. Shift clique para limpar o histórico</translation>
     </message>
     <message>
-        <location line="+237"/>
+        <location line="+195"/>
         <source>Square root  √</source>
         <translation>Raiz quadrada √</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+359"/>
+        <location line="+209"/>
         <source>Custom root</source>
         <translation>Raiz personalizada</translation>
     </message>
     <message>
-        <location line="-351"/>
+        <location line="-201"/>
         <source>Select calculator mode</source>
         <translation>Selecionar modo de calculadora</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>Modos de calculadora</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+46"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>Desfazer</translation>
@@ -567,18 +567,18 @@
         <translation>Opções</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+81"/>
+        <location line="+5"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-283"/>
         <source>Preferences</source>
         <translation>Preferências</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="+14"/>
         <source>About</source>
         <translation>Informações</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+43"/>
         <source>Fluff Linux Calculator</source>
         <translation>Calculadora Fluff Linux</translation>
     </message>
@@ -610,36 +610,38 @@
     <message>
         <location line="+7"/>
         <location line="+2"/>
+        <location line="+30"/>
+        <location line="+43"/>
         <source>OK</source>
         <translation>SUCESSO</translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+157"/>
         <source>Display</source>
         <translation>Visualização</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+15"/>
         <source>Digit grouping</source>
         <translation>Agrupamento de dígitos</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+22"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>Adiciona separadores a números grandes. Exemplo: 1.000.000 torna-se 1.000.000. Não usado em programação.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+5"/>
         <source>Result format and decimal places apply to Basic, Advanced, and Financial. Conversion chooses a sensible precision automatically.</source>
         <translation>O formato do resultado e as casas decimais se aplicam a Básico, Avançado e Financeiro. A conversão escolhe automaticamente uma precisão sensata.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+10"/>
         <source>Result format</source>
         <translation>Formato do resultado</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Automatic</source>
         <translation>Automático</translation>
     </message>
@@ -679,27 +681,27 @@
         <translation>usa poderes em etapas de três. Exemplo: 12.000 é mostrado usando e3.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>Decimal places</source>
         <translation>Casas decimais</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+25"/>
         <source>For Basic, Advanced, and Financial, sets digits after the decimal in Fixed, Scientific, and Engineering. With 3 places, 2.5 becomes 2.500.</source>
         <translation>Para Básico, Avançado e Financeiro, define dígitos após o decimal em Fixo, Científico e Engenharia. Com 3 vagas, 2,5 passa a 2.500.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+7"/>
         <source>Calculation</source>
         <translation>Cálculo</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+12"/>
         <source>Angle unit</source>
         <translation>Unidade angular</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Uses 360 degrees per full turn. Example: sin(30) = 0.5.</source>
         <translation>Usa 360 graus por volta completa. Exemplo: sin(30) = 0,5.</translation>
     </message>
@@ -714,7 +716,7 @@
         <translation>Usa 400 grados por turno completo. Exemplo: sin(50) é cerca de 0,707.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location filename="../qml/Main.qml" line="-31"/>
         <source>Root degree</source>
         <translation>Grau da raiz</translation>
     </message>
@@ -724,12 +726,12 @@
         <translation>Escolha 3 para uma raiz cúbica, 4 para uma raiz quarta ou qualquer grau superior.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+15"/>
         <source>Financial Calculation</source>
         <translation>Cálculo financeiro</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>Use only the fields needed by this calculation.</source>
         <translation>Use apenas os campos necessários para este cálculo.</translation>
     </message>
@@ -754,13 +756,13 @@
         <translation>Pagamento / salvamento / valor futuro</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+185"/>
         <location line="+2"/>
         <source>Backspace</source>
         <translation>Apagar</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+121"/>
         <source>Programmer word size</source>
         <translation>Tamanho da palavra do programador</translation>
     </message>
@@ -770,13 +772,13 @@
         <translation>De</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <location line="+77"/>
+        <location line="+26"/>
+        <location line="+89"/>
         <source>Value</source>
         <translation>Valor</translation>
     </message>
     <message>
-        <location line="-31"/>
+        <location line="-39"/>
         <location line="+2"/>
         <source>Swap values and units</source>
         <translation>Trocar valores e unidades</translation>
@@ -786,11 +788,27 @@
         <source>To</source>
         <translation>Para</translation>
     </message>
+    <message>
+        <location filename="../qml/PreferencesWindow.qml" line="+20"/>
+        <source>Reset settings</source>
+        <translation>Repor definições</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Close</source>
+        <translation>Fechar</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="-710"/>
+        <location line="+43"/>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
 </context>
 <context>
     <name>ProgrammerBasePreview</name>
     <message>
-        <location filename="../qml/ProgrammerBasePreview.qml" line="+14"/>
+        <location filename="../qml/ProgrammerBasePreview.qml" line="+15"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
@@ -820,17 +838,17 @@
         <translation>Não disponível</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+86"/>
         <source>%1 value %2</source>
         <translation>%1 valor %2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Use %1  %2</source>
         <translation>Usar %1 %2</translation>
     </message>
     <message>
-        <location line="+140"/>
+        <location line="+133"/>
         <source>%1 value scrollbar</source>
         <translation>%1 barra de rolagem de valores</translation>
     </message>
@@ -838,17 +856,17 @@
 <context>
     <name>ProgrammerBitPanel</name>
     <message>
-        <location filename="../qml/ProgrammerBitPanel.qml" line="+11"/>
+        <location filename="../qml/ProgrammerBitPanel.qml" line="+12"/>
         <source>Whole number required</source>
         <translation>O número inteiro é necessário</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+35"/>
         <source>Bit toggle panel</source>
         <translation>Painel de alternância de bits</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+58"/>
         <source>Bit panel scrollbar</source>
         <translation>Barra de rolagem do painel de bits</translation>
     </message>
@@ -959,7 +977,7 @@
 <context>
     <name>ProgrammerHistoryDrawer</name>
     <message>
-        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+8"/>
+        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+9"/>
         <source>History</source>
         <translation>Histórico</translation>
     </message>
@@ -969,7 +987,7 @@
         <translation>Ainda sem histórico</translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+165"/>
         <location line="+8"/>
         <location line="+2"/>
         <source>Undo</source>
@@ -999,12 +1017,12 @@
         <translation>Entradas %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+17"/>
         <source>History scrollbar</source>
         <translation>Barra de rolagem do histórico</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>%1 equals %2</source>
         <translation>%1 é igual a %2</translation>
     </message>

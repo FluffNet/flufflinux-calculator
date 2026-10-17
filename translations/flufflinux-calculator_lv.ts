@@ -4,13 +4,13 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="+17"/>
+        <location filename="../qml/Main.qml" line="+18"/>
         <location line="+1"/>
         <source>Calculator</source>
         <translation>Kalkulators</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -19,27 +19,27 @@
     </message>
     <message>
         <location line="-2"/>
-        <location line="+880"/>
-        <location line="+349"/>
+        <location line="+902"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+299"/>
         <source>Degrees</source>
         <translation>Grādi</translation>
     </message>
     <message>
-        <location line="-1228"/>
-        <location line="+881"/>
-        <location line="+347"/>
+        <location line="-901"/>
+        <location line="+903"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Gradians</source>
         <translation>Gradiāni</translation>
     </message>
     <message>
-        <location line="-1227"/>
-        <location line="+879"/>
-        <location line="+348"/>
+        <location line="-902"/>
+        <location line="+901"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Radians</source>
         <translation>Radiāni</translation>
     </message>
     <message>
-        <location line="-1226"/>
+        <location line="-900"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -326,42 +326,42 @@
     </message>
     <message>
         <location line="+5"/>
-        <location line="+846"/>
+        <location line="+870"/>
         <source>Basic</source>
         <translation>Pamata</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Advanced</source>
         <translation>Paplašināts</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Financial</source>
         <translation>Finanšu</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Programming</source>
         <translation>Programmēšanas</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Conversion</source>
         <translation>Konvertēšana</translation>
     </message>
     <message>
-        <location line="-839"/>
-        <location line="+1617"/>
+        <location line="-863"/>
+        <location line="+1497"/>
         <source>Invalid input</source>
         <translation>Nederīga ievade</translation>
     </message>
     <message>
-        <location line="-1616"/>
+        <location line="-1496"/>
         <source>Invalid value</source>
         <translation>Nederīga vērtība</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1593"/>
+        <location line="+1473"/>
         <source>Whole number required</source>
         <translation>Nepieciešams vesels skaitlis</translation>
     </message>
     <message>
-        <location line="-1036"/>
+        <location line="-851"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>Laukakmens kvadrāts. Ar peles labo pogu noklikšķiniet vai turiet, lai iegūtu vairāk sakņu</translation>
     </message>
@@ -492,7 +492,7 @@
         <translation>Notīrīt. Shift noklikšķiniet, lai notīrītu vēsturi</translation>
     </message>
     <message>
-        <location line="+237"/>
+        <location line="+195"/>
         <source>Square root  √</source>
         <translation>Laukakmens kvadrāts √</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+359"/>
+        <location line="+209"/>
         <source>Custom root</source>
         <translation>Pielāgota sakne</translation>
     </message>
     <message>
-        <location line="-351"/>
+        <location line="-201"/>
         <source>Select calculator mode</source>
         <translation>Atlasi kalkulatora režīmu</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>Kalkulatora režīmi</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+46"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>Atsaukt</translation>
@@ -567,18 +567,18 @@
         <translation>Opcijas</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+81"/>
+        <location line="+5"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-283"/>
         <source>Preferences</source>
         <translation>Iestatījumi</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="+14"/>
         <source>About</source>
         <translation>Par</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+43"/>
         <source>Fluff Linux Calculator</source>
         <translation>Fluff Linux kalkulators</translation>
     </message>
@@ -610,36 +610,38 @@
     <message>
         <location line="+7"/>
         <location line="+2"/>
+        <location line="+30"/>
+        <location line="+43"/>
         <source>OK</source>
         <translation>Labi</translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+157"/>
         <source>Display</source>
         <translation>Displejs</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+15"/>
         <source>Digit grouping</source>
         <translation>Ciparu grupēšana</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+22"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>Pievieno atdalītājus lieliem skaitļiem. Piemērs: 1000000 kļūst par 1,000,000. Netiek izmantots programmēšanā.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+5"/>
         <source>Result format and decimal places apply to Basic, Advanced, and Financial. Conversion chooses a sensible precision automatically.</source>
         <translation>Rezultāta formāts un decimāldaļas attiecas uz Basic, Advanced un Financial. Konversija automātiski izvēlas saprātīgu precizitāti.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+10"/>
         <source>Result format</source>
         <translation>Rezultāta formāts</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Automatic</source>
         <translation>Automātiska</translation>
     </message>
@@ -679,27 +681,27 @@
         <translation>Inženierzinātņu izmanto spēkus trīs soļos. Piemērs: 12,000 tiek attēlots, izmantojot e3.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>Decimal places</source>
         <translation>Decimāldaļas</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+25"/>
         <source>For Basic, Advanced, and Financial, sets digits after the decimal in Fixed, Scientific, and Engineering. With 3 places, 2.5 becomes 2.500.</source>
         <translation>Basic, Advanced un Financial, iestata ciparus aiz komata Fiksētajā, Zinātniskajā un Inženierzinātņu formātā. Ar 3 decimālām 2.5 kļūst par 2.500.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+7"/>
         <source>Calculation</source>
         <translation>Aprēķins</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+12"/>
         <source>Angle unit</source>
         <translation>Leņķa vienība</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Uses 360 degrees per full turn. Example: sin(30) = 0.5.</source>
         <translation>Izmanto 360 grādus pilnai rotācijai. Piemērs: sin(30) = 0,5.</translation>
     </message>
@@ -714,7 +716,7 @@
         <translation>Izmanto 400 grādus pilnai rotācijai. Piemērs: sin(50) ir aptuveni 0,707.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location filename="../qml/Main.qml" line="-31"/>
         <source>Root degree</source>
         <translation>Saknes pakāpe</translation>
     </message>
@@ -724,12 +726,12 @@
         <translation>Izvēlieties 3 kubsaknei, 4 ceturtajai saknei vai jebkurai augstākai pakāpei.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+15"/>
         <source>Financial Calculation</source>
         <translation>Finanšu aprēķins</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>Use only the fields needed by this calculation.</source>
         <translation>Lietojiet tikai laukus, kas nepieciešami šim aprēķinam.</translation>
     </message>
@@ -754,13 +756,13 @@
         <translation>Maksājums / atlikums / nākotnes vērtība</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+185"/>
         <location line="+2"/>
         <source>Backspace</source>
         <translation>Atsoļa taustiņš</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+121"/>
         <source>Programmer word size</source>
         <translation>Programmētāja vārda izmērs</translation>
     </message>
@@ -770,13 +772,13 @@
         <translation>No</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <location line="+77"/>
+        <location line="+26"/>
+        <location line="+89"/>
         <source>Value</source>
         <translation>Vērtība</translation>
     </message>
     <message>
-        <location line="-31"/>
+        <location line="-39"/>
         <location line="+2"/>
         <source>Swap values and units</source>
         <translation>Apmainīt vērtības un vienības</translation>
@@ -786,11 +788,27 @@
         <source>To</source>
         <translation>Uz</translation>
     </message>
+    <message>
+        <location filename="../qml/PreferencesWindow.qml" line="+20"/>
+        <source>Reset settings</source>
+        <translation>Atiestatīt iestatījumus</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Close</source>
+        <translation>Aizvērt</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="-710"/>
+        <location line="+43"/>
+        <source>Cancel</source>
+        <translation>Atcelt</translation>
+    </message>
 </context>
 <context>
     <name>ProgrammerBasePreview</name>
     <message>
-        <location filename="../qml/ProgrammerBasePreview.qml" line="+14"/>
+        <location filename="../qml/ProgrammerBasePreview.qml" line="+15"/>
         <source>Hexadecimal</source>
         <translation>Heksadecimāls</translation>
     </message>
@@ -820,17 +838,17 @@
         <translation>Nav pieejams</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+86"/>
         <source>%1 value %2</source>
         <translation>%1 vērtība %2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Use %1  %2</source>
         <translation>Lietot %1 %2</translation>
     </message>
     <message>
-        <location line="+140"/>
+        <location line="+133"/>
         <source>%1 value scrollbar</source>
         <translation>%1 vērtības ritjosla</translation>
     </message>
@@ -838,17 +856,17 @@
 <context>
     <name>ProgrammerBitPanel</name>
     <message>
-        <location filename="../qml/ProgrammerBitPanel.qml" line="+11"/>
+        <location filename="../qml/ProgrammerBitPanel.qml" line="+12"/>
         <source>Whole number required</source>
         <translation>Nepieciešams vesels skaitlis</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+35"/>
         <source>Bit toggle panel</source>
         <translation>Bitu pārslēgšanas panelis</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+58"/>
         <source>Bit panel scrollbar</source>
         <translation>Bitu paneļa ritjosla</translation>
     </message>
@@ -959,7 +977,7 @@
 <context>
     <name>ProgrammerHistoryDrawer</name>
     <message>
-        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+8"/>
+        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+9"/>
         <source>History</source>
         <translation>Vēsture</translation>
     </message>
@@ -969,7 +987,7 @@
         <translation>Vēsture vēl nav</translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+165"/>
         <location line="+8"/>
         <location line="+2"/>
         <source>Undo</source>
@@ -999,12 +1017,12 @@
         <translation>%1 ieraksti</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+17"/>
         <source>History scrollbar</source>
         <translation>Vēstures ritjosla</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>%1 equals %2</source>
         <translation>%1 ir vienāds ar %2</translation>
     </message>

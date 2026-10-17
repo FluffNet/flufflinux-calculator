@@ -41,6 +41,7 @@ TestCase {
     function init() {
         clearCount = 0
         focusedEditor.text = "98765"
+        shortcuts.enabled = true
         testWindow.requestActivate()
         focusedEditor.forceActiveFocus()
         tryVerify(function() { return focusedEditor.activeFocus })
@@ -50,6 +51,14 @@ TestCase {
         keyClick(Qt.Key_Escape)
         compare(clearCount, 1)
         compare(focusedEditor.text, "")
+    }
+
+    function test_disabled_shortcuts_leave_editor_keys_unhandled() {
+        shortcuts.enabled = false
+        verify(!shortcuts.handleFocusedEditorKey(Qt.Key_Escape, Qt.NoModifier))
+        keyClick(Qt.Key_Escape)
+        compare(clearCount, 0)
+        compare(focusedEditor.text, "98765")
     }
 
     function test_modified_escape_is_ignored_by_editor_handler() {

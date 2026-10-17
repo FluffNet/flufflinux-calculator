@@ -4,13 +4,13 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="+17"/>
+        <location filename="../qml/Main.qml" line="+18"/>
         <location line="+1"/>
         <source>Calculator</source>
         <translation>Skaičiuotuvas</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -19,27 +19,27 @@
     </message>
     <message>
         <location line="-2"/>
-        <location line="+880"/>
-        <location line="+349"/>
+        <location line="+902"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+299"/>
         <source>Degrees</source>
         <translation>Laipsniai</translation>
     </message>
     <message>
-        <location line="-1228"/>
-        <location line="+881"/>
-        <location line="+347"/>
+        <location line="-901"/>
+        <location line="+903"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Gradians</source>
         <translation>Gradientai</translation>
     </message>
     <message>
-        <location line="-1227"/>
-        <location line="+879"/>
-        <location line="+348"/>
+        <location line="-902"/>
+        <location line="+901"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+0"/>
         <source>Radians</source>
         <translation>Radianai</translation>
     </message>
     <message>
-        <location line="-1226"/>
+        <location line="-900"/>
         <location line="+1"/>
         <location line="+1"/>
         <location line="+1"/>
@@ -326,42 +326,42 @@
     </message>
     <message>
         <location line="+5"/>
-        <location line="+846"/>
+        <location line="+870"/>
         <source>Basic</source>
         <translation>Pagrindinis</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Advanced</source>
         <translation>Išplėstinis</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Financial</source>
         <translation>Finansinis</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Programming</source>
         <translation>Programavimo</translation>
     </message>
     <message>
-        <location line="-845"/>
-        <location line="+846"/>
+        <location line="-869"/>
+        <location line="+870"/>
         <source>Conversion</source>
         <translation>Konversija</translation>
     </message>
     <message>
-        <location line="-839"/>
-        <location line="+1617"/>
+        <location line="-863"/>
+        <location line="+1497"/>
         <source>Invalid input</source>
         <translation>Neteisinga įvestis</translation>
     </message>
     <message>
-        <location line="-1616"/>
+        <location line="-1496"/>
         <source>Invalid value</source>
         <translation>Neteisinga reikšmė</translation>
     </message>
@@ -477,12 +477,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1593"/>
+        <location line="+1473"/>
         <source>Whole number required</source>
         <translation>Reikalingas sveikasis skaičius</translation>
     </message>
     <message>
-        <location line="-1036"/>
+        <location line="-851"/>
         <source>Square root. Right click or hold for more roots</source>
         <translation>Kvadratinė šaknis. Dešiniuoju pelės mygtuku spustelėkite arba laikykite, kad gautumėte daugiau šaknų</translation>
     </message>
@@ -492,7 +492,7 @@
         <translation>Išvalyti. Shift spustelėkite, kad išvalytumėte istoriją</translation>
     </message>
     <message>
-        <location line="+237"/>
+        <location line="+195"/>
         <source>Square root  √</source>
         <translation>Kvadratinė šaknis √</translation>
     </message>
@@ -508,12 +508,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+359"/>
+        <location line="+209"/>
         <source>Custom root</source>
         <translation>Pasirinktine šaknis</translation>
     </message>
     <message>
-        <location line="-351"/>
+        <location line="-201"/>
         <source>Select calculator mode</source>
         <translation>Pasirinkite skaičiuotuvo režimą</translation>
     </message>
@@ -523,7 +523,7 @@
         <translation>Skaičiuotuvo režimai</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+46"/>
         <location line="+0"/>
         <source>Undo</source>
         <translation>Atšaukti</translation>
@@ -567,18 +567,18 @@
         <translation>Parinktys</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+81"/>
+        <location line="+5"/>
+        <location filename="../qml/PreferencesWindow.qml" line="-283"/>
         <source>Preferences</source>
         <translation>Parinktys</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="+14"/>
         <source>About</source>
         <translation>Apie</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+43"/>
         <source>Fluff Linux Calculator</source>
         <translation>Fluff Linux skaičiuotuvas</translation>
     </message>
@@ -610,36 +610,38 @@
     <message>
         <location line="+7"/>
         <location line="+2"/>
+        <location line="+30"/>
+        <location line="+43"/>
         <source>OK</source>
         <translation>Gerai</translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location filename="../qml/PreferencesWindow.qml" line="+157"/>
         <source>Display</source>
         <translation>Rodymas</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+15"/>
         <source>Digit grouping</source>
         <translation>Skaičių grupavimas</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+22"/>
         <source>Adds separators to large numbers. Example: 1000000 becomes 1,000,000. Not used in Programming.</source>
         <translation>Prideda atskyriklius dideliems skaičiams. Pavyzdys: 1000000 tampa 1,000,000. Programavime nenaudojama.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+5"/>
         <source>Result format and decimal places apply to Basic, Advanced, and Financial. Conversion chooses a sensible precision automatically.</source>
         <translation>Rezultato formatas ir dešimtainių vietų skaičius taikomas Pagrindiniam, Išplėstiniam ir Finansiniam. Konvertavimas automatiškai pasirenka tinkamą tikslumą.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+10"/>
         <source>Result format</source>
         <translation>Rezultato formatas</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Automatic</source>
         <translation>Automatiškai</translation>
     </message>
@@ -679,27 +681,27 @@
         <translation>Inžinerinis naudoja laipsnius po tris. Pavyzdys: 12,000 rodomas kaip e3.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>Decimal places</source>
         <translation>Dešimtainių vietų skaičius</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+25"/>
         <source>For Basic, Advanced, and Financial, sets digits after the decimal in Fixed, Scientific, and Engineering. With 3 places, 2.5 becomes 2.500.</source>
         <translation>Pagrindiniams, Išplėtiniams ir Finansiniams nustato skaitmenis po kablelio Fiksuotame, Mokslo ir Inžinerijos formatuose. Turint 3 skaitmenis, 2,5 tampa 2,500.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+7"/>
         <source>Calculation</source>
         <translation>Skaičiavimas</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+12"/>
         <source>Angle unit</source>
         <translation>Kampo vienetas</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Uses 360 degrees per full turn. Example: sin(30) = 0.5.</source>
         <translation>Naudoja 360 laipsnių pilnai apsukai. Pavyzdys: sin(30) = 0,5.</translation>
     </message>
@@ -714,7 +716,7 @@
         <translation>Naudoja 400 gradianų pilnai apsukai. Pavyzdys: sin(50) yra apie 0,707.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location filename="../qml/Main.qml" line="-31"/>
         <source>Root degree</source>
         <translation>Šaknies laipsnis</translation>
     </message>
@@ -724,12 +726,12 @@
         <translation>Pasirinkite 3 trijų šaknies, 4 ketvirtos šaknies arba bet kuriai aukštesnei šaknei.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+15"/>
         <source>Financial Calculation</source>
         <translation>Finansinis skaičiavimas</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>Use only the fields needed by this calculation.</source>
         <translation>Naudokite tik laukus, reikalingus šiam skaičiavimui.</translation>
     </message>
@@ -754,13 +756,13 @@
         <translation>Mokėjimas / likutinė vertė / būsima vertė</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+185"/>
         <location line="+2"/>
         <source>Backspace</source>
         <translation>Grįžtamasis trynimas</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+121"/>
         <source>Programmer word size</source>
         <translation>Programuotojo žodžio dydis</translation>
     </message>
@@ -770,13 +772,13 @@
         <translation>Nuo</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <location line="+77"/>
+        <location line="+26"/>
+        <location line="+89"/>
         <source>Value</source>
         <translation>Reikšmė</translation>
     </message>
     <message>
-        <location line="-31"/>
+        <location line="-39"/>
         <location line="+2"/>
         <source>Swap values and units</source>
         <translation>Apversti reikšmes ir vienetus</translation>
@@ -786,11 +788,27 @@
         <source>To</source>
         <translation>Iki</translation>
     </message>
+    <message>
+        <location filename="../qml/PreferencesWindow.qml" line="+20"/>
+        <source>Reset settings</source>
+        <translation>Atkurti nustatymus</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Close</source>
+        <translation>Užverti</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="-710"/>
+        <location line="+43"/>
+        <source>Cancel</source>
+        <translation>Atšaukti</translation>
+    </message>
 </context>
 <context>
     <name>ProgrammerBasePreview</name>
     <message>
-        <location filename="../qml/ProgrammerBasePreview.qml" line="+14"/>
+        <location filename="../qml/ProgrammerBasePreview.qml" line="+15"/>
         <source>Hexadecimal</source>
         <translation>Šešioliktainis</translation>
     </message>
@@ -820,17 +838,17 @@
         <translation>Neprieinama</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+86"/>
         <source>%1 value %2</source>
         <translation>%1 reikšmė %2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Use %1  %2</source>
         <translation>Naudokite %1  %2</translation>
     </message>
     <message>
-        <location line="+140"/>
+        <location line="+133"/>
         <source>%1 value scrollbar</source>
         <translation>%1 reikšmės slankiklį</translation>
     </message>
@@ -838,17 +856,17 @@
 <context>
     <name>ProgrammerBitPanel</name>
     <message>
-        <location filename="../qml/ProgrammerBitPanel.qml" line="+11"/>
+        <location filename="../qml/ProgrammerBitPanel.qml" line="+12"/>
         <source>Whole number required</source>
         <translation>Reikalingas sveikasis skaičius</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+35"/>
         <source>Bit toggle panel</source>
         <translation>Bitų perjungimo skydelį</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+58"/>
         <source>Bit panel scrollbar</source>
         <translation>Bitų skydelio slankiklį</translation>
     </message>
@@ -959,7 +977,7 @@
 <context>
     <name>ProgrammerHistoryDrawer</name>
     <message>
-        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+8"/>
+        <location filename="../qml/ProgrammerHistoryDrawer.qml" line="+9"/>
         <source>History</source>
         <translation>Istorija</translation>
     </message>
@@ -969,7 +987,7 @@
         <translation>Kol kas be istorijos</translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+165"/>
         <location line="+8"/>
         <location line="+2"/>
         <source>Undo</source>
@@ -999,12 +1017,12 @@
         <translation>%1 įrašai</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+17"/>
         <source>History scrollbar</source>
         <translation>Istorijos slankiklis</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>%1 equals %2</source>
         <translation>%1 lygu %2</translation>
     </message>

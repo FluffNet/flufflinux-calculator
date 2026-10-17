@@ -114,7 +114,7 @@ Run the staged application without installing it:
 Create a pacman package archive:
 
 ```sh
-bsdtar --zstd -cf flufflinux-calculator-2026.10-2-x86_64.pkg.tar.zst -C fakeroot .PKGINFO usr
+bsdtar --zstd -cf flufflinux-calculator-2026.10-3-x86_64.pkg.tar.zst -C fakeroot .PKGINFO usr
 ```
 
 Package build systems can install into their own staging directory:
@@ -126,7 +126,7 @@ make DESTDIR="$pkgdir" install
 
 ## Translating
 
-Translation sources are stored in `translations`. Qt Linguist can be used to edit an existing `.ts` catalog.
+English and 95 language/script catalogs cover all 96 supported Fluff Linux choices, with 172 country locales. Swiss German and Brazilian Portuguese have additional wording catalogs. Calculator follows KDE/FluffSetup language and regional selections, preserves script variants and glibc modifiers, and supports all seven RTL languages. Translation sources are stored in `translations`. Qt Linguist can be used to edit an existing `.ts` catalog.
 
 ```sh
 linguist translations/flufflinux-calculator_de.ts
@@ -154,6 +154,8 @@ LANGUAGE=de ./target/release/flufflinux-calculator
 See [TRANSLATING.md](TRANSLATING.md) for the complete editing, testing, and new language workflow.
 
 ## Settings
+
+Preferences opens in a separate draggable window. Escape or Close dismisses it. The window has a minimum size, scrolls when needed, and scales its controls and spacing when enlarged. Reset settings restores automatic result formatting, nine decimal places, degrees, and digit grouping. The button is disabled while these options match their defaults.
 
 Preferences and window state are stored in `$XDG_CONFIG_HOME/flufflinux-calculator.conf`, or `~/.config/flufflinux-calculator.conf` when `XDG_CONFIG_HOME` is not set.
 

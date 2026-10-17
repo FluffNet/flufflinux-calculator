@@ -2,6 +2,7 @@ mod app_icon;
 mod backend;
 mod complex;
 mod engine;
+mod i18n;
 mod precise;
 
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QQuickStyle, QUrl};

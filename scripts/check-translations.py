@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
+import csv
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -8,11 +9,36 @@ root = Path(__file__).resolve().parent.parent
 language_file = root / "translations" / "LANGUAGES"
 languages = [line.split()[0] for line in language_file.read_text().splitlines() if line.strip()]
 errors = []
-expected_languages = {
-    "bg", "cs", "da", "de", "el", "es", "et", "fi", "fr", "ga",
-    "he", "hr", "hu", "it", "ja", "lt", "lv", "mt", "nl", "pl", "pt",
-    "ro", "ru", "sk", "sl", "sv",
+inventory = list(csv.DictReader((root / "translations" / "languages.tsv").open(), delimiter="\t"))
+regions = list(csv.DictReader((root / "translations" / "regions.tsv").open(), delimiter="\t"))
+base_languages = {row["code"] for row in inventory}
+variants = {line.split()[0] for line in (root / "translations" / "VARIANTS").read_text().splitlines() if line.strip()}
+expected_languages = (base_languages - {"en"}) | variants
+directions = {row["code"]: row["direction"] for row in inventory}
+if {code for code, direction in directions.items() if direction == "RTL"} != {"ar", "he", "fa", "ur", "ps", "ug", "pa_Arab"}:
+    errors.append("RTL classification does not match the shared inventory")
+if len(inventory) != 96 or len(base_languages) != 96:
+    errors.append("The shared inventory must contain 96 distinct language/script choices")
+if len(regions) != 172 or len({row["locale"] for row in regions}) != 172:
+    errors.append("The shared inventory must contain 172 distinct country-locale choices")
+for row in regions:
+    if row["language"] not in base_languages:
+        errors.append(f"Unknown language for region: {row['locale']}")
+    elif row["direction"] != directions[row["language"]]:
+        errors.append(f"Region direction differs from its language: {row['locale']}")
+aliases = list(csv.DictReader((root / "translations" / "desktop-aliases.tsv").open(), delimiter="\t"))
+expected_desktop_languages = expected_languages | {"en"} | {row["locale"] for row in aliases}
+for row in aliases:
+    if row["language"] not in base_languages:
+        errors.append(f"Unknown desktop locale alias: {row['locale']}")
+resource_languages = {
+    Path(element.text).stem.removeprefix("flufflinux-calculator_")
+    for element in ET.parse(root / "resources.qrc").findall(".//file")
+    if (element.text or "").endswith(".qm")
 }
+if resource_languages != expected_languages:
+    errors.append("Embedded compiled catalogs do not match LANGUAGES")
+
 
 if set(languages) != expected_languages:
     errors.append("LANGUAGES does not match the supported FLU language set")
@@ -23,7 +49,7 @@ desktop_file = root / "data" / "com.flufflinux.calculator.desktop"
 desktop_text = desktop_file.read_text()
 for key in ("Name",):
     localized_languages = set(re.findall(rf"^{key}\[([^]]+)\]=", desktop_text, re.MULTILINE))
-    if localized_languages != expected_languages:
+    if localized_languages != expected_desktop_languages:
         errors.append(f"Desktop {key} translations do not match LANGUAGES")
 for line in desktop_text.splitlines():
     if line.startswith("Keywords") and not line.endswith(";"):
@@ -77,9 +103,13 @@ for language in languages:
         translated_slots = sorted(re.findall(r"%\d+", translated))
         if source_slots != translated_slots:
             errors.append(f"{language}: placeholder mismatch: {source}")
+        normalized_translation = re.sub(r"\s|[\u2066-\u2069]", "", translated)
+        for formula in re.findall(r"sin\([^)]*\)", source):
+            if re.sub(r"\s", "", formula) not in normalized_translation:
+                errors.append(f"{language}: mathematical function was translated: {source}")
 
 if errors:
     print("\n".join(errors))
     sys.exit(1)
 
-print(f"Checked {len(languages)} complete translation catalogs")
+print(f"Checked {len(languages)} complete catalogs, 96 language/script choices, and 172 country locales")
